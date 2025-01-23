@@ -1,0 +1,23 @@
+/* eslint-disable react-native/no-inline-styles */
+import { Text, Pressable } from 'react-native';
+import React from 'react';
+import { HEIGHT, WIDTH } from '../constants/dimension';
+import { colors } from '../constants/colors';
+
+interface buttonProps {
+    buttonName: string;
+    selected: boolean;
+    onPress: () => void;
+
+
+}
+const FilterButton: React.FC<buttonProps> = (props) => {
+    const { buttonName, selected, onPress } = props;
+    return (
+        <Pressable style={{ width: WIDTH * 0.2, height: HEIGHT * 0.04, backgroundColor: selected ? colors.brownColor : `${colors.grayColor}10`, marginRight: WIDTH * 0.05, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.02 }} onPress={onPress}>
+            <Text style={{ color: selected ? colors.commonWhite : colors.commonBlack, fontWeight: selected ? '600' : '400' }}>{buttonName}</Text>
+        </Pressable>
+    );
+};
+
+export default FilterButton;
