@@ -7,6 +7,7 @@ import { cartIcon, dotIcon, heartIcon, homeIcon, notificationIcon } from '../ass
 import WishListScreen from '../screens/WishListScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import CartScreen from '../screens/CartScreen';
+import OrderScreen from '../screens/OrderScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -15,7 +16,7 @@ const Tab = createBottomTabNavigator();
 const tabData = [
     { name: 'Home', component: HomeScreen, icon: homeIcon },
     { name: 'wishlist', component: WishListScreen, icon: heartIcon },
-    { name: 'Cart', component: CartScreen, icon: cartIcon },
+    { name: 'Cart', component: OrderScreen, icon: cartIcon },
     { name: 'Notification', component: NotificationScreen, icon: notificationIcon },
 ];
 

@@ -6,6 +6,7 @@ import { HomeTabNavigator } from './HomeTabNavigator';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import OrderScreen from '../screens/OrderScreen';
 import DeliveryScreen from '../screens/DeliveryScreen';
+import AddressScreen from '../screens/AddressScreen';
 
 
 
@@ -18,6 +19,7 @@ const AppNavigator = () => {
             <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen} />
             <Stack.Screen name="OrderScreen" component={OrderScreen} />
             <Stack.Screen name="DeliveryScreen" component={DeliveryScreen} />
+            <Stack.Screen name="AddressScreen" component={AddressScreen} />
 
         </Stack.Navigator>
     );

@@ -22,5 +22,6 @@ import gpsIcon from './gpsIcon/gpsIcon.png';
 import locationIcon from './locationIcon/locationIcon.png';
 import phoneIcon from './phoneIcon/phoneIcon.png';
 import driverIcon from './driverIcon/driverIcon.png';
-import minusIcon from './minusIcon/minusIcon.png'
-export { searchIcon, homeIcon, heartIcon, filterIcon, starIcon, plusIcon, cartIcon, notificationIcon, dotIcon, backIcon, deliveryIcon, beansIcon, milkCanIcon, rateIcon, editIcon, documentIcon, discountIcon, rightArrowIcon, walletIcon, bottomArrowIcon, gpsIcon, locationIcon, phoneIcon, driverIcon, minusIcon };
+import minusIcon from './minusIcon/minusIcon.png';
+import deleteIcon from './deleteIcon/deleteIcon.png';
+export { searchIcon, homeIcon, heartIcon, filterIcon, starIcon, plusIcon, cartIcon, notificationIcon, dotIcon, backIcon, deliveryIcon, beansIcon, milkCanIcon, rateIcon, editIcon, documentIcon, discountIcon, rightArrowIcon, walletIcon, bottomArrowIcon, gpsIcon, locationIcon, phoneIcon, driverIcon, minusIcon, deleteIcon };

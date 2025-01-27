@@ -14,7 +14,7 @@ const HomeScreen = () => {
     const [isSelected, setIsSelected] = useState<number>();
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
+            <ScrollView bounces={false} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
                 {/* <View style={{ position: 'absolute' }}> */}
                 <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={[colors.matteBlack, colors.commonBlack]} style={{ width: WIDTH * 1, height: HEIGHT * 0.35 }} >
                     <View style={{ paddingLeft: WIDTH * 0.07 }}>

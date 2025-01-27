@@ -1,12 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, Image, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, Image, Pressable, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { backIcon, beansIcon, deliveryIcon, heartIcon, milkCanIcon, rateIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../constants/colors';
+import { useDispatch } from 'react-redux';
+import { addCart } from '../redux/slice/cartSlice';
 
 interface productItem {
+
     item: {
         id: number;
         name: string;
@@ -23,10 +26,28 @@ interface ProductDetailScreenProps {
 }
 const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
     const { section } = route.params;
-
+    const dispatch = useDispatch();
     const [showMore, setShowMore] = useState(false);
     const navigation = useNavigation();
     const [isSelected, setIsSelected] = useState<number>(1);
+
+    const handleAddItem = () => {
+        dispatch(addCart({
+            id: section.item.id,
+            name: section.item.name,
+            coffeeType: section.item.coffeeType,
+            description: section.item.description,
+            type: {
+                size: section.item.type[isSelected].size,
+                price: section.item.type[isSelected].price,
+            },
+            rating: section.item.rating,
+            img: section.item.img,
+            quantity: 1,
+        }));
+        Alert.alert('Successfully Added To cart');
+        navigation.navigate('HomeTabs')
+    };
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: WIDTH * 0.1, marginTop: HEIGHT * 0.03, marginBottom: HEIGHT * 0.02 }}>
@@ -112,7 +133,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                     <Text style={{ marginBottom: HEIGHT * 0.01, color: colors.grayColor }}>Price</Text>
                     <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.02, fontWeight: 'bold' }}>$ {section.item.type[isSelected].price}</Text>
                 </View>
-                <Pressable style={{ width: WIDTH * 0.6, height: HEIGHT * 0.07, backgroundColor: colors.brownColor, borderRadius: WIDTH * 0.03, justifyContent: 'center', alignItems: 'center' }} onPress={() => navigation.navigate('OrderScreen')}><Text style={{ color: colors.commonWhite, fontWeight: 'bold' }}>Buy Now</Text></Pressable>
+                <Pressable style={{ width: WIDTH * 0.6, height: HEIGHT * 0.07, backgroundColor: colors.brownColor, borderRadius: WIDTH * 0.03, justifyContent: 'center', alignItems: 'center' }} onPress={handleAddItem}><Text style={{ color: colors.commonWhite, fontWeight: 'bold' }} >Buy Now</Text></Pressable>
 
             </View>
         </SafeAreaView >

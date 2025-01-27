@@ -1,10 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Text, Pressable, Image, View } from 'react-native';
+import { Text, Pressable, Image, View, Alert } from 'react-native';
 import React from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { plusIcon, starIcon } from '../assets/icons';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../constants/colors';
+import { useDispatch } from 'react-redux';
+import { addCart } from '../redux/slice/cartSlice';
+// import { getFirestore } from '@react-native-firebase/firestore';
+
 
 interface coffeeProps {
     item: {
@@ -22,6 +26,40 @@ interface coffeeProps {
 const CoffeeCard: React.FC<coffeeProps> = (props) => {
     const { item } = props;
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+
+    // In your handleAddCart function
+    const handleAddCart = () => {
+        // const firestore = getFirestore();
+        // firestore.collection('coffeeItem')
+        //     .add({
+        //         item,
+        //     })
+        //     .then(() => {
+        //         console.log('User added!');
+        //     })
+        //     .catch(error => {
+        //         console.error("Error adding document: ", error);
+        //     });
+
+        dispatch(addCart({
+            id: item.id,
+            name: item.name,
+            coffeeType: item.coffeeType,
+            description: item.description,
+            type: {
+                size: item.type[0].size,
+                price: item.type[0].price,
+            },
+            rating: item.rating,
+            img: item.img,
+            quantity: 1,
+        }));
+        Alert.alert('Successfully Added To cart');
+    };
+
+
     return (
         <Pressable style={{ backgroundColor: colors.commonWhite, marginTop: HEIGHT * 0.02, marginBottom: HEIGHT * 0.01, width: WIDTH * 0.42, height: HEIGHT * 0.3, borderRadius: 15, marginLeft: WIDTH * 0.04 }} onPress={() => {
             navigation.navigate('ProductDetailScreen', {
@@ -40,7 +78,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
 
                 <View style={{ marginTop: HEIGHT * 0.005, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginRight: WIDTH * 0.03 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>$ {item.type[0].price}</Text>
-                    <Pressable style={{ backgroundColor: '#C67C4D', height: WIDTH * 0.08, width: WIDTH * 0.08, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.02 }}>
+                    <Pressable style={{ backgroundColor: '#C67C4D', height: WIDTH * 0.08, width: WIDTH * 0.08, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.02 }} onPress={handleAddCart}>
                         <Image source={plusIcon} />
                     </Pressable>
                 </View>
