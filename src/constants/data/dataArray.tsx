@@ -64,7 +64,7 @@ const coffeeArray = [
     },
 ];
 
-const addressTypeArray = [
+const orderType = [
     { id: 1, name: 'Deliver' },
     { id: 2, name: 'Pick Up' },
 ];
@@ -93,4 +93,4 @@ const DeliveryData = {
     description: 'we will deliver your goods to you in the shortest possible time.',
 
 };
-export { filterArray, coffeeArray, addressTypeArray, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData };
+export { filterArray, coffeeArray, orderType, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData };

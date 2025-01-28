@@ -1,22 +1,44 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, SafeAreaView, Pressable, Image, ScrollView, FlatList } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { backIcon, bottomArrowIcon, discountIcon, plusIcon, rightArrowIcon, walletIcon } from '../assets/icons';
 import { useNavigation } from '@react-navigation/native';
 import { HEIGHT, WIDTH } from '../constants/dimension';
-import { addressTypeArray, editAdressArray } from '../constants/data/dataArray';
+import { orderType, editAdressArray } from '../constants/data/dataArray';
 import { colors } from '../constants/colors';
 import { selectedCarts } from '../redux/slice/cartSlice';
 import { useSelector } from 'react-redux';
 import OrderComponent from '../components/OrderComponent';
-import { addedContacts } from '../redux/slice/contactSlice';
+// import { addedContacts } from '../redux/slice/contactSlice';
+import firebase from '@react-native-firebase/firestore';
 
 const OrderScreen = () => {
     const navigation = useNavigation();
     const [isSelected, setIsSelected] = useState<number>(1);
-    const contacts = useSelector(addedContacts);
-    const selectedContact = contacts.filter((contact) => contact.selected === true);
+    const [selectedContact, setSelectedContact] = useState<[]>([]);
+
     const selectedCart = useSelector(selectedCarts);
+    useEffect(() => {
+        const onAddressSelected = async () => {
+            try {
+                const address: [] = [];
+                await firebase()
+                    .collection('address')
+                    .where('selected', '==', true)
+                    .get()
+                    .then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
+                            address.push(doc.data());
+                        });
+                    });
+                setSelectedContact(address);
+            } catch (error) {
+                console.log('Error occurred:', error);
+            }
+        };
+        onAddressSelected();
+    }, [selectedContact]);
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>
@@ -28,7 +50,7 @@ const OrderScreen = () => {
                     <Text style={{ fontWeight: '600', fontSize: HEIGHT * 0.02, marginLeft: WIDTH * 0.3 }}>Order</Text>
                 </View>
                 <View style={{ width: WIDTH * 0.85, backgroundColor: `${colors.grayColor}10`, height: HEIGHT * 0.05, alignSelf: 'center', marginTop: HEIGHT * 0.04, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    {addressTypeArray.map((type, index) => (
+                    {orderType.map((type, index) => (
                         <Pressable
                             key={index}
                             style={[

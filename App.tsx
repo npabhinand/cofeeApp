@@ -1,21 +1,31 @@
 // import { View, Text } from 'react-native'
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './src/routes/AppNavigator';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
-// import firebase from '@react-native-firebase/app';
+import { firebase } from '@react-native-firebase/firestore';
+import { Alert } from 'react-native';
+
 const App = () => {
 
 
 
-  // if (!firebase.apps.length) {
-  //   firebase.initializeApp();
-  // } else {
-  //   firebase.app(); // if already initialized
-  // }
+  useEffect(() => {
 
-  // console.log('Firebase initialized:', firebase.apps.length);
+    try {
+      if (firebase.apps.length === 0) {
+        console.error('Firebase is not initialized!');
+        Alert.alert('Firebase is not initialized');
+      } else {
+        console.log('Firebase is initialized--');
+      }
+    } catch (error) {
+      console.error('Error checking Firebase initialization: ', error);
+      Alert.alert('Error initializing Firebase.');
+    }
+  }, []);
+
 
   return (
     <NavigationContainer>

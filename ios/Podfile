@@ -13,9 +13,8 @@ linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
-else
-  # Default behavior: Use frameworks globally
-  use_frameworks!
+# else
+#   use_frameworks!
 end
 
 # use_modular_headers!
@@ -25,7 +24,8 @@ end
 
 target 'coffeeApp' do
   config = use_native_modules!
-
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.

@@ -1,20 +1,38 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image, SafeAreaView, Modal, FlatList } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
 import { backIcon } from '../assets/icons';
 import { colors } from '../constants/colors';
 import AddressRenderItem from '../components/AddressRenderItem';
 import AddAddressComponent from '../components/AddAddressComponent';
-import { useSelector } from 'react-redux';
-import { addedContacts } from '../redux/slice/contactSlice';
+import firestore from '@react-native-firebase/firestore';
+// import { useSelector } from 'react-redux';
+// import { addedContacts } from '../redux/slice/contactSlice';
+
 
 const AddressScreen = () => {
-    const addressList = useSelector(addedContacts);
+    // const addressList = useSelector(addedContacts);
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [addressList, setAddressList] = useState();
+    const [update, setUpdate] = useState<boolean>(false);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const addresses = [];
+            const addressRef = await firestore().collection('address').get();
+            addressRef.forEach((doc) => {
+                addresses.push({ ...doc.data(), id: doc.id });
+            });
+            setAddressList(addresses);
+        };
+        fetchData();
+    }, [update]);
+
+
+    console.log(addressList);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>
@@ -27,14 +45,14 @@ const AddressScreen = () => {
             {/*  */}
             <FlatList
                 data={addressList}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.id}
                 renderItem={(item) => (
-                    <AddressRenderItem item={item.item} />
+                    <AddressRenderItem item={item.item} setUpdate={setUpdate} update={update} />
                 )}
             />
             {/*  */}
             <Modal visible={modalVisible} animationType="slide">
-                <AddAddressComponent setModalVisible={setModalVisible} />
+                <AddAddressComponent setModalVisible={setModalVisible} setUpdate={setUpdate} update={update} />
             </Modal>
             {/*  */}
             <Pressable style={{ position: 'absolute', width: WIDTH * 0.9, height: HEIGHT * 0.06, bottom: HEIGHT * 0.04, backgroundColor: colors.brownColor, alignSelf: 'center', justifyContent: 'center', borderRadius: 10 }}
