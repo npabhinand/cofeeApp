@@ -8,25 +8,26 @@ import { HEIGHT, WIDTH } from '../constants/dimension';
 // import { addContact, updateContact } from '../redux/slice/contactSlice';
 import firestore from '@react-native-firebase/firestore';
 
-interface addresProps {
+interface addressProps {
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
     update: boolean;
     id: string;
     name: string;
-    phone: string;
+    phone: number;
     address: string;
     selected: boolean;
 }
 
-const AddAddressComponent: React.FC<addresProps> = (props) => {
-    const { id, name, address, phone, selected, setUpdate, update } = props;
-
-    const { setModalVisible } = props;
+const AddAddressComponent: React.FC<addressProps> = (props) => {
     // const dispatch = useDispatch();
-    const [inputName, setInputName] = useState<string>(name || '');
-    const [inputPhone, setInputPhone] = useState<string>(phone || '');
-    const [inputAddress, setInputAddress] = useState<string>(address || '');
+    // const [inputName, setInputName] = useState<string>(name || '');
+    // const [inputPhone, setInputPhone] = useState<string>(phone || '');
+    // const [inputAddress, setInputAddress] = useState<string>(address || '');
+    const { id, name, address, phone, setUpdate, update } = props;
+    const { setModalVisible } = props;
+    const [errors, setErrors] = useState({});
+    const [formData, setFormData] = useState<addressProps>({ name: name || '', phone: phone || null, address: address || '' });
 
 
     // const AddOrUpdateAddress = () => {
@@ -63,16 +64,24 @@ const AddAddressComponent: React.FC<addresProps> = (props) => {
     // };
 
     const AddOrUpdateAddress = async () => {
-        if (!inputName || !inputPhone || !inputAddress) {
-            Alert.alert('Please fill in all fields');
+        let newErrors = {};
+        Object.keys(formData).forEach((key) => {
+            if (!formData[key].trim()) {
+                newErrors[key] = `${key} is required `;
+            }
+        });
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            // Alert.alert('Failed to update address');
             return;
-        }
+        };
+
         if (id) {
             try {
                 await firestore().collection('address').doc(id).update({
-                    name: inputName,
-                    phone: inputPhone,
-                    address: inputAddress,
+                    name: formData.name,
+                    phone: formData.phone,
+                    address: formData.address,
                     selected: false,
                 });
                 Alert.alert('Address updated Successfully');
@@ -83,9 +92,9 @@ const AddAddressComponent: React.FC<addresProps> = (props) => {
         } else {
             try {
                 await firestore().collection('address').add({
-                    name: inputName,
-                    phone: inputPhone,
-                    address: inputAddress,
+                    name: formData.name,
+                    phone: formData.phone,
+                    address: formData.address,
                     selected: false,
                 });
                 Alert.alert('Address Added Successfully');
@@ -98,6 +107,14 @@ const AddAddressComponent: React.FC<addresProps> = (props) => {
         setUpdate(!update);
     };
 
+    const onChangeText = (key: string, value: string) => {
+        if (key === 'phone') {
+            value = value.replace(/[^0-9]/g, '');
+        }
+        setFormData((prev) => ({ ...prev, [key]: value }));
+        setErrors((prev) => ({ ...prev, [key]: '' }));
+    };
+
     return (
         <View style={{ flex: 1, backgroundColor: colors.whiteColor, paddingHorizontal: WIDTH * 0.05 }}>
             <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.1 }}>
@@ -107,12 +124,13 @@ const AddAddressComponent: React.FC<addresProps> = (props) => {
                 <Text style={{ fontWeight: '600', fontSize: HEIGHT * 0.02, marginLeft: WIDTH * 0.2 }}>Add New Address</Text>
             </View>
             <View style={{ marginTop: HEIGHT * 0.04, gap: HEIGHT * 0.01 }}>
-                <Text style={{ fontWeight: '600', marginTop: HEIGHT * 0.01 }}>Name</Text>
-                <TextInput placeholder="Type Here" style={{ width: WIDTH * 0.9, borderWidth: 1, height: HEIGHT * 0.055, paddingLeft: WIDTH * 0.05, borderRadius: 5 }} onChangeText={setInputName} value={inputName} />
-                <Text style={{ fontWeight: '600', marginTop: HEIGHT * 0.01 }}>Phone</Text>
-                <TextInput placeholder="Type Here" style={{ width: WIDTH * 0.9, borderWidth: 1, height: HEIGHT * 0.055, paddingLeft: WIDTH * 0.05, borderRadius: 5 }} keyboardType="numeric" onChangeText={setInputPhone} value={inputPhone} />
-                <Text style={{ fontWeight: '600', marginTop: HEIGHT * 0.01 }}>Address</Text>
-                <TextInput placeholder="Type Here" style={{ width: WIDTH * 0.9, borderWidth: 1, height: HEIGHT * 0.15, paddingLeft: WIDTH * 0.05, borderRadius: 5 }} multiline={true} onChangeText={setInputAddress} value={inputAddress} />
+                {Object.keys(formData).map((key) => (
+                    <View key={key}>
+                        <Text style={{ fontWeight: '600', marginBottom: HEIGHT * 0.01 }}>{key}</Text>
+                        <TextInput placeholder="Type Here" style={{ width: WIDTH * 0.9, borderWidth: 1, height: key === 'address' ? HEIGHT * 0.15 : HEIGHT * 0.055, paddingLeft: WIDTH * 0.05, borderRadius: 5, borderColor: errors[key] ? colors.redColor : colors.commonBlack }} onChangeText={(text) => onChangeText(key, text)} value={formData[key]} multiline={key === 'address' ? true : false} keyboardType={key === 'phone' ? 'numeric' : 'default'}
+                        />
+                    </View>
+                ))}
             </View>
             <Pressable style={{ position: 'absolute', width: WIDTH * 0.9, height: HEIGHT * 0.06, bottom: HEIGHT * 0.04, backgroundColor: colors.brownColor, alignSelf: 'center', justifyContent: 'center', borderRadius: 10 }}
                 onPress={AddOrUpdateAddress}>
@@ -122,4 +140,5 @@ const AddAddressComponent: React.FC<addresProps> = (props) => {
     );
 };
 
+// const dataUI = [{ }, { }, { }]
 export default AddAddressComponent;

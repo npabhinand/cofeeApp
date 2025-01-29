@@ -1,5 +1,6 @@
 import { documentIcon, editIcon } from '../../assets/icons';
-import { coffee1, coffee2, coffee3, coffee4 } from '../../assets/images';
+// import { HEIGHT, WIDTH } from '../dimension';
+
 
 const filterArray = [
     { id: 1, name: 'All Coffee' },
@@ -12,7 +13,7 @@ const filterArray = [
 const coffeeArray = [
     {
         id: 1,
-        img: coffee1,
+        img: 'coffee1',
         name: 'Coffee Mocha',
         coffeeType: 'Deep Foam',
         description: 'A rich blend of espresso, steamed milk, and chocolate syrup, topped with a thick layer of foam. A smooth espresso-based drink with a velvety microfoam texture, offering a strong coffee flavor.',
@@ -26,7 +27,7 @@ const coffeeArray = [
     {
         id: 2,
         name: 'Flat White',
-        img: coffee2,
+        img: 'coffee2',
         coffeeType: 'Espresso',
         description: 'A smooth espresso-based drink with a velvety microfoam texture, offering a strong coffee flavor. A delicious mix of espresso, milk, and chocolate, served either iced or hot for a refreshing treat.',
         type: [
@@ -39,7 +40,7 @@ const coffeeArray = [
     {
         id: 3,
         name: 'Flat White',
-        img: coffee3,
+        img: 'coffee3',
         coffeeType: 'Americano',
         description: 'A creamy and rich espresso drink with a balanced amount of steamed milk and velvety foam. A delicious mix of espresso, milk, and chocolate, served either iced or hot for a refreshing treat.',
         type: [
@@ -52,7 +53,7 @@ const coffeeArray = [
     {
         id: 4,
         name: 'Mocha Fusi',
-        img: coffee4,
+        img: 'coffee4',
         coffeeType: 'Ice/Hot',
         description: 'A delicious mix of espresso, milk, and chocolate, served either iced or hot for a refreshing treat. A creamy and rich espresso drink with a balanced amount of steamed milk and velvety foam.',
         type: [
@@ -77,7 +78,7 @@ const sizeButton = [
     { id: 1, name: 'S' },
     { id: 2, name: 'M' },
     { id: 3, name: 'L' },
-]
+];
 
 const onBoardScreenData = {
     title: 'Fall in Love with Coffee in Blissful Delight!',
@@ -93,4 +94,12 @@ const DeliveryData = {
     description: 'we will deliver your goods to you in the shortest possible time.',
 
 };
-export { filterArray, coffeeArray, orderType, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData };
+const coffeeImageArray = {
+    coffee1: require('../../assets/images/coffee1/coffee.png'),
+    coffee2: require('../../assets/images/coffee2/coffee2.png'),
+    coffee3: require('../../assets/images/coffee3/coffee3.png'),
+    coffee4: require('../../assets/images/coffee4/coffee4.png'),
+};
+
+
+export { filterArray, coffeeArray, orderType, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData, coffeeImageArray, };

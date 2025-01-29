@@ -1,13 +1,16 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import HomeScreen from '../screens/HomeScreen';
 import { cartIcon, dotIcon, heartIcon, homeIcon, notificationIcon } from '../assets/icons';
 import WishListScreen from '../screens/WishListScreen';
 import NotificationScreen from '../screens/NotificationScreen';
-import CartScreen from '../screens/CartScreen';
 import OrderScreen from '../screens/OrderScreen';
+import { colors } from '../constants/colors';
+import { useSelector } from 'react-redux';
+import { selectCartCount } from '../redux/slice/cartCountSlice';
 
 
 const Tab = createBottomTabNavigator();
@@ -16,23 +19,32 @@ const Tab = createBottomTabNavigator();
 const tabData = [
     { name: 'Home', component: HomeScreen, icon: homeIcon },
     { name: 'wishlist', component: WishListScreen, icon: heartIcon },
-    { name: 'Cart', component: OrderScreen, icon: cartIcon },
+    { name: 'Cart', component: OrderScreen, icon: cartIcon, number: 5 },
     { name: 'Notification', component: NotificationScreen, icon: notificationIcon },
 ];
 
 interface tabBarProps {
-    src?: any;
-    label?: string;
+    tab: {
+        name: string;
+        icon: number;
+    };
+    // src?: any;
+    // label?: string;
     focused?: boolean;
 }
 
 const CustomTabBarIcon: React.FC<tabBarProps> = (props) => {
-    const { src, focused } = props;
+    const { tab, focused } = props;
+    const counter = useSelector(selectCartCount);
+    // console.log('count:', useSelector(selectCartCount));
+
 
     return (
         <View>
-            <Image source={src} style={{ tintColor: focused ? '#C67C4D' : '#A2A2A2' }} />
-            {focused && <Image source={dotIcon} style={{ marginTop: HEIGHT * 0.005, alignSelf: 'center' }} />}
+            {tab.name === 'Cart' && <View style={{ backgroundColor: colors.brownColor, width: WIDTH * 0.04, height: WIDTH * 0.04, borderRadius: '50%', alignItems: 'center', justifyContent: 'center', position: 'absolute', left: WIDTH * 0.04, bottom: HEIGHT * 0.017 }}><Text style={{ fontSize: 9, color: colors.commonWhite }}>{counter}</Text></View>}
+            <Image source={tab.icon} style={{ tintColor: focused ? '#C67C4D' : '#A2A2A2' }} />
+            {focused && <Image source={dotIcon} style={{ marginTop: HEIGHT * 0.005, alignSelf: 'center', position: 'absolute', top: HEIGHT * 0.025 }} />}
+
         </View>
     );
 };
@@ -53,13 +65,13 @@ export const HomeTabNavigator = () => {
                     options={{
                         headerShown: false,
                         tabBarIcon: ({ focused }) => (
-                            <CustomTabBarIcon src={tab.icon} label={tab.name} focused={focused} />
+                            <CustomTabBarIcon tab={tab} focused={focused} />
                         ),
                     }}
                 />
             ))}
         </Tab.Navigator>
-    )
+    );
 
 };
 

@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image, Modal, Alert } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { deleteIcon, editIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
@@ -33,7 +33,7 @@ const AddressRenderItem: React.FC<contactProp> = (props) => {
             .doc(item.id)
             .delete()
             .then(() => {
-                console.log('User deleted!');
+                console.log('address deleted!');
             });
         setUpdate(!update);
     };

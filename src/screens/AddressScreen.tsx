@@ -13,12 +13,13 @@ import firestore from '@react-native-firebase/firestore';
 
 
 const AddressScreen = () => {
+
     // const addressList = useSelector(addedContacts);
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [addressList, setAddressList] = useState();
     const [update, setUpdate] = useState<boolean>(false);
-
+    // console.log(section)
     useEffect(() => {
         const fetchData = async () => {
             const addresses = [];
@@ -32,7 +33,6 @@ const AddressScreen = () => {
     }, [update]);
 
 
-    console.log(addressList);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>

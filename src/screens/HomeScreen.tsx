@@ -1,17 +1,35 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, TextInput, Image, Pressable, ScrollView, FlatList } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { bottomArrowIcon, filterIcon, searchIcon } from '../assets/icons';
 import PromoComponent from '../components/PromoComponent';
-import { coffeeArray, filterArray } from '../constants/data/dataArray';
+import { filterArray } from '../constants/data/dataArray';
 import FilterButton from '../components/FilterButton';
 import CoffeeCard from '../components/CoffeeCard';
 import { colors } from '../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
+import firestore from '@react-native-firebase/firestore';
 
 const HomeScreen = () => {
     const [isSelected, setIsSelected] = useState<number>();
+    const [coffeeArray, setCoffeeArray] = useState<[]>([]);
+
+    useEffect(() => {
+        const fetchCoffee = async () => {
+            const coffees = [];
+            try {
+                const coffeeRef = await firestore().collection('coffeeItem').get();
+                coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
+                setCoffeeArray(coffees);
+            } catch {
+                console.log('error while fetching coffee items');
+            }
+        };
+        fetchCoffee();
+    }, []);
+
+    // const filterImageArray=coffeeArray.map((coffee)=>coffee.item.img);
     return (
         <View style={{ flex: 1 }}>
             <ScrollView bounces={false} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
@@ -60,11 +78,12 @@ const HomeScreen = () => {
                 </ScrollView>
                 <FlatList
                     data={coffeeArray}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.id}
                     numColumns={2}
+                    scrollEnabled={false}
                     contentContainerStyle={{ marginBottom: HEIGHT * 0.13, paddingHorizontal: WIDTH * 0.02 }}
-                    renderItem={item => (
-                        <CoffeeCard item={item.item} />
+                    renderItem={({ item }) => (
+                        <CoffeeCard item={item} />
                     )} />
             </ScrollView>
         </View>

@@ -1,13 +1,35 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Image, Pressable } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { background1 } from '../assets/images';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
 import { onBoardScreenData } from '../constants/data/dataArray';
 import { colors } from '../constants/colors';
+import { useDispatch } from 'react-redux';
+import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
+import { addCartCount } from '../redux/slice/cartCountSlice';
 
 const OnBoardScreen = () => {
+    // const [cartCount, setCartCount] = useState<number>();
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const fetchCartCount = async () => {
+            try {
+                const cartItemRef = firestore().collection('cartItem');
+                const snapshot = await getCountFromServer(cartItemRef);
+                // setCartCount(snapshot.data().count);
+                dispatch(addCartCount(snapshot.data().count));
+                console.log('dispatch', snapshot.data().count);
+            } catch (error) {
+                console.log('error while counting cart documents');
+            }
+
+        };
+        fetchCartCount();
+
+    }, [dispatch]);
+
     const navigation = useNavigation();
     return (
         <View style={{ flex: 1, backgroundColor: colors.commonBlack }}>

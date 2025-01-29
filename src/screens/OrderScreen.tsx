@@ -2,24 +2,26 @@
 import { View, Text, SafeAreaView, Pressable, Image, ScrollView, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { backIcon, bottomArrowIcon, discountIcon, plusIcon, rightArrowIcon, walletIcon } from '../assets/icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { orderType, editAdressArray } from '../constants/data/dataArray';
 import { colors } from '../constants/colors';
-import { selectedCarts } from '../redux/slice/cartSlice';
-import { useSelector } from 'react-redux';
+// import { selectedCarts } from '../redux/slice/cartSlice';
+// import { useSelector } from 'react-redux';
 import OrderComponent from '../components/OrderComponent';
 // import { addedContacts } from '../redux/slice/contactSlice';
 import firebase from '@react-native-firebase/firestore';
 
 const OrderScreen = () => {
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
     const [isSelected, setIsSelected] = useState<number>(1);
     const [selectedContact, setSelectedContact] = useState<[]>([]);
-
-    const selectedCart = useSelector(selectedCarts);
+    const [cartItems, setCartItems] = useState<[]>([]);
+    // const [update, setUpdate] = useState<boolean>(false);
+    // const selectedCart = useSelector(selectedCarts);
     useEffect(() => {
-        const onAddressSelected = async () => {
+        const onFetchData = async () => {
             try {
                 const address: [] = [];
                 await firebase()
@@ -32,12 +34,35 @@ const OrderScreen = () => {
                         });
                     });
                 setSelectedContact(address);
+                // cart item
             } catch (error) {
                 console.log('Error occurred:', error);
             }
         };
-        onAddressSelected();
-    }, [selectedContact]);
+        onFetchData();
+    }, [isFocused]);
+
+
+    useEffect(() => {
+        const onFetchCartItem = async () => {
+            try {
+                const carts: [] = [];
+                await firebase()
+                    .collection('cartItem')
+                    .get()
+                    .then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
+                            carts.push({ ...doc.data(), id: doc.id });
+                        });
+                    });
+                setCartItems(carts);
+            } catch (error) {
+                console.log('Error occurred while fetching cart data', error);
+            }
+        };
+        onFetchCartItem();
+    }, [cartItems]);
+
 
 
     return (
@@ -72,20 +97,25 @@ const OrderScreen = () => {
                 <View style={{ marginTop: HEIGHT * 0.04, paddingHorizontal: WIDTH * 0.07 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}> Delivery Address</Text>
 
-                    {(selectedContact).length ? <>
-                        <Text style={{ marginTop: HEIGHT * 0.03, fontWeight: '600', fontSize: HEIGHT * 0.018 }}>{selectedContact[0].name}</Text>
-                        <Text style={{ color: colors.grayColor, marginTop: WIDTH * 0.02 }}>{selectedContact[0].address}</Text>
-                        <View style={{ flexDirection: 'row', gap: WIDTH * 0.03, marginTop: HEIGHT * 0.02 }}>
-                            {editAdressArray.map((item, index) => (
-                                <Pressable key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, borderWidth: 0.5, height: HEIGHT * 0.035, paddingHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.04, backgroundColor: colors.commonWhite }} onPress={() => navigation.navigate('AddressScreen')}><Image source={item.icon} /><Text>{item.name}</Text></Pressable>
-                            ))}
+                    {selectedContact.map((item, index) => (
+                        <View key={index}>
+                            <Text style={{ marginTop: HEIGHT * 0.03, fontWeight: '600', fontSize: HEIGHT * 0.018 }}>{item.name}</Text>
+                            <Text style={{ color: colors.grayColor, marginTop: WIDTH * 0.02 }}>{item.address}</Text>
+                            <View style={{ flexDirection: 'row', gap: WIDTH * 0.03, marginTop: HEIGHT * 0.02 }}>
+                                {editAdressArray.map((item, index) => (
+                                    <Pressable key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, borderWidth: 0.5, height: HEIGHT * 0.035, paddingHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.04, backgroundColor: colors.commonWhite }} onPress={() => navigation.navigate('AddressScreen')}><Image source={item.icon} /><Text>{item.name}</Text>
+                                    </Pressable>
+                                ))}
+                            </View>
                         </View>
-                    </> :
-                        <>
-                            <Pressable style={{ marginTop: HEIGHT * 0.03, flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, borderWidth: 0.5, height: HEIGHT * 0.035, paddingHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.04, backgroundColor: colors.commonWhite, width: WIDTH * 0.4 }} onPress={() => navigation.navigate('AddressScreen')}><Image source={plusIcon} style={{ tintColor: colors.commonBlack }} /><Text>Add Address</Text></Pressable>
-                        </>}
+                    ))}
+                    {selectedContact.length === 0 ?
 
-
+                        <Pressable style={{ marginTop: HEIGHT * 0.03, flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, borderWidth: 0.5, height: HEIGHT * 0.035, paddingHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.04, backgroundColor: colors.commonWhite, width: WIDTH * 0.4 }} onPress={() => navigation.navigate('AddressScreen')}>
+                            <Image source={plusIcon} style={{ tintColor: colors.commonBlack }} />
+                            <Text>Add Address</Text>
+                        </Pressable> : <></>
+                    }
 
                     <View
                         style={{
@@ -97,10 +127,11 @@ const OrderScreen = () => {
                     />
 
                     <FlatList
-                        data={selectedCart}
-                        keyExtractor={(item) => item.id.toString()}
+                        data={cartItems}
+                        keyExtractor={(item) => item.id}
+                        scrollEnabled={false}
                         renderItem={(item) => (
-                            <OrderComponent item={item.item} />
+                            <OrderComponent item={item} />
                         )}
                     />
 

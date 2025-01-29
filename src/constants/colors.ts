@@ -10,4 +10,5 @@ export const colors =
     whiteColor: '#F9F9F9',
     lightGray: '#EDEDED',
     greenColor: '#35C07E',
+    redColor: 'red',
 };
