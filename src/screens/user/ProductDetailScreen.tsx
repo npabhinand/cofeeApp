@@ -1,13 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, SafeAreaView, Image, Pressable, Alert } from 'react-native';
 import React, { useState } from 'react';
-import { backIcon, beansIcon, deliveryIcon, heartIcon, milkCanIcon, rateIcon } from '../assets/icons';
-import { HEIGHT, WIDTH } from '../constants/dimension';
+import { backIcon, beansIcon, deliveryIcon, heartIcon, milkCanIcon, rateIcon } from '../../assets/icons';
+import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../constants/colors';
+import { colors } from '../../constants/colors';
 import { useDispatch } from 'react-redux';
-import { addCart } from '../redux/slice/cartSlice';
-import { coffee4 } from '../assets/images';
+import { addCart } from '../../redux/slice/cartSlice';
+import { coffee4 } from '../../assets/images';
 
 interface productItem {
     item: {

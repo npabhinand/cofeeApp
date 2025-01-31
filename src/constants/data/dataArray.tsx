@@ -1,6 +1,5 @@
-import { documentIcon, editIcon } from '../../assets/icons';
 // import { HEIGHT, WIDTH } from '../dimension';
-
+import { beansIcon, cartIcon, documentIcon, editIcon, peoplesIcon } from '../../assets/icons';
 
 const filterArray = [
     { id: 1, name: 'All Coffee' },
@@ -102,4 +101,12 @@ const coffeeImageArray = {
 };
 
 
-export { filterArray, coffeeArray, orderType, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData, coffeeImageArray, };
+
+const cardArray = [
+    { id: 1, title: 'Product', count: 1, icon: beansIcon, navigate: 'ProductListScreen' },
+    { id: 2, title: 'User', count: 1, icon: peoplesIcon, navigate: 'UserListScreen' },
+    { id: 3, title: 'Orders', count: 1, icon: cartIcon, navigate: 'OrderListScreen' },
+    { id: 4, title: 'Comments', count: 1, icon: documentIcon, navigate: 'CommentListScreen' },
+];
+
+export { filterArray, coffeeArray, orderType, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData, coffeeImageArray, cardArray };

@@ -1,14 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, SafeAreaView, Pressable, Image, ScrollView, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { backIcon, bottomArrowIcon, discountIcon, plusIcon, rightArrowIcon, walletIcon } from '../assets/icons';
+import { backIcon, bottomArrowIcon, discountIcon, plusIcon, rightArrowIcon, walletIcon } from '../../assets/icons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { HEIGHT, WIDTH } from '../constants/dimension';
-import { orderType, editAdressArray } from '../constants/data/dataArray';
-import { colors } from '../constants/colors';
+import { HEIGHT, WIDTH } from '../../constants/dimension';
+import { orderType, editAdressArray } from '../../constants/data/dataArray';
+import { colors } from '../../constants/colors';
 // import { selectedCarts } from '../redux/slice/cartSlice';
 // import { useSelector } from 'react-redux';
-import OrderComponent from '../components/OrderComponent';
+import OrderComponent from '../../components/OrderComponent';
 // import { addedContacts } from '../redux/slice/contactSlice';
 import firebase from '@react-native-firebase/firestore';
 

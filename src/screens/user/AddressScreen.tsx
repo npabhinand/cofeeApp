@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image, SafeAreaView, Modal, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { HEIGHT, WIDTH } from '../constants/dimension';
+import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
-import { backIcon } from '../assets/icons';
-import { colors } from '../constants/colors';
-import AddressRenderItem from '../components/AddressRenderItem';
-import AddAddressComponent from '../components/AddAddressComponent';
+import { backIcon } from '../../assets/icons';
+import { colors } from '../../constants/colors';
+import AddressRenderItem from '../../components/AddressRenderItem';
+import AddAddressComponent from '../../components/AddAddressComponent';
 import firestore from '@react-native-firebase/firestore';
 // import { useSelector } from 'react-redux';
 // import { addedContacts } from '../redux/slice/contactSlice';

@@ -1,12 +1,18 @@
 import React from 'react';
 // import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import OnBoardScreen from '../screens/OnBoardScreen';
+import OnBoardScreen from '../screens/user/OnBoardScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeTabNavigator } from './HomeTabNavigator';
-import ProductDetailScreen from '../screens/ProductDetailScreen';
-import OrderScreen from '../screens/OrderScreen';
-import DeliveryScreen from '../screens/DeliveryScreen';
-import AddressScreen from '../screens/AddressScreen';
+import ProductDetailScreen from '../screens/user/ProductDetailScreen';
+import OrderScreen from '../screens/user/OrderScreen';
+import DeliveryScreen from '../screens/user/DeliveryScreen';
+import AddressScreen from '../screens/user/AddressScreen';
+import AdminHomeScreen from '../screens/Admin/AdminHomeScreen';
+import ProductListScreen from '../screens/Admin/ProductListScreen';
+import UserListScreen from '../screens/Admin/UserListScreen';
+import OrderListScreen from '../screens/Admin/OrderListScreen';
+import CommentListScreen from '../screens/Admin/CommentListScreen';
+import LoginScreen from '../screens/LoginScreen';
 
 
 
@@ -20,7 +26,12 @@ const AppNavigator = () => {
             <Stack.Screen name="OrderScreen" component={OrderScreen} />
             <Stack.Screen name="DeliveryScreen" component={DeliveryScreen} />
             <Stack.Screen name="AddressScreen" component={AddressScreen} />
-
+            <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />
+            <Stack.Screen name="ProductListScreen" component={ProductListScreen} />
+            <Stack.Screen name="UserListScreen" component={UserListScreen} />
+            <Stack.Screen name="OrderListScreen" component={OrderListScreen} />
+            <Stack.Screen name="CommentListScreen" component={CommentListScreen} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
         </Stack.Navigator>
     );
 };

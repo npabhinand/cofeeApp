@@ -1,13 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image, Modal, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { deleteIcon, editIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import AddAddressComponent from './AddAddressComponent';
 // import { useDispatch } from 'react-redux';
 // import { deleteContact, updateSelectionContact } from '../redux/slice/contactSlice';
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 
 interface contactProp {
@@ -23,7 +23,6 @@ interface contactProp {
 }
 const AddressRenderItem: React.FC<contactProp> = (props) => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const navigation = useNavigation();
     const { item, setUpdate, update } = props;
     // const dispatch = useDispatch();
 
@@ -95,7 +94,6 @@ const AddressRenderItem: React.FC<contactProp> = (props) => {
         }
         Alert.alert('Address selected successfully');
         setUpdate(!update);
-        navigation.goBack();
     };
 
     return (

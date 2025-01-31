@@ -1,13 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, TextInput, Image, Pressable, ScrollView, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { HEIGHT, WIDTH } from '../constants/dimension';
-import { bottomArrowIcon, filterIcon, searchIcon } from '../assets/icons';
-import PromoComponent from '../components/PromoComponent';
-import { filterArray } from '../constants/data/dataArray';
-import FilterButton from '../components/FilterButton';
-import CoffeeCard from '../components/CoffeeCard';
-import { colors } from '../constants/colors';
+import { HEIGHT, WIDTH } from '../../constants/dimension';
+import { bottomArrowIcon, filterIcon, searchIcon } from '../../assets/icons';
+import PromoComponent from '../../components/PromoComponent';
+import { filterArray } from '../../constants/data/dataArray';
+import FilterButton from '../../components/FilterButton';
+import CoffeeCard from '../../components/CoffeeCard';
+import { colors } from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import firestore from '@react-native-firebase/firestore';
 
@@ -29,7 +29,6 @@ const HomeScreen = () => {
         fetchCoffee();
     }, []);
 
-    // const filterImageArray=coffeeArray.map((coffee)=>coffee.item.img);
     return (
         <View style={{ flex: 1 }}>
             <ScrollView bounces={false} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Text, Pressable, Image, View, Alert } from 'react-native';
+import { Text, Pressable, Image, View, Alert, ActivityIndicator } from 'react-native';
 import React from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { plusIcon, starIcon } from '../assets/icons';
@@ -15,15 +15,13 @@ import { coffeeImageArray } from '../constants/data/dataArray';
 
 interface coffeeProps {
     item: {
-        item: {
-            id: number;
-            name: string;
-            coffeeType: string;
-            description: string;
-            type: { size: string; price: number; }[],
-            rating: number;
-            img: number;
-        }
+        id: number;
+        product: string;
+        coffeeType: string;
+        description: string;
+        type: { size: string; price: number; }[],
+        rating: number;
+        image: string;
     }
 }
 
@@ -38,15 +36,15 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
         try {
             await firestore().collection('cartItem')
                 .add({
-                    name: item.item.name,
-                    coffeeType: item.item.coffeeType,
-                    description: item.item.description,
+                    name: item.product,
+                    coffeeType: item.coffeeType,
+                    description: item.description,
                     type: {
-                        size: item.item.type[0].size,
-                        price: item.item.type[0].price,
+                        size: item.type[0].size,
+                        price: item.type[0].price,
                     },
-                    rating: item.item.rating,
-                    img: item.item.img,
+                    // rating: item.rating,
+                    image: item.image,
                     quantity: 1,
                 });
             const cartItemRef = firestore().collection('cartItem');
@@ -82,18 +80,18 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 section: { item },
             });
         }}>
-            <Image source={coffeeImageArray[item.item.img]} style={{ width: WIDTH * 0.38, borderRadius: 15, height: WIDTH * 0.38, position: 'absolute', alignSelf: 'center', marginTop: HEIGHT * 0.01 }} />
+            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.38, borderRadius: 15, height: WIDTH * 0.38, position: 'absolute', alignSelf: 'center', marginTop: HEIGHT * 0.01 }} />
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', right: WIDTH * 0.02, position: 'absolute', top: HEIGHT * 0.01, backgroundColor: `${colors.commonBlack}30`, height: HEIGHT * 0.04, width: WIDTH * 0.15, borderTopRightRadius: 15, paddingLeft: HEIGHT * 0.015, borderBottomLeftRadius: 30 }}>
+            {/* <View style={{ flexDirection: 'row', alignItems: 'center', right: WIDTH * 0.02, position: 'absolute', top: HEIGHT * 0.01, backgroundColor: `${colors.commonBlack}30`, height: HEIGHT * 0.04, width: WIDTH * 0.15, borderTopRightRadius: 15, paddingLeft: HEIGHT * 0.015, borderBottomLeftRadius: 30 }}>
                 <Image source={starIcon} style={{ height: HEIGHT * 0.015, marginRight: WIDTH * 0.02 }} />
-                <Text style={{ color: colors.commonWhite, fontSize: 10 }}>{item.item.rating}</Text>
-            </View>
+                <Text style={{ color: colors.commonWhite, fontSize: 10 }}>{item?.rating}</Text>
+            </View> */}
             <View style={{ marginTop: HEIGHT * 0.19, marginLeft: WIDTH * 0.03 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>{item.item.name}</Text>
-                <Text style={{ marginTop: HEIGHT * 0.005, color: colors.grayColor }}>{item.item.coffeeType}</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>{item.product}</Text>
+                <Text style={{ marginTop: HEIGHT * 0.005, color: colors.grayColor }}>{item.coffeeType}</Text>
 
                 <View style={{ marginTop: HEIGHT * 0.005, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginRight: WIDTH * 0.03 }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>$ {item.item.type[0].price}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>$ {item.type[0].price}</Text>
                     <Pressable style={{ backgroundColor: '#C67C4D', height: WIDTH * 0.08, width: WIDTH * 0.08, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.02 }} onPress={handleAddCart}>
                         <Image source={plusIcon} />
                     </Pressable>

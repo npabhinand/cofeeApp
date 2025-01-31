@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image } from 'react-native';
 import React from 'react';
-import { deliveryBoy, map, rute } from '../assets/images';
-import { backIcon, deliveryIcon, driverIcon, gpsIcon, locationIcon, phoneIcon } from '../assets/icons';
-import { HEIGHT, WIDTH } from '../constants/dimension';
+import { deliveryBoy, map, rute } from '../../assets/images';
+import { backIcon, deliveryIcon, driverIcon, gpsIcon, locationIcon, phoneIcon } from '../../assets/icons';
+import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../constants/colors';
-import { DeliveryData } from '../constants/data/dataArray';
+import { colors } from '../../constants/colors';
+import { DeliveryData } from '../../constants/data/dataArray';
 
 const DeliveryScreen = () => {
     const navigation = useNavigation();
