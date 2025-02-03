@@ -1,20 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Image, Pressable } from 'react-native';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { background1 } from '../../assets/images';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
 import { onBoardScreenData } from '../../constants/data/dataArray';
 import { colors } from '../../constants/colors';
-// import { useDispatch } from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
+import { useDispatch } from 'react-redux';
+// import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { addCartCount } from '../../redux/slice/cartCountSlice';
+import { addUserData } from '../../redux/slice/userDataSlice';
 
 const OnBoardScreen = () => {
     const navigation = useNavigation();
     // const [cartCount, setCartCount] = useState<number>();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     // useEffect(() => {
     //     const fetchCartCount = async () => {
     //         try {
@@ -37,6 +37,7 @@ const OnBoardScreen = () => {
             const fetchLoginDetails = await AsyncStorage.getItem('userD');
             if (fetchLoginDetails != null) {
                 const loginDetails = JSON.parse(fetchLoginDetails);
+                dispatch(addUserData(loginDetails));
                 if (loginDetails.userType === 'admin') {
                     navigation.reset({
                         index: 0,

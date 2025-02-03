@@ -4,15 +4,9 @@ import React from 'react';
 import { profileIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
+import { userProps } from '../constants/types/commonTypes';
 
 
-interface userProps {
-    item: {
-        name?: string;
-        email?: string;
-        phone?: number;
-    }
-}
 const UserRenderItem: React.FC<userProps> = (props) => {
     const { item } = props;
     return (

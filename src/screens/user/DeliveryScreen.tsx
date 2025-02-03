@@ -63,7 +63,7 @@ const DeliveryScreen = () => {
                         <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: HEIGHT * 0.005 }}>Delivered your order</Text>
                         <Text style={{ fontSize: 13, color: colors.grayColor, marginRight: WIDTH * 0.2 }}>Pesronal Courier</Text>
                     </View>
-                    <View style={{ borderWidth: 0.4, height: WIDTH * 0.12, width: WIDTH * 0.12, color: colors.grayColor, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ borderWidth: 0.4, height: WIDTH * 0.12, width: WIDTH * 0.12, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
                         <Image source={phoneIcon} />
                     </View>
                 </View>

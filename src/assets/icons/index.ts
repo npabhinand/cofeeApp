@@ -28,5 +28,8 @@ import profileIcon from './profileIcon.png';
 import peoplesIcon from './peoplesIcon/peoplesIcon.png';
 import notVisibleIcon from './notVisibleIcon/notVisibleIcon.png';
 import visibleIcon from './visibleIcon/visibleIcon.png';
+import profile from './profile/profile.png';
+import logout from './logout/logoutIcon.png';
+import back from './back.png'
 // import commentIcon from './commentIcon/commentIcon.png';
-export { searchIcon, homeIcon, heartIcon, filterIcon, starIcon, plusIcon, cartIcon, notificationIcon, dotIcon, backIcon, deliveryIcon, beansIcon, milkCanIcon, rateIcon, editIcon, documentIcon, discountIcon, rightArrowIcon, walletIcon, bottomArrowIcon, gpsIcon, locationIcon, phoneIcon, driverIcon, minusIcon, deleteIcon, profileIcon, peoplesIcon, notVisibleIcon, visibleIcon };
+export { searchIcon, homeIcon, heartIcon, filterIcon, starIcon, plusIcon, cartIcon, notificationIcon, dotIcon, backIcon, deliveryIcon, beansIcon, milkCanIcon, rateIcon, editIcon, documentIcon, discountIcon, rightArrowIcon, walletIcon, bottomArrowIcon, gpsIcon, locationIcon, phoneIcon, driverIcon, minusIcon, deleteIcon, profileIcon, peoplesIcon, notVisibleIcon, visibleIcon, profile, logout, back };

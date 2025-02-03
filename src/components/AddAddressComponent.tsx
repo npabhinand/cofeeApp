@@ -1,67 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image, TextInput, Alert } from 'react-native';
 import React, { useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
 import { colors } from '../constants/colors';
 import { backIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
-// import { useDispatch } from 'react-redux';
-// import { addContact, updateContact } from '../redux/slice/contactSlice';
-import firestore from '@react-native-firebase/firestore';
+import { addressProps } from '../constants/types/commonTypes';
 
-interface addressProps {
-    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-    update: boolean;
-    id: string;
-    name: string;
-    phone: number;
-    address: string;
-    selected: boolean;
-}
+
 
 const AddAddressComponent: React.FC<addressProps> = (props) => {
-    // const dispatch = useDispatch();
-    // const [inputName, setInputName] = useState<string>(name || '');
-    // const [inputPhone, setInputPhone] = useState<string>(phone || '');
-    // const [inputAddress, setInputAddress] = useState<string>(address || '');
+
     const { id, name, address, phone, setUpdate, update } = props;
     const { setModalVisible } = props;
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState<addressProps>({ name: name || '', phone: phone || null, address: address || '' });
-
-
-    // const AddOrUpdateAddress = () => {
-    //     if (!inputName || !inputPhone || !inputAddress) {
-    //         Alert.alert('Please fill in all fields');
-    //         return;
-    //     }
-
-    //     if (id) {
-    //         // Update existing address
-    //         dispatch(updateContact({
-    //             id: id,
-    //             name: inputName,
-    //             phone: inputPhone,
-    //             address: inputAddress,
-    //             selected: selected,
-    //         }));
-    //     } else {
-
-    //             dispatch(addContact({
-    //                 id: Date.now(),
-    //                 name: inputName,
-    //                 phone: inputPhone,
-    //                 address: inputAddress,
-    //                 selected: false,
-    //             }));
-    //             Alert.alert('Successfully address Added');
-    //         } catch (error) {
-    //             console.error('Error adding address to Firestore:', error);
-    //             Alert.alert('Failed to add address');
-    //         }
-    //     }
-    //     setModalVisible(false);
-    // };
 
     const AddOrUpdateAddress = async () => {
         let newErrors = {};

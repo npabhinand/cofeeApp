@@ -9,6 +9,8 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { addUserData } from '../redux/slice/userDataSlice';
 
 const LoginScreen = () => {
     const [formData, setFormData] = useState<{ email: string; password: string; }>({ email: '', password: '' });
@@ -16,7 +18,7 @@ const LoginScreen = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const navigation = useNavigation();
-
+    const dispatch = useDispatch();
 
     const handleLogin = async () => {
         let newErrors = {};
@@ -39,7 +41,7 @@ const LoginScreen = () => {
             if (!userQuerySnapshot.empty) {
                 const userDoc = userQuerySnapshot.data();
                 await AsyncStorage.setItem('userD', JSON.stringify(userDoc));
-
+                dispatch(addUserData(userDoc));
 
                 if (userDoc?.userType === 'admin') {
                     navigation.reset({
@@ -55,11 +57,14 @@ const LoginScreen = () => {
                     console.log('checking');
                 }
             } else {
+                setLoading(!loading);
                 Alert.alert('User not found', 'Please check your credentials.');
+
             }
         } catch (error) {
-            console.log(error.code, error.message);
+            console.log(error);
             Alert.alert('Invalid email or password');
+            setLoading(!loading);
         }
         setLoading(!loading);
     };

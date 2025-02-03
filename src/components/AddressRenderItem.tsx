@@ -5,23 +5,11 @@ import { deleteIcon, editIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import AddAddressComponent from './AddAddressComponent';
-// import { useDispatch } from 'react-redux';
-// import { deleteContact, updateSelectionContact } from '../redux/slice/contactSlice';
-// import { useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import { contactProps } from '../constants/types/commonTypes';
 
-interface contactProp {
-    item: {
-        id: string;
-        name: string;
-        phone: string;
-        address: string;
-        selected: boolean;
-    };
-    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-    update: boolean;
-}
-const AddressRenderItem: React.FC<contactProp> = (props) => {
+
+const AddressRenderItem: React.FC<contactProps> = (props) => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const { item, setUpdate, update } = props;
     // const dispatch = useDispatch();

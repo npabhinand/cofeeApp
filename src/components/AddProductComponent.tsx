@@ -6,20 +6,9 @@ import { backIcon } from '../assets/icons';
 import { colors } from '../constants/colors';
 import firebase from '@react-native-firebase/firestore';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { productProp } from '../constants/types/commonTypes';
 
-interface productProp {
-    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-    update: boolean;
-    item?: {
-        id: string,
-        product: string,
-        coffeeType: string,
-        image: string,
-        description: string;
-        type: { size: string, price: number }
-    };
-}
+
 
 const AddProductComponent: React.FC<productProp> = (props) => {
     const { setModalVisible, item, setUpdate, update } = props;

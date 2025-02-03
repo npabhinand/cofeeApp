@@ -1,25 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, Image, Pressable, Alert } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 import React, { useState } from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import { minusIcon, plusIcon } from '../assets/icons';
-import { coffeeImageArray } from '../constants/data/dataArray';
-import firestore from '@react-native-firebase/firestore';
-interface CartProps {
-    item: {
-        item: {
-            id: string;
-            name: string;
-            coffeeType: string;
-            description: string;
-            type: { size: string; price: number; }[],
-            rating: number;
-            img: string;
-            quantity: number;
-        }
-    }
-}
+// import { coffeeImageArray } from '../constants/data/dataArray';
+// import firestore from '@react-native-firebase/firestore';
+import { CartProps } from '../constants/types/commonTypes';
+
 const OrderComponent: React.FC<CartProps> = (props) => {
     const { item } = props;
     const [counter, setCounter] = useState<number>(item.item.quantity);
@@ -56,7 +44,7 @@ const OrderComponent: React.FC<CartProps> = (props) => {
         <>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.04 }}>
                 <Image
-                    source={coffeeImageArray[item.item.img]}
+                    source={{ uri: item.item.image }}
                     style={{ height: WIDTH * 0.15, width: WIDTH * 0.15, borderRadius: WIDTH * 0.02 }}
                 />
                 <View style={{ width: WIDTH * 0.4 }}>

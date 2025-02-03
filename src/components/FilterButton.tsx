@@ -3,14 +3,8 @@ import { Text, Pressable } from 'react-native';
 import React from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
+import { buttonProps } from '../constants/types/commonTypes';
 
-interface buttonProps {
-    buttonName: string;
-    selected: boolean;
-    onPress: () => void;
-
-
-}
 const FilterButton: React.FC<buttonProps> = (props) => {
     const { buttonName, selected, onPress } = props;
     return (

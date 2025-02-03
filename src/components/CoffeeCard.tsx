@@ -1,36 +1,27 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Text, Pressable, Image, View, Alert, ActivityIndicator } from 'react-native';
+import { Text, Pressable, Image, View, Alert } from 'react-native';
 import React from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
-import { plusIcon, starIcon } from '../assets/icons';
+import { plusIcon } from '../assets/icons';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../constants/colors';
 import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { addCartCount } from '../redux/slice/cartCountSlice';
-import { coffeeImageArray } from '../constants/data/dataArray';
+import { coffeeProps } from '../constants/types/commonTypes';
+
+
 // import { addCart } from '../redux/slice/cartSlice';
 
 
 
-interface coffeeProps {
-    item: {
-        id: number;
-        product: string;
-        coffeeType: string;
-        description: string;
-        type: { size: string; price: number; }[],
-        rating: number;
-        image: string;
-    }
-}
+
 
 const CoffeeCard: React.FC<coffeeProps> = (props) => {
-    const { item } = props;
+    const { item, userId } = props;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-
-
+    console.log('--', userId);
     // In your handleAddCart function
     const handleAddCart = async () => {
         try {
@@ -43,6 +34,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                         size: item.type[0].size,
                         price: item.type[0].price,
                     },
+                    userId: userId,
                     // rating: item.rating,
                     image: item.image,
                     quantity: 1,
@@ -56,20 +48,6 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
             console.log('error while adding to carts Items');
         }
 
-
-        // dispatch(addCart({
-        //     id: item.id,
-        //     name: item.name,
-        //     coffeeType: item.coffeeType,
-        //     description: item.description,
-        //     type: {
-        //         size: item.type[0].size,
-        //         price: item.type[0].price,
-        //     },
-        //     rating: item.rating,
-        //     img: item.img,
-        //     quantity: 1,
-        // }));
 
         Alert.alert('Successfully Added To cart');
     };

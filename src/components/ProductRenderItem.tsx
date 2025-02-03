@@ -7,19 +7,10 @@ import { colors } from '../constants/colors';
 import { deleteIcon, editIcon } from '../assets/icons';
 import AddProductComponent from './AddProductComponent';
 import firestore from '@react-native-firebase/firestore';
+import { productItems } from '../constants/types/commonTypes';
 
 
-interface productItems {
-    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-    update: boolean;
-    item: {
-        id: string,
-        product: string,
-        coffeeType: string,
-        image: string,
-        type: { size: string, price: number }
-    }
-}
+
 const ProductRenderItem: React.FC<productItems> = (props) => {
     const { item, setUpdate, update } = props;
     const [modalVisible, setModalVisible] = useState(false);

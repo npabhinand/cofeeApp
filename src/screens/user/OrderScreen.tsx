@@ -7,10 +7,11 @@ import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { orderType, editAdressArray } from '../../constants/data/dataArray';
 import { colors } from '../../constants/colors';
 // import { selectedCarts } from '../redux/slice/cartSlice';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import OrderComponent from '../../components/OrderComponent';
 // import { addedContacts } from '../redux/slice/contactSlice';
 import firebase from '@react-native-firebase/firestore';
+import { selectedUserData } from '../../redux/slice/userDataSlice';
 
 const OrderScreen = () => {
     const navigation = useNavigation();
@@ -19,11 +20,11 @@ const OrderScreen = () => {
     const [selectedContact, setSelectedContact] = useState<[]>([]);
     const [cartItems, setCartItems] = useState<[]>([]);
     // const [update, setUpdate] = useState<boolean>(false);
-    // const selectedCart = useSelector(selectedCarts);
+    const userData = useSelector(selectedUserData);
     useEffect(() => {
         const onFetchData = async () => {
             try {
-                const address: [] = [];
+                const address = [];
                 await firebase()
                     .collection('address')
                     .where('selected', '==', true)
@@ -48,7 +49,7 @@ const OrderScreen = () => {
             try {
                 const carts: [] = [];
                 await firebase()
-                    .collection('cartItem')
+                    .collection('cartItem').where('userId', '==', userData[0].email)
                     .get()
                     .then(querySnapshot => {
                         querySnapshot.forEach(doc => {
@@ -61,7 +62,7 @@ const OrderScreen = () => {
             }
         };
         onFetchCartItem();
-    }, [cartItems]);
+    }, [cartItems, userData]);
 
 
 
