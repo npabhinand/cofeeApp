@@ -10,10 +10,10 @@ import StockRenderItem from '../../components/StockRenderItem';
 const StockListScreen = () => {
     const [coffeeData, setCoffeeData] = useState([]);
     const navigation = useNavigation();
-
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
-            const coffees = [];
+            const coffees: any = [];
             try {
                 const coffeeRef = await firestore().collection('coffeeItem').get();
                 coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
@@ -23,7 +23,7 @@ const StockListScreen = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [loading]);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -38,7 +38,7 @@ const StockListScreen = () => {
             <FlatList
                 data={coffeeData}
                 renderItem={(item) => (
-                    <StockRenderItem item={item.item} />
+                    <StockRenderItem item={item.item} setLoading={setLoading} loading={loading} />
                 )}
             />
 

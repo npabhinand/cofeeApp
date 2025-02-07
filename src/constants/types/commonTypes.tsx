@@ -72,17 +72,17 @@ interface buttonProps {
     onPress: () => void;
 }
 interface CartProps {
+    // item: {
     item: {
-        item: {
-            id: string;
-            name: string;
-            coffeeType: string;
-            description: string;
-            type: { size: string; price: number; },
-            rating: number;
-            image: string;
-            quantity: number;
-        }
+        id: string;
+        name: string;
+        coffeeType: string;
+        description: string;
+        type: { size: string; price: number; },
+        rating: number;
+        image: string;
+        quantity: number;
+        // }
     }
 }
 interface productsProps {

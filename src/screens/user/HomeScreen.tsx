@@ -32,7 +32,7 @@ const HomeScreen = () => {
             const coffees = [];
             try {
                 setLoading(true);
-                const coffeeRef = await firestore().collection('coffeeItem').get();
+                const coffeeRef = await firestore().collection('coffeeItem').where('stock', '>', 0).get();
                 coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
                 setCoffeeArray(coffees);
                 setLoading(false);

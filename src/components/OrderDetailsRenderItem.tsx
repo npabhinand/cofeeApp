@@ -34,10 +34,12 @@ const OrderDetailsRenderItem = (props) => {
                     <Text style={{ fontSize: 15, fontWeight: '500', color: colors.commonBlack }}>{details.value}</Text>
                 </View>
             ))}
+            {/*  */}
             <Text style={{ textAlign: 'center', fontWeight: '600', color: colors.brownColor }} onPress={() => setIsVisible(!isVisible)}>Show Order Details</Text>
+
             {/*  */}
             <Modal visible={isVisible}>
-                <View style={{ width: WIDTH * 0.9, alignItems: 'center', alignSelf: 'center', marginTop: HEIGHT * 0.05 }}>
+                <View style={{ width: WIDTH * 0.9, alignSelf: 'center', marginTop: HEIGHT * 0.05 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.03, marginVertical: HEIGHT * 0.02 }}>Order Details</Text>
                     {/* {orderArray.map((details, index) => ( */}
                     {/* <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: WIDTH * 0.02, marginBottom: HEIGHT * 0.015 }}>
@@ -46,7 +48,17 @@ const OrderDetailsRenderItem = (props) => {
                             </Text>
                             <Text style={{ fontSize: 15, fontWeight: '500', color: colors.commonBlack }}>{details.value}</Text>
                         </View> */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ marginTop: HEIGHT * 0.01, fontSize: 18, fontWeight: '600', marginBottom: HEIGHT * 0.01 }}>Delivery Address</Text>
+                    {/*  */}
+                    {addressDetails.map((detail, index) => (
+                        <View style={{ flexDirection: 'row', rowGap: HEIGHT * 0.01 }} key={index}>
+                            <Text style={{ color: colors.brownColor, fontSize: 16, fontWeight: '600', marginRight: 10, width: WIDTH * 0.3 }}>{detail.label}</Text>
+                            <Text style={{ fontSize: 15, fontWeight: '500', color: colors.commonBlack, width: WIDTH * 0.6, }}>{detail.value}</Text>
+                        </View>))}
+                    {/*  */}
+
+
+                    {/* <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <View style={{ marginRight: WIDTH * 0.1, gap: HEIGHT * 0.01 }}>
                             <Text style={{ color: colors.brownColor }}>Order Id</Text>
                             <Text style={{ color: colors.brownColor }}>Order price</Text>
@@ -57,10 +69,10 @@ const OrderDetailsRenderItem = (props) => {
                             <Text>${item.TotalPrice}</Text>
                             <Text>{date}</Text>
                         </View>
-                    </View>
+                    </View> */}
                     {/* ))} */}
                     {item.products.map((product, index: number) => (
-                        <View key={index} style={{ borderBottomWidth: 1, flexDirection: 'row', alignItems: 'center', borderColor: colors.brownColor, paddingBottom: HEIGHT * 0.015, marginBottom: HEIGHT * 0.02 }}>
+                        <View key={index} style={{ borderBottomWidth: 1, flexDirection: 'row', alignItems: 'center', borderColor: colors.brownColor, paddingBottom: HEIGHT * 0.015, marginTop: HEIGHT * 0.02 }}>
 
                             <Image
                                 source={{ uri: product.image }}
@@ -78,14 +90,16 @@ const OrderDetailsRenderItem = (props) => {
                             </View>
                         </View>
                     ))}
-                    <Text style={{ textAlign: 'center', fontWeight: '600', fontSize: 19, marginBottom: HEIGHT * 0.01, color: colors.grayColor }}>Contact Details</Text>
+                    <Text style={{ fontWeight: '600', fontSize: 19, marginVertical: HEIGHT * 0.02, color: colors.grayColor }}>Payment Details</Text>
 
-                    {addressDetails.map((detail, index) => (
-                        <View style={{ flexDirection: 'row', rowGap: HEIGHT * 0.01 }} key={index}>
-                            <Text style={{ color: colors.brownColor, fontSize: 16, fontWeight: '600', marginRight: 10, width: WIDTH * 0.4, textAlign: 'center' }}>{detail.label}</Text>
-                            <Text style={{ fontSize: 15, fontWeight: '500', color: colors.commonBlack, width: WIDTH * 0.4, }}>{detail.value}</Text>
-                        </View>))}
-
+                    {orderArray.map((details, index) => (
+                        <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: HEIGHT * 0.01 }}>
+                            <Text style={{ color: colors.brownColor, fontSize: 16, fontWeight: '600', marginRight: 10, width: WIDTH * 0.3, }}>
+                                {details.name}
+                            </Text>
+                            <Text style={{ fontSize: 15, fontWeight: '500', color: colors.commonBlack, textAlign: 'left' }}>{details.value}</Text>
+                        </View>
+                    ))}
                 </View>
                 <Pressable style={{ width: WIDTH * 0.9, height: HEIGHT * 0.06, backgroundColor: colors.brownColor, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: HEIGHT * 0.04, borderRadius: 10 }} onPress={() => setIsVisible(!isVisible)}><Text style={{ color: colors.commonWhite, fontSize: 15 }}>Hide Details</Text></Pressable>
             </Modal>

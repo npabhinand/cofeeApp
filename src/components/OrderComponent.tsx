@@ -1,11 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, Image, Pressable } from 'react-native';
+import { View, Text, Image, Pressable, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import { minusIcon, plusIcon } from '../assets/icons';
 // import { coffeeImageArray } from '../constants/data/dataArray';
-// import firestore from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import { CartProps } from '../constants/types/commonTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectedPrice, updateAddTotalPrice, updateSubTotalPrice } from '../redux/slice/priceTotalSlice';
@@ -17,13 +17,6 @@ const OrderComponent: React.FC<CartProps> = (props) => {
     const totalPrice = useSelector(selectedPrice);
     console.log('counter update', totalPrice);
 
-    const handleIncrease = async () => {
-        setCounter(counter + 1);
-        dispatch(updateAddTotalPrice(parseInt(item.type.price)));
-        //         id: item.id,
-        //         selected: true,
-        //     }));
-    };
 
     // const handleIncrease = useCallback(() => {
     //     setCounter((prevCounter: number) => {
@@ -60,17 +53,30 @@ const OrderComponent: React.FC<CartProps> = (props) => {
         if (counter > 1) {
             setCounter(counter - 1);
             dispatch(updateSubTotalPrice(parseInt(item.type.price)));
-            // try {
-            //     await firestore().collection('cartItem').doc(item.item.id).update({
-            //         quantity: counter,
-            //     });
-            // } catch (error) {
-            //     console.error('Failed to update quantity', error);
-            //     Alert.alert('Failed to update quantity');
-            // }
+            try {
+                await firestore().collection('cartItem').doc(item.id).update({
+                    quantity: counter,
+                });
+            } catch (error) {
+                console.error('Failed to update quantity', error);
+                Alert.alert('Failed to update quantity');
+            }
         }
     };
-    console.log(item.id)
+
+    const handleIncrease = async () => {
+        setCounter(counter + 1);
+        dispatch(updateAddTotalPrice(parseInt(item.type.price)));
+        try {
+            await firestore().collection('cartItem').doc(item.id).update({
+                quantity: counter,
+            });
+        } catch (error) {
+            console.error('Failed to update quantity', error);
+            Alert.alert('Failed to update cart Item');
+        }
+    };
+
     return (
         <>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.03, paddingHorizontal: WIDTH * 0.07, backgroundColor: '#F9F9F9', height: HEIGHT * 0.1 }}>
