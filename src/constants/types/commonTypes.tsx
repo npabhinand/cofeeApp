@@ -78,7 +78,7 @@ interface CartProps {
             name: string;
             coffeeType: string;
             description: string;
-            type: { size: string; price: number; }[],
+            type: { size: string; price: number; },
             rating: number;
             image: string;
             quantity: number;
@@ -107,7 +107,36 @@ interface userProps {
 }
 interface dropDownProps {
     color?: string;
-    handleModal: (value: boolean) => void;
-
+    setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    isVisible: boolean
+    onPressClose: any
 }
-export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems };
+interface CartState {
+    cartCount: number;
+}
+
+interface dropDownState {
+    isVisible: boolean;
+}
+interface PriceState {
+    totalPrice: number;
+}
+interface CartItem {
+    id: number;
+    name: string;
+    coffeeType: string;
+    description: string;
+    type: { size: string; price: number; }[],
+    rating: number;
+    img: number;
+    quantity: number;
+}
+
+interface ContactItem {
+    id: number;
+    name: string;
+    phone: number;
+    address: string;
+    selected: boolean;
+}
+export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState };

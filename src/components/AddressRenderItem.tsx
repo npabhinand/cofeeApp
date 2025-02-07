@@ -7,12 +7,16 @@ import { colors } from '../constants/colors';
 import AddAddressComponent from './AddAddressComponent';
 import firestore from '@react-native-firebase/firestore';
 import { contactProps } from '../constants/types/commonTypes';
+import { useSelector } from 'react-redux';
+import { selectedUserData } from '../redux/slice/userDataSlice';
 
 
 const AddressRenderItem: React.FC<contactProps> = (props) => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const { item, setUpdate, update } = props;
     // const dispatch = useDispatch();
+    const userData = useSelector(selectedUserData);
+    const userEmail = userData[0].email;
 
     const onDeleteItem = () => {
         firestore()
@@ -52,6 +56,7 @@ const AddressRenderItem: React.FC<contactProps> = (props) => {
         try {
 
             await firestore().collection('address')
+                .where('userId', '==', userEmail)
                 .where('selected', '==', true)
                 .get()
                 .then(function (querySnapshot) {

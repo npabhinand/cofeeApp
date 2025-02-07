@@ -17,6 +17,7 @@ const userSlice = createSlice({
     reducers: {
         addUserData: (state, action: PayloadAction<userDataItem>) => {
             const item = action.payload;
+            state.userData = [];
             const itemExits = state.userData.some((user) => user.email === item.email);
             if (!itemExits) {
                 state.userData.push(item);

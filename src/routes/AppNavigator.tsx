@@ -11,8 +11,9 @@ import AdminHomeScreen from '../screens/Admin/AdminHomeScreen';
 import ProductListScreen from '../screens/Admin/ProductListScreen';
 import UserListScreen from '../screens/Admin/UserListScreen';
 import OrderListScreen from '../screens/Admin/OrderListScreen';
-import CommentListScreen from '../screens/Admin/CommentListScreen';
+import CommentListScreen from '../screens/Admin/StockListScreen';
 import LoginScreen from '../screens/LoginScreen';
+import HomeScreen from '../screens/user/HomeScreen';
 
 
 
@@ -20,6 +21,7 @@ const AppNavigator = () => {
     const Stack = createNativeStackNavigator();
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="OnBoardScreen">
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="HomeTabs" component={HomeTabNavigator} />
             <Stack.Screen name="OnBoardScreen" component={OnBoardScreen} />
             <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen} />

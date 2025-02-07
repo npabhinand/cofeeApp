@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CartState } from '../../constants/types/commonTypes';
 
 
-interface CartState {
-    cartCount: number;
-}
+
 
 const initialState: CartState = {
     cartCount: 0,

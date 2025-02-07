@@ -106,7 +106,10 @@ const cardArray = [
     { id: 1, title: 'Product', count: 1, icon: beansIcon, navigate: 'ProductListScreen' },
     { id: 2, title: 'User', count: 1, icon: peoplesIcon, navigate: 'UserListScreen' },
     { id: 3, title: 'Orders', count: 1, icon: cartIcon, navigate: 'OrderListScreen' },
-    { id: 4, title: 'Comments', count: 1, icon: documentIcon, navigate: 'CommentListScreen' },
+    { id: 4, title: 'Stock', count: 1, icon: documentIcon, navigate: 'CommentListScreen' },
 ];
+
+
+// there is astock in the cofeeItem collection iwant to reduec each item that users ordr by qauntity in the cart
 
 export { filterArray, coffeeArray, orderType, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData, coffeeImageArray, cardArray };

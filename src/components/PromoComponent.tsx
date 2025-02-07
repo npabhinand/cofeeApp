@@ -13,11 +13,11 @@ const PromoComponent = () => {
                 <View style={{ backgroundColor: colors.redButtonColor, width: WIDTH * 0.18, height: HEIGHT * 0.04, marginBottom: HEIGHT * 0.01, alignItems: 'center', borderRadius: WIDTH * 0.02, justifyContent: 'center' }}>
                     <Text style={{ color: colors.commonWhite, fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>Promo</Text>
                 </View>
-                <View style={{ backgroundColor: colors.commonBlack, width: WIDTH * 0.5, height: HEIGHT * 0.03, marginVertical: HEIGHT * 0.017, paddingLeft: WIDTH * 0.005 }}>
-                    <Text style={{ fontSize: 35, color: '#fff', fontWeight: 'bold', marginTop: -HEIGHT * 0.018 }}>Buy one get </Text>
+                <View style={{ backgroundColor: colors.commonBlack, marginVertical: HEIGHT * 0.017, paddingLeft: WIDTH * 0.005, width: WIDTH * 0.52 }}>
+                    <Text style={{ fontSize: HEIGHT * 0.042, color: '#fff', fontWeight: 'bold', marginTop: -HEIGHT * 0.018 }}>Buy one get </Text>
                 </View>
                 <View style={{ backgroundColor: colors.commonBlack, width: WIDTH * 0.39, height: HEIGHT * 0.03, paddingLeft: WIDTH * 0.005 }}>
-                    <Text style={{ fontSize: 35, color: '#fff', fontWeight: 'bold', marginTop: -HEIGHT * 0.018 }}>one FREE</Text>
+                    <Text style={{ fontSize: HEIGHT * 0.042, color: '#fff', fontWeight: 'bold', marginTop: -HEIGHT * 0.018 }}>one FREE</Text>
                 </View>
             </View>
 

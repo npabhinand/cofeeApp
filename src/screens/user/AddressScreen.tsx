@@ -8,6 +8,8 @@ import { colors } from '../../constants/colors';
 import AddressRenderItem from '../../components/AddressRenderItem';
 import AddAddressComponent from '../../components/AddAddressComponent';
 import firestore from '@react-native-firebase/firestore';
+import { useSelector } from 'react-redux';
+import { selectedUserData } from '../../redux/slice/userDataSlice';
 // import { useSelector } from 'react-redux';
 // import { addedContacts } from '../redux/slice/contactSlice';
 
@@ -19,11 +21,13 @@ const AddressScreen = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [addressList, setAddressList] = useState();
     const [update, setUpdate] = useState<boolean>(false);
+    const userData = useSelector(selectedUserData);
+    const userEmail = userData[0].email;
     // console.log(section)
     useEffect(() => {
         const fetchData = async () => {
             const addresses = [];
-            const addressRef = await firestore().collection('address').get();
+            const addressRef = await firestore().collection('address').where('userId', '==', userEmail).get();
             addressRef.forEach((doc) => {
                 addresses.push({ ...doc.data(), id: doc.id });
             });

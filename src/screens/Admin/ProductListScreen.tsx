@@ -5,17 +5,11 @@ import ProductRenderItem from '../../components/ProductRenderItem';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { colors } from '../../constants/colors';
 import AddProductComponent from '../../components/AddProductComponent';
-import firebase from '@react-native-firebase/firestore'
+import firebase from '@react-native-firebase/firestore';
 import { backIcon } from '../../assets/icons';
 import { useNavigation } from '@react-navigation/native';
 
-// interface productItems{
-//     id:string,
-//     product:string,
-//     coffeeType:string,
-//     image:string,
-//     type:{}
-// }
+
 const ProductListScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [productList, setProductList] = useState([]);
@@ -25,7 +19,7 @@ const ProductListScreen = () => {
         const fetchProductData = async () => {
             const productArray = [];
             try {
-                const productRef = await firebase().collection('coffeeItem').get()
+                const productRef = await firebase().collection('coffeeItem').get();
                 productRef.forEach((doc) => {
                     productArray.push({ id: doc.id, ...doc.data() });
                 });

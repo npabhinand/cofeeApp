@@ -6,16 +6,18 @@ import { colors } from '../constants/colors';
 import { backIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { addressProps } from '../constants/types/commonTypes';
+import { useSelector } from 'react-redux';
+import { selectedUserData } from '../redux/slice/userDataSlice';
 
 
 
 const AddAddressComponent: React.FC<addressProps> = (props) => {
 
-    const { id, name, address, phone, setUpdate, update } = props;
-    const { setModalVisible } = props;
+    const { id, name, address, phone, setUpdate, update, setModalVisible } = props;
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState<addressProps>({ name: name || '', phone: phone || null, address: address || '' });
-
+    const userData = useSelector(selectedUserData);
+    const userEmail = userData[0].email;
     const AddOrUpdateAddress = async () => {
         let newErrors = {};
         Object.keys(formData).forEach((key) => {
@@ -49,6 +51,7 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
                     phone: formData.phone,
                     address: formData.address,
                     selected: false,
+                    userId: userEmail,
                 });
                 Alert.alert('Address Added Successfully');
             } catch (error) {

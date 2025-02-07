@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, Pressable, Image } from 'react-native';
+import { View, Text, Pressable, Image, SafeAreaView } from 'react-native';
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+
 import { HEIGHT, WIDTH } from '../../constants/dimension';
+import { useNavigation } from '@react-navigation/native';
 import { backIcon } from '../../assets/icons';
 
-
-const CommentListScreen = () => {
+const OrderDetailsScreen = () => {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -15,10 +15,10 @@ const CommentListScreen = () => {
                 <Pressable onPress={() => navigation.goBack()}>
                     <Image source={backIcon} />
                 </Pressable>
-                <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Comments</Text>
+                <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Orders</Text>
             </View>
         </SafeAreaView>
-    );
-};
+    )
+}
 
-export default CommentListScreen;
+export default OrderDetailsScreen;

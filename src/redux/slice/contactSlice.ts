@@ -1,13 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ContactItem } from '../../constants/types/commonTypes';
 
 
-interface ContactItem {
-    id: number;
-    name: string;
-    phone: number;
-    address: string;
-    selected: boolean;
-}
 
 interface contactState {
     contacts: ContactItem[]

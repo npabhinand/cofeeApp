@@ -22,18 +22,30 @@ const LoginScreen = () => {
 
     const handleLogin = async () => {
         let newErrors = {};
+
+
         Object.keys(formData).forEach((key) => {
             if (!formData[key].trim()) {
                 newErrors[key] = `${key} is required `;
             }
         });
+        const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (formData.email && !reg.test(formData.email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+
+        if (formData.password && formData.password.length < 6) {
+            newErrors.password = 'Password at least 6 characters';
+        }
+
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
         }
-        setLoading(!loading);
+
 
         try {
+            setLoading(true);
             const userCredential = await auth().signInWithEmailAndPassword(formData.email, formData.password);
             const user = userCredential.user;
             const userQuerySnapshot = await firestore().collection('user').doc(user.uid).get();
@@ -42,7 +54,7 @@ const LoginScreen = () => {
                 const userDoc = userQuerySnapshot.data();
                 await AsyncStorage.setItem('userD', JSON.stringify(userDoc));
                 dispatch(addUserData(userDoc));
-
+                setLoading(false);
                 if (userDoc?.userType === 'admin') {
                     navigation.reset({
                         index: 0,
@@ -57,16 +69,16 @@ const LoginScreen = () => {
                     console.log('checking');
                 }
             } else {
-                setLoading(!loading);
+                setLoading(false);
                 Alert.alert('User not found', 'Please check your credentials.');
 
             }
         } catch (error) {
             console.log(error);
             Alert.alert('Invalid email or password');
-            setLoading(!loading);
+            setLoading(false);
         }
-        setLoading(!loading);
+
     };
 
     // };

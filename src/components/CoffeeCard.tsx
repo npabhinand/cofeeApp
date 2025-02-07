@@ -2,7 +2,7 @@
 import { Text, Pressable, Image, View, Alert } from 'react-native';
 import React from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
-import { plusIcon } from '../assets/icons';
+import { plusIcon, starIcon } from '../assets/icons';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../constants/colors';
 import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
@@ -14,19 +14,39 @@ import { coffeeProps } from '../constants/types/commonTypes';
 // import { addCart } from '../redux/slice/cartSlice';
 
 
-
-
-
 const CoffeeCard: React.FC<coffeeProps> = (props) => {
     const { item, userId } = props;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    console.log('--', userId);
-    // In your handleAddCart function
     const handleAddCart = async () => {
         try {
-            await firestore().collection('cartItem')
-                .add({
+            const carts = [];
+            await firestore()
+                .collection('cartItem')
+                .where('userId', '==', userId)
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        carts.push({ ...doc.data(), id: doc.id });
+                    });
+                });
+            // setCartItems(carts);
+
+            const existingProduct = carts.find(items => items.productId === item.id);
+            if (existingProduct) {
+                await firestore()
+                    .collection('cartItem')
+                    .doc(existingProduct.id)
+                    .update({
+                        quantity: existingProduct.quantity + 1,
+                    });
+
+                const cartItemRef = firestore().collection('cartItem').where('userId', '==', userId);
+                const snapshot = await getCountFromServer(cartItemRef);
+                dispatch(addCartCount(snapshot.data().count));
+                console.log('Updated cart count', snapshot.data().count);
+            } else {
+                await firestore().collection('cartItem').add({
                     name: item.product,
                     coffeeType: item.coffeeType,
                     description: item.description,
@@ -35,22 +55,23 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                         price: item.type[0].price,
                     },
                     userId: userId,
-                    // rating: item.rating,
                     image: item.image,
                     quantity: 1,
+                    productId: item.id,
                 });
-            const cartItemRef = firestore().collection('cartItem');
-            const snapshot = await getCountFromServer(cartItemRef);
-            // setCartCount(snapshot.data().count);
-            dispatch(addCartCount(snapshot.data().count));
-            console.log('dispatch', snapshot.data().count);
+
+                const cartItemRef = firestore().collection('cartItem').where('userId', '==', userId);
+                const snapshot = await getCountFromServer(cartItemRef);
+                dispatch(addCartCount(snapshot.data().count));
+                console.log('Added new cart item, cart count:', snapshot.data().count);
+            }
+
+            Alert.alert('Item successfully added to cart');
         } catch (error) {
-            console.log('error while adding to carts Items');
+            console.log('Error occurred while handling cart items', error);
         }
-
-
-        Alert.alert('Successfully Added To cart');
     };
+
 
     return (
         <Pressable style={{ backgroundColor: colors.commonWhite, marginTop: HEIGHT * 0.02, marginBottom: HEIGHT * 0.01, width: WIDTH * 0.42, height: HEIGHT * 0.3, borderRadius: 15, marginLeft: WIDTH * 0.04 }} onPress={() => {
@@ -58,12 +79,12 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 section: { item },
             });
         }}>
-            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.38, borderRadius: 15, height: WIDTH * 0.38, position: 'absolute', alignSelf: 'center', marginTop: HEIGHT * 0.01 }} />
+            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.38, borderRadius: 15, height: HEIGHT * 0.16, position: 'absolute', alignSelf: 'center', marginTop: HEIGHT * 0.01 }} />
 
-            {/* <View style={{ flexDirection: 'row', alignItems: 'center', right: WIDTH * 0.02, position: 'absolute', top: HEIGHT * 0.01, backgroundColor: `${colors.commonBlack}30`, height: HEIGHT * 0.04, width: WIDTH * 0.15, borderTopRightRadius: 15, paddingLeft: HEIGHT * 0.015, borderBottomLeftRadius: 30 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', right: WIDTH * 0.02, position: 'absolute', top: HEIGHT * 0.01, backgroundColor: `${colors.commonBlack}30`, height: HEIGHT * 0.04, width: WIDTH * 0.15, borderTopRightRadius: 15, paddingLeft: HEIGHT * 0.015, borderBottomLeftRadius: 30 }}>
                 <Image source={starIcon} style={{ height: HEIGHT * 0.015, marginRight: WIDTH * 0.02 }} />
-                <Text style={{ color: colors.commonWhite, fontSize: 10 }}>{item?.rating}</Text>
-            </View> */}
+                <Text style={{ color: colors.commonWhite, fontSize: 10 }}>4.8</Text>
+            </View>
             <View style={{ marginTop: HEIGHT * 0.19, marginLeft: WIDTH * 0.03 }}>
                 <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>{item.product}</Text>
                 <Text style={{ marginTop: HEIGHT * 0.005, color: colors.grayColor }}>{item.coffeeType}</Text>
