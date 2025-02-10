@@ -14,6 +14,7 @@ import OrderListScreen from '../screens/Admin/OrderListScreen';
 import CommentListScreen from '../screens/Admin/StockListScreen';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/user/HomeScreen';
+import ProfitListScreen from '../screens/Admin/ProfitListScreen';
 
 
 
@@ -34,6 +35,7 @@ const AppNavigator = () => {
             <Stack.Screen name="OrderListScreen" component={OrderListScreen} />
             <Stack.Screen name="CommentListScreen" component={CommentListScreen} />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="ProfitListScreen" component={ProfitListScreen} />
         </Stack.Navigator>
     );
 };

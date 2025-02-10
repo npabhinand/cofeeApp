@@ -1,5 +1,5 @@
 // import { HEIGHT, WIDTH } from '../dimension';
-import { beansIcon, cartIcon, documentIcon, editIcon, peoplesIcon } from '../../assets/icons';
+import { beansIcon, cartIcon, documentIcon, editIcon, peoplesIcon, profitIcon } from '../../assets/icons';
 
 const filterArray = [
     { id: 1, name: 'All Coffee' },
@@ -107,9 +107,39 @@ const cardArray = [
     { id: 2, title: 'User', count: 1, icon: peoplesIcon, navigate: 'UserListScreen' },
     { id: 3, title: 'Orders', count: 1, icon: cartIcon, navigate: 'OrderListScreen' },
     { id: 4, title: 'Stock', count: 1, icon: documentIcon, navigate: 'CommentListScreen' },
+    { id: 5, title: 'Profit', count: 1, icon: profitIcon, navigate: 'ProfitListScreen' },
 ];
 
+// const flavorsArray = [
+//     { id: 1, name: 'citrus' },
+//     { id: 2, name: 'floral' },
+//     { id: 3, name: 'berry' },
+//     { id: 4, name: 'chocolatey' },
+//     { id: 5, name: 'nutty' },
+//     { id: 6, name: 'buttery' },
+//     { id: 7, name: 'caramelly' },
+//     { id: 8, name: 'smokey' },
+//     { id: 9, name: 'spicy' },
+//     { id: 10, name: 'sweet' },
+//     { id: 11, name: 'sour' },
+//     { id: 12, name: 'vanilla' },
+// ];
 
-// there is astock in the cofeeItem collection iwant to reduec each item that users ordr by qauntity in the cart
+// const sugarSelectionArray = [
+//     { id: 1, name: '100 % sugar' },
+//     { id: 2, name: '70 % sugar' },
+//     { id: 3, name: '50 % sugar' },
+//     { id: 4, name: '0 % sugar' },
+// ];
+// const sizeArray = [
+//     { id: 1, name: 'S' },
+//     { id: 2, name: 'M' },
+//     { id: 3, name: 'L' },
+// ];
 
-export { filterArray, coffeeArray, orderType, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData, coffeeImageArray, cardArray };
+const AttributeArray = [
+    { id: 1, name: 'Add Size' },
+    { id: 1, name: 'Add Flavors' },
+    { id: 1, name: 'Add Sugar' },
+]
+export { filterArray, coffeeArray, orderType, editAdressArray, onBoardScreenData, productDetailData, sizeButton, DeliveryData, coffeeImageArray, cardArray, AttributeArray };

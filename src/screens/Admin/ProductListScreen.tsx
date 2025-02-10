@@ -34,11 +34,11 @@ const ProductListScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
-            <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.1, marginVertical: HEIGHT * 0.01 }}>
+            <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.01, alignItems: 'center' }}>
                 <Pressable onPress={() => navigation.goBack()}>
                     <Image source={backIcon} />
                 </Pressable>
-                <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Coffee Items</Text>
+                <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Coffee products</Text>
             </View>
 
             <FlatList

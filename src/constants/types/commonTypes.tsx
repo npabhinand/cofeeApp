@@ -79,7 +79,7 @@ interface CartProps {
         name: string;
         coffeeType: string;
         description: string;
-        type: { size: string; price: number; },
+        type: { size: string; price: string; },
         rating: number;
         image: string;
         quantity: number;
@@ -108,7 +108,7 @@ interface userProps {
 }
 interface dropDownProps {
     color?: string;
-    setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    // setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
     isVisible: boolean
     onPressClose: any
 }

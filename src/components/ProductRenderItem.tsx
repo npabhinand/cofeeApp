@@ -44,7 +44,7 @@ const ProductRenderItem: React.FC<productItems> = (props) => {
             <Pressable style={{ position: 'absolute', right: WIDTH * 0.15, top: HEIGHT * 0.015, width: WIDTH * 0.08, height: WIDTH * 0.08, borderRadius: '50%', backgroundColor: `${colors.brownColor}40`, justifyContent: 'center', alignItems: 'center', zIndex: 1 }} onPress={handleDeleteAlert}>
                 <Image source={deleteIcon} style={{ tintColor: colors.brownColor, width: WIDTH * 0.04, height: WIDTH * 0.03 }} />
             </Pressable>
-            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.25, height: WIDTH * 0.25, borderRadius: 10 }} />
+            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.23, height: HEIGHT * 0.12, borderRadius: 10 }} />
             <View style={{ rowGap: 10, marginRight: WIDTH * 0.05 }}>
                 <Text style={{ fontSize: 18, fontWeight: '600' }}>{item.product}</Text>
                 <Text style={{ color: colors.grayColor }}>{item.coffeeType}</Text>

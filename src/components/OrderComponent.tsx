@@ -52,7 +52,7 @@ const OrderComponent: React.FC<CartProps> = (props) => {
     const handleDecrease = async () => {
         if (counter > 1) {
             setCounter(counter - 1);
-            dispatch(updateSubTotalPrice(parseInt(item.type.price)));
+            dispatch(updateSubTotalPrice(parseInt(item.type.price, 10)));
             try {
                 await firestore().collection('cartItem').doc(item.id).update({
                     quantity: counter,
@@ -66,7 +66,7 @@ const OrderComponent: React.FC<CartProps> = (props) => {
 
     const handleIncrease = async () => {
         setCounter(counter + 1);
-        dispatch(updateAddTotalPrice(parseInt(item.type.price)));
+        dispatch(updateAddTotalPrice(parseInt(item.type.price, 10)));
         try {
             await firestore().collection('cartItem').doc(item.id).update({
                 quantity: counter,
@@ -76,6 +76,7 @@ const OrderComponent: React.FC<CartProps> = (props) => {
             Alert.alert('Failed to update cart Item');
         }
     };
+
 
     return (
         <>
