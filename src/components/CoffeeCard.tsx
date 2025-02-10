@@ -15,12 +15,13 @@ import { coffeeProps } from '../constants/types/commonTypes';
 
 
 const CoffeeCard: React.FC<coffeeProps> = (props) => {
-    const { item, userId } = props;
+    const { item, userId, setLoading } = props;
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const handleAddCart = async () => {
         try {
             const carts = [];
+            setLoading(true);
             await firestore()
                 .collection('cartItem')
                 .where('userId', '==', userId)
@@ -45,6 +46,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 const snapshot = await getCountFromServer(cartItemRef);
                 dispatch(addCartCount(snapshot.data().count));
                 console.log('Updated cart count', snapshot.data().count);
+                setLoading(false);
             } else {
                 await firestore().collection('cartItem').add({
                     name: item.product,
@@ -63,6 +65,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 const cartItemRef = firestore().collection('cartItem').where('userId', '==', userId);
                 const snapshot = await getCountFromServer(cartItemRef);
                 dispatch(addCartCount(snapshot.data().count));
+                setLoading(false);
                 console.log('Added new cart item, cart count:', snapshot.data().count);
             }
 

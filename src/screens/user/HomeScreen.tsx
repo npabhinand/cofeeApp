@@ -153,7 +153,7 @@ const HomeScreen = () => {
                         scrollEnabled={false}
                         contentContainerStyle={{ marginBottom: HEIGHT * 0.13, paddingHorizontal: WIDTH * 0.02 }}
                         renderItem={({ item }) => (
-                            <CoffeeCard item={item} userId={userData[0].email} />
+                            <CoffeeCard item={item} userId={userData[0].email} setLoading={setLoading} />
                         )} />
                 </ScrollView>
             }

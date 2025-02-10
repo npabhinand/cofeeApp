@@ -12,7 +12,7 @@ const OrderDetailsRenderItem = (props) => {
     const [isVisible, setIsVisible] = useState(false);
     const date = moment(item.orderTime).format("ddd,MM Do YY, h:mm:ss a");
     const orderArray = [
-        { name: 'orderId', value: item.id },
+        { name: 'Track Order', value: item.id },
         { name: 'Order Price', value: `$${item.TotalPrice} ` },
         { name: 'Order Time', value: date },
     ];

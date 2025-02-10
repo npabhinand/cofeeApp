@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, Image, Pressable, Modal, TextInput, Alert } from 'react-native';
+import { View, Text, Image, Pressable, Modal, TextInput, Alert, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
@@ -9,13 +9,13 @@ import firestore from '@react-native-firebase/firestore';
 const StockRenderItem = (props) => {
     const { item, setLoading, loading } = props;
     const [isVisible, setIsVisible] = useState(false);
-    const [formData, setFormData] = useState<{ product: string; stock: number; profit: number }>({ product: item.product || '', stock: item.stock || 0, profit: item.profit || 0 });
+    const [formData, setFormData] = useState<{ product: string; stock: string; profit: string }>({ product: item.product || '', stock: item.stock.toString() || 0, profit: item.profit.toString() || 0 });
     const [errors, setErrors] = useState({});
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
 
     const handleSubmit = async () => {
-
+        setLoading(true);
         let newErrors = {};
         Object.keys(formData).forEach((key) => {
             if (!formData[key].trim()) {
@@ -35,10 +35,11 @@ const StockRenderItem = (props) => {
                 });
                 Alert.alert('Stock is Updated');
                 setIsVisible(!isVisible);
-                setLoading(!loading);
+                setLoading(false);
             } catch (error) {
                 console.log('error while updating stock', error);
                 Alert.alert('Stock is not updated');
+                setLoading(false);
             }
         }
     };
@@ -53,15 +54,26 @@ const StockRenderItem = (props) => {
 
     return (
         <>
-            <View style={{ width: WIDTH * 0.9, height: HEIGHT * 0.12, backgroundColor: colors.commonWhite, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', borderRadius: 10, paddingHorizontal: WIDTH * 0.05, marginTop: HEIGHT * 0.015 }}>
-                <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.2, height: WIDTH * 0.2 }} />
-                <View style={{ marginLeft: WIDTH * 0.03 }}>
-
-                    <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>{item.product}</Text>
-                    <Text>Stock: {item.stock}</Text>
-                    <Text>Profit: ${item.profit}</Text>
-                    <Text style={{ color: colors.brownColor, fontSize: 15 }} onPress={() => setIsVisible(!isVisible)}>View Details</Text>
+            <View style={{ width: WIDTH * 0.9, height: WIDTH * 0.25, backgroundColor: colors.commonWhite, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', borderRadius: 10, paddingHorizontal: WIDTH * 0.03, marginTop: HEIGHT * 0.015, gap: WIDTH * 0.05 }}>
+                <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.2, height: WIDTH * 0.2, borderRadius: 10 }} />
+                {/* <View style={{ marginLeft: WIDTH * 0.03 }}> */}
+                <View>
+                    <Text style={{ fontWeight: 'bold' }}>Product</Text>
+                    <Text style={{ color: colors.grayColor }}>{item.product}</Text>
                 </View>
+                <View>
+                    <Text>Stock</Text>
+                    <Text style={{ color: colors.grayColor }}>{item.stock}</Text>
+
+                </View>
+                <View>
+                    <Text>Profit %</Text>
+                    <Text style={{ color: colors.grayColor }}>{item.profit}</Text>
+                </View>
+                {/* <View> */}
+                <Text style={{ color: colors.brownColor, fontSize: 15, position: 'absolute', bottom: 10, left: WIDTH * 0.4 }} onPress={() => setIsVisible(!isVisible)}>View Details</Text>
+                {/* </View> */}
+                {/* </View> */}
 
             </View>
             {/* Modal */}
@@ -81,12 +93,14 @@ const StockRenderItem = (props) => {
 
                             <Text style={{ color: colors.redColor, textAlign: 'right' }}>{errors[key]}</Text>
                             {/* </View> */}
-                            <TextInput placeholder={`Enter ${key}`} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.056, borderWidth: 1, borderRadius: 5, padding: 5, borderColor: errors[key] ? colors.redColor : colors.commonBlack, backgroundColor: key === 'product' ? `${colors.grayColor}20` : isEdit ? colors.commonWhite : `${colors.grayColor}20` }} autoFocus={true} onChangeText={(text) => onChangeText(text, key)} value={formData[key].toString()} editable={key === 'product' ? false : isEdit} keyboardType="numeric" />
+                            <TextInput placeholder={`Enter ${key}`} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.056, borderWidth: 1, borderRadius: 5, padding: 5, borderColor: errors[key] ? colors.redColor : colors.commonBlack, backgroundColor: key === 'product' ? `${colors.grayColor}20` : isEdit ? colors.commonWhite : `${colors.grayColor}20` }} autoFocus={true} onChangeText={(text) => onChangeText(text, key)} value={formData[key]} editable={key === 'product' ? false : isEdit} keyboardType="numeric" />
                         </View>
                     ))}
 
 
-                    <Pressable style={{ position: 'absolute', bottom: HEIGHT * 0.05, width: WIDTH * 0.9, alignItems: 'center', height: HEIGHT * 0.056, alignSelf: 'center', backgroundColor: colors.brownColor, justifyContent: 'center', borderRadius: 10 }} onPress={isEdit ? handleSubmit : () => setIsEdit(!isEdit)} ><Text style={{ color: colors.commonWhite, fontWeight: '600' }} >{isEdit ? 'Update Stock' : 'Edit Stock'}</Text></Pressable>
+                    <Pressable style={{ position: 'absolute', bottom: HEIGHT * 0.05, width: WIDTH * 0.9, alignItems: 'center', height: HEIGHT * 0.056, alignSelf: 'center', backgroundColor: colors.brownColor, justifyContent: 'center', borderRadius: 10 }} onPress={isEdit ? handleSubmit : () => setIsEdit(!isEdit)} >
+                        {loading ? <ActivityIndicator color={colors.commonWhite} /> : <Text style={{ color: colors.commonWhite, fontWeight: '600' }} >{isEdit ? 'Update Stock' : 'Edit Stock'}</Text>}
+                    </Pressable>
                 </View>
 
             </Modal>

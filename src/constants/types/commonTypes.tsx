@@ -61,6 +61,7 @@ interface coffeeProps {
         image: string;
     }
     userId: string;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface ProductDetailScreenProps {
     route: { params: { section: coffeeProps } };

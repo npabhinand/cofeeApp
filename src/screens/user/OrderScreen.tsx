@@ -80,7 +80,7 @@ const OrderScreen = () => {
             }
         };
         onFetchCartItem();
-    }, [userData]);
+    }, [isFocused]);
 
 
     const filterCartItem = cartItems.map(item => ({
@@ -117,11 +117,19 @@ const OrderScreen = () => {
 
     //     },
     // ]);
+    const handleButtonDelete = async (id: string) => {
+        firestore()
+            .collection('cartItem')
+            .doc(id)
+            .delete()
+            .then(() => {
+                console.log('cartItem deleted deleted!');
+            });
+    }
 
     const HandleOrder = async () => {
         setLoading(true);
         if (cartItems.length > 0) {
-            const batch = firestore().batch();
             for (const item of cartItems) {
                 const itemRef = firestore().collection('coffeeItem').doc(item.productId);
                 const doc = await itemRef.get();
@@ -146,7 +154,7 @@ const OrderScreen = () => {
                 await firestore().collection('orders').add({
                     products: filterCartItem,
                     address: selectedContact,
-                    TotalPrice: prices - 1,
+                    TotalPrice: prices + 1,
                     orderTime: Date.now(),
                 });
                 Alert.alert('Order placed successfully');
@@ -168,12 +176,22 @@ const OrderScreen = () => {
     // });
 
 
-    const onSwipeValueChange = (swipeData) => {
-        const { key, value } = swipeData;
 
-        // if (value < -100) {
-        //     deleteItem(key);
-        // }
+    const onRowDidOpen = (rowKey) => {
+
+        Alert.alert('Are You sure want to delete Cart Item', '', [
+            {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            {
+                text: 'Delete',
+                // onPress: () => dispatch(deleteContact(item.id))
+                onPress: () => handleButtonDelete(rowKey),
+
+            },
+        ]);
     };
 
 
@@ -244,6 +262,7 @@ const OrderScreen = () => {
                         <SwipeListView
                             data={cartItems}
                             scrollEnabled={false}
+                            keyExtractor={(item) => item.id}
                             renderItem={({ item }) => (
                                 <OrderComponent
                                     item={item}
@@ -256,9 +275,9 @@ const OrderScreen = () => {
                                     </Pressable>
                                 </View>
                             )}
-                            onSwipeValueChange={onSwipeValueChange}
+                            onRowDidOpen={(rowKey) => onRowDidOpen(rowKey)}
                             // leftOpenValue={75}
-                            rightOpenValue={-100}
+                            rightOpenValue={-200}
                         />
 
 
@@ -293,7 +312,7 @@ const OrderScreen = () => {
                         <Image source={walletIcon} />
                         <View style={{ marginLeft: WIDTH * 0.05, marginRight: WIDTH * 0.5 }}>
                             <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginBottom: HEIGHT * 0.01 }}>Cash/Wallet</Text>
-                            <Text style={{ color: colors.brownColor }}>${totalPrice - 1}</Text>
+                            <Text style={{ color: colors.brownColor }}>${totalPrice + 1}</Text>
                         </View>
                         <Image source={bottomArrowIcon} />
                     </View>

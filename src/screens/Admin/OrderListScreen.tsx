@@ -77,7 +77,7 @@ const OrderListScreen = () => {
                 calendarHeaderStyle={{ color: 'white' }}
                 calendarColor={colors.brownColor}
                 dateNumberStyle={{ color: 'white' }}
-                // dateNameStyle={{ color: 'white' }}
+                dateNameStyle={{ color: 'white' }}
                 highlightDateNumberStyle={{ color: 'yellow' }}
                 startingDate={moment()}
                 onDateSelected={(date) => handleDateSelected(moment(date).format('DD/MM/YYYY'))}

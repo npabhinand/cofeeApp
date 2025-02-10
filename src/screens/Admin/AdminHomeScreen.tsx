@@ -14,7 +14,7 @@ const AdminHomeScreen = () => {
     const [isVisible, setIsVisible] = useState<boolean>(false)
     return (
         <SafeAreaView>
-            <View style={{ flexDirection: 'row', marginHorizontal: WIDTH * 0.1, justifyContent: 'space-between', height: HEIGHT * 0.05, marginVertical: HEIGHT * 0.03, marginBottom: HEIGHT * 0.05 }}>
+            <View style={{ flexDirection: 'row', marginHorizontal: WIDTH * 0.05, justifyContent: 'space-between', height: HEIGHT * 0.05, marginVertical: HEIGHT * 0.03, marginBottom: HEIGHT * 0.05 }}>
                 <View>
                     <Text style={{ fontSize: 9, color: colors.grayColor }}>WELCOME BACK</Text>
                     <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Admin</Text>
