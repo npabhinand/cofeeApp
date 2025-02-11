@@ -31,6 +31,7 @@ const OrderScreen = () => {
     //     console.log('rendering')
     // }, [isFocused])
 
+
     useEffect(() => {
         const onFetchData = async () => {
             setLoading(true);
@@ -68,7 +69,7 @@ const OrderScreen = () => {
                     .then(querySnapshot => {
                         querySnapshot.forEach(doc => {
                             carts.push({ ...doc.data(), id: doc.id });
-                            total += parseInt(doc.data().type.price * doc.data().quantity);
+                            total += parseInt(doc.data().price * doc.data().quantity, 10);
                         });
                     });
                 setPrices(total);
@@ -86,12 +87,12 @@ const OrderScreen = () => {
     const filterCartItem = cartItems.map(item => ({
         productId: item.productId,
         quantity: item.quantity,
-        type: item.type,
+        type: item.types,
+        price: item.price,
         userId: item.userId,
         image: item.image,
         name: item.name,
     }));
-
 
     // const onDeleteItem = () => {
     //     firestore()
@@ -125,7 +126,8 @@ const OrderScreen = () => {
             .then(() => {
                 console.log('cartItem deleted deleted!');
             });
-    }
+    };
+
 
     const HandleOrder = async () => {
         setLoading(true);
@@ -169,15 +171,10 @@ const OrderScreen = () => {
             Alert.alert('No items in the cart');
             setLoading(false);
         }
+        setLoading(false);
     };
 
-    // cartItems.forEach((item) => {
-    //     console.log(item.productId, item.quantity);
-    // });
-
-
-
-    const onRowDidOpen = (rowKey) => {
+    const onRowDidOpen = (rowKey: string) => {
 
         Alert.alert('Are You sure want to delete Cart Item', '', [
             {
@@ -270,14 +267,16 @@ const OrderScreen = () => {
                             )}
                             renderHiddenItem={(item) => (
                                 <View style={{ height: HEIGHT * 0.12, marginTop: -HEIGHT * 0.02 }} >
-                                    <Pressable style={{ right: WIDTH * 0.1, position: 'absolute', top: HEIGHT * 0.05 }} onPress={() => handleDeleteAlert(item.id)}>
+                                    <Pressable style={{ right: WIDTH * 0.1, position: 'absolute', top: HEIGHT * 0.05 }}
+                                    // onPress={() => handleDeleteAlert(item.id)}
+                                    >
                                         <Image source={deleteIcon} />
                                     </Pressable>
                                 </View>
                             )}
                             onRowDidOpen={(rowKey) => onRowDidOpen(rowKey)}
                             // leftOpenValue={75}
-                            rightOpenValue={-200}
+                            rightOpenValue={-300}
                         />
 
 

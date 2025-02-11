@@ -7,6 +7,7 @@ import { backIcon } from '../../assets/icons';
 import firestore from '@react-native-firebase/firestore';
 import ProfitRenderItem from '../../components/ProfitRenderItem';
 import { colors } from '../../constants/colors';
+// import { colors } from '../../constants/colors';
 
 const ProfitListScreen = () => {
     const [coffeeData, setCoffeeData] = useState([]);
@@ -16,7 +17,7 @@ const ProfitListScreen = () => {
         const fetchData = async () => {
             const coffees: any = [];
             try {
-                const coffeeRef = await firestore().collection('orders').get();
+                const coffeeRef = await firestore().collection('coffeeItem').get();
                 coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
                 setCoffeeData(coffees);
             } catch (error) {
@@ -38,11 +39,21 @@ const ProfitListScreen = () => {
                         </Pressable>
                         <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>profit</Text>
                     </View>
+
+
                     <View style={{ width: WIDTH * 0.8, height: HEIGHT * 0.2, alignSelf: 'center', backgroundColor: `${colors.brownColor}90`, borderRadius: 30, padding: HEIGHT * 0.05 }}>
                         <Text>profit</Text>
                         <Text style={{ fontSize: HEIGHT * 0.04, fontWeight: '600' }}>$24.45</Text>
                     </View>
-                    <Text style={{ padding: WIDTH * 0.05, fontSize: HEIGHT * 0.022, fontWeight: '600' }}>Recent Orders</Text>
+
+                    {/* <Pressable style={{
+                        alignSelf: 'center', marginTop: HEIGHT * 0.02, width: WIDTH * 0.15, height: WIDTH * 0.15, borderRadius: 10, backgroundColor
+                            : colors.commonBlack, alignItems: 'center', justifyContent: 'center',
+                    }}>
+                        <Image source={plusIcon} style={{ width: WIDTH * 0.08, height: WIDTH * 0.08 }} />
+                    </Pressable> */}
+
+                    <Text style={{ paddingLeft: WIDTH * 0.05, marginTop: HEIGHT * 0.01, fontSize: HEIGHT * 0.022, fontWeight: '600' }}>Product Profits</Text>
                     <FlatList
                         data={coffeeData}
                         renderItem={(item) => (

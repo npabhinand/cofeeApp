@@ -9,17 +9,18 @@ import { backIcon } from '../../assets/icons';
 import firestore from '@react-native-firebase/firestore';
 import OrderDetailsRenderItem from '../../components/OrderDetailsRenderItem';
 import moment from 'moment';
+
 const OrderListScreen = () => {
     const navigation = useNavigation();
     const [orderList, setOrderList] = useState<[]>([]);
     const [fullOrderList, setFullOrderList] = useState<[]>([]);
     const [price, setPrice] = useState<number>(0);
-    const [profit, setProfit] = useState<number>(0);
+    const [profit, setProfit] = useState<string>();
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const orders = [];
+                const orders: [] = [];
                 let totalPrice = 0;
                 await firestore().collection('orders').get().then(querySnapshot => {
                     querySnapshot.forEach(doc => {
@@ -30,7 +31,7 @@ const OrderListScreen = () => {
                 setFullOrderList(orders);
                 setOrderList(orders);
                 setPrice(totalPrice);
-                setProfit((totalPrice * 0.2).toFixed(2))
+                setProfit((totalPrice * 0.2).toFixed(2));
             }
             catch (err) {
                 console.log('Error while fetching data');
@@ -40,7 +41,7 @@ const OrderListScreen = () => {
     }, []);
 
 
-    const handleDateSelected = (selectedDate) => {
+    const handleDateSelected = (selectedDate: string) => {
 
         const filteredOrders = fullOrderList.filter(order => {
             const orderDate = moment(order.orderTime).format('DD/MM/YYYY');
@@ -71,6 +72,7 @@ const OrderListScreen = () => {
             </View>
 
             <CalendarStrip
+                // key={ }
                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                 daySelectionAnimation={{ type: 'border', duration: 200, borderWidth: 1, borderHighlightColor: 'white' }}
                 style={{ height: HEIGHT * 0.12, paddingTop: 10 }}
@@ -91,12 +93,7 @@ const OrderListScreen = () => {
                         </View>
                     ))}
                 </View>
-                <Text style={{ fontSize: 25, margin: WIDTH * 0.05 }}>Items</Text>
-
-
-                {/*  */}
-
-
+                <Text style={{ fontSize: 25, margin: WIDTH * 0.05 }}>Order Details</Text>
 
                 <FlatList
                     data={orderList}

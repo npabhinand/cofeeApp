@@ -38,12 +38,12 @@ const ProductListScreen = () => {
                 <Pressable onPress={() => navigation.goBack()}>
                     <Image source={backIcon} />
                 </Pressable>
-                <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Coffee products</Text>
+                <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Products</Text>
             </View>
 
             <FlatList
                 data={productList}
-                keyExtractor={(item) => item.id}
+                // keyExtractor={(item) => item.id}
                 renderItem={(item) => (
                     <ProductRenderItem item={item.item} setUpdate={setUpdate} update={update} />
                 )} />

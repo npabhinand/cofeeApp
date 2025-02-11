@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, Image, Pressable, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, SafeAreaView, Image, Pressable, ScrollView, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import { backIcon, beansIcon, deliveryIcon, heartIcon, milkCanIcon, rateIcon } from '../../assets/icons';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
@@ -20,14 +20,14 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
     const [showMore, setShowMore] = useState(false);
     // const [cartItems, setCartItems] = useState<[]>([]);
     const navigation = useNavigation();
-    const [isSelected, setIsSelected] = useState<number>(1);
+    // const [isSelected, setIsSelected] = useState<number>(1);
     const userData = useSelector(selectedUserData);
     const userId = userData[0].email;
 
     const handleAddItem = async () => {
         try {
             setLoading(true);
-            const carts = [];
+            const carts: any = [];
             await firestore()
                 .collection('cartItem')
                 .where('userId', '==', userData[0].email)
@@ -57,10 +57,8 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                     name: section.item.product,
                     coffeeType: section.item.coffeeType,
                     description: section.item.description,
-                    type: {
-                        size: section.item.type[0].size,
-                        price: section.item.type[0].price,
-                    },
+                    types: section.item.types,
+                    price: section.item.price,
                     userId: userId,
                     image: section.item.image,
                     quantity: 1,
@@ -113,7 +111,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                     </View>
                     <View style={{ paddingHorizontal: WIDTH * 0.06, marginTop: HEIGHT * 0.02, paddingBottom: HEIGHT * 0.15 }}>
                         <Image source={{ uri: section.item.image }} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.24, borderRadius: WIDTH * 0.04 }} />
-                        <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginTop: HEIGHT * 0.02 }}>{section.item.product}</Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginTop: HEIGHT * 0.02, textTransform: 'capitalize' }}>{section.item.product}</Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: colors.grayColor, marginTop: HEIGHT * 0.01 }}>{section.item.coffeeType}</Text>
@@ -167,15 +165,18 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         </View>
                         {/*  */}
                         {/* size buttons */}
-                        <Text style={{ marginTop: HEIGHT * 0.035, fontWeight: '600', fontSize: HEIGHT * 0.02, marginBottom: HEIGHT * 0.015 }}>Size</Text>
+                        {/* <Text style={{ marginTop: HEIGHT * 0.035, fontWeight: '600', fontSize: HEIGHT * 0.02, marginBottom: HEIGHT * 0.015 }}>Size</Text> */}
 
-                        <View style={{ marginTop: HEIGHT * 0.01, flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-                            {section.item.type.map((size, index) => (
-                                <Pressable key={index} style={[{
-                                    width: WIDTH * 0.25, height: HEIGHT * 0.05, backgroundColor: isSelected === index ? `${colors.brownColor}10` : colors.commonWhite, borderWidth: 0.5, borderRadius: WIDTH * 0.03, borderColor: isSelected === index ? colors.brownColor : `${colors.grayColor}60`, justifyContent: 'center', alignItems: 'center',
-                                }]} onPress={() => setIsSelected(index)}>
-                                    <Text style={{ color: isSelected === index ? colors.brownColor : colors.commonBlack }}>{size.size}</Text>
-                                </Pressable>
+                        <View style={{ marginTop: HEIGHT * 0.01, display: 'flex', gap: HEIGHT * 0.01 }}>
+                            {Object.keys(section.item.types).map((key) => (
+                                <View key={key} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={{ color: colors.grayColor, textTransform: 'capitalize' }}>{key}: </Text>
+                                    {/* <Pressable style={[{
+                                        width: WIDTH * 0.25, height: HEIGHT * 0.05, backgroundColor: colors.brownColor, borderWidth: 0.5, borderRadius: WIDTH * 0.03, borderColor: `${colors.grayColor}60`, justifyContent: 'center', alignItems: 'center',
+                                    }]} > */}
+                                    <Text style={{ color: colors.grayColor }}>{section.item.types[key]}</Text>
+                                    {/* </Pressable> */}
+                                </View>
                             ))}
 
                         </View>
@@ -184,7 +185,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                 <View style={{ backgroundColor: colors.commonWhite, flexDirection: 'row', justifyContent: 'space-between', position: 'absolute', bottom: HEIGHT * 0.01, paddingHorizontal: WIDTH * 0.06, height: HEIGHT * 0.13, width: WIDTH * 1, borderTopLeftRadius: HEIGHT * 0.03, borderTopRightRadius: HEIGHT * 0.03, paddingTop: HEIGHT * 0.02 }}>
                     <View>
                         <Text style={{ marginBottom: HEIGHT * 0.01, color: colors.grayColor }}>Price</Text>
-                        <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.02, fontWeight: 'bold' }}>$ {section.item.type[isSelected].price}</Text>
+                        <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.02, fontWeight: 'bold' }}>$ {section.item.price}</Text>
                     </View>
                     <Pressable style={{ width: WIDTH * 0.6, height: HEIGHT * 0.07, backgroundColor: colors.brownColor, borderRadius: WIDTH * 0.03, justifyContent: 'center', alignItems: 'center' }} onPress={handleAddItem}><Text style={{ color: colors.commonWhite, fontWeight: 'bold' }} >Buy Now</Text></Pressable>
 

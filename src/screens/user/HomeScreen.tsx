@@ -24,7 +24,7 @@ const HomeScreen = () => {
     const userData = useSelector(selectedUserData);
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const navigation = useNavigation();
-    console.log(userData)
+
 
     useEffect(() => {
 

@@ -11,9 +11,6 @@ import { addCartCount } from '../redux/slice/cartCountSlice';
 import { coffeeProps } from '../constants/types/commonTypes';
 
 
-// import { addCart } from '../redux/slice/cartSlice';
-
-
 const CoffeeCard: React.FC<coffeeProps> = (props) => {
     const { item, userId, setLoading } = props;
     const navigation = useNavigation();
@@ -52,10 +49,8 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                     name: item.product,
                     coffeeType: item.coffeeType,
                     description: item.description,
-                    type: {
-                        size: item.type[0].size,
-                        price: item.type[0].price,
-                    },
+                    types: item.types,
+                    price: item.price,
                     userId: userId,
                     image: item.image,
                     quantity: 1,
@@ -69,10 +64,11 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 console.log('Added new cart item, cart count:', snapshot.data().count);
             }
 
-            Alert.alert('Item successfully added to cart');
+            Alert.alert('Product successfully added to cart');
         } catch (error) {
             console.log('Error occurred while handling cart items', error);
         }
+        setLoading(false);
     };
 
 
@@ -93,7 +89,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 <Text style={{ marginTop: HEIGHT * 0.005, color: colors.grayColor }}>{item.coffeeType}</Text>
 
                 <View style={{ marginTop: HEIGHT * 0.005, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginRight: WIDTH * 0.03 }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>$ {item.type[0].price}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>$ {item.price}</Text>
                     <Pressable style={{ backgroundColor: '#C67C4D', height: WIDTH * 0.08, width: WIDTH * 0.08, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.02 }} onPress={handleAddCart}>
                         <Image source={plusIcon} />
                     </Pressable>

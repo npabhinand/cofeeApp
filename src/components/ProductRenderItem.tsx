@@ -36,20 +36,20 @@ const ProductRenderItem: React.FC<productItems> = (props) => {
 
     return (
         <View style={{
-            flexDirection: 'row', marginTop: HEIGHT * 0.02, width: WIDTH * 0.9, backgroundColor: colors.commonWhite, alignSelf: 'center', height: HEIGHT * 0.15, borderRadius: 10, padding: 10, gap: 10, justifyContent: 'space-between', alignItems: 'center', shadowColor: colors.commonBlack, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.20, shadowRadius: 1.41, elevation: 2,
+            flexDirection: 'row', marginTop: HEIGHT * 0.02, width: WIDTH * 0.9, backgroundColor: colors.commonWhite, alignSelf: 'center', height: 100, borderRadius: 10, padding: 10, gap: 10, justifyContent: 'space-between', alignItems: 'center', shadowColor: colors.commonBlack, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.20, shadowRadius: 1.41, elevation: 2,
         }}>
             <Pressable style={{ position: 'absolute', right: WIDTH * 0.05, top: HEIGHT * 0.015, width: WIDTH * 0.08, height: WIDTH * 0.08, borderRadius: '50%', backgroundColor: `${colors.brownColor}40`, justifyContent: 'center', alignItems: 'center', zIndex: 1 }} onPress={() => setModalVisible(true)}>
                 <Image source={editIcon} style={{ tintColor: colors.brownColor }} />
             </Pressable>
             <Pressable style={{ position: 'absolute', right: WIDTH * 0.15, top: HEIGHT * 0.015, width: WIDTH * 0.08, height: WIDTH * 0.08, borderRadius: '50%', backgroundColor: `${colors.brownColor}40`, justifyContent: 'center', alignItems: 'center', zIndex: 1 }} onPress={handleDeleteAlert}>
-                <Image source={deleteIcon} style={{ tintColor: colors.brownColor, width: WIDTH * 0.04, height: WIDTH * 0.03 }} />
+                <Image source={deleteIcon} style={{ tintColor: colors.brownColor, width: WIDTH * 0.04, height: WIDTH * 0.04 }} />
             </Pressable>
-            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.23, height: HEIGHT * 0.12, borderRadius: 10 }} />
+            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.2, height: 80, borderRadius: 10 }} />
             <View style={{ rowGap: 10, marginRight: WIDTH * 0.05 }}>
-                <Text style={{ fontSize: 18, fontWeight: '600' }}>{item.product}</Text>
+                <Text style={{ fontSize: 16, fontWeight: '600' }}>{item.product}</Text>
                 <Text style={{ color: colors.grayColor }}>{item.coffeeType}</Text>
             </View>
-            <Text style={{ fontSize: HEIGHT * 0.03, marginTop: HEIGHT * 0.01, fontWeight: '600', color: colors.brownColor, marginRight: WIDTH * 0.05 }}>${item.type[0].price}</Text>
+            <Text style={{ fontSize: HEIGHT * 0.025, marginTop: HEIGHT * 0.04, fontWeight: '600', color: colors.brownColor, marginRight: WIDTH * 0.05 }}>${item.price}</Text>
             <Modal visible={modalVisible} animationType="slide">
                 <AddProductComponent setModalVisible={setModalVisible} item={item} setUpdate={setUpdate} update={update} />
             </Modal>

@@ -52,7 +52,7 @@ const OrderComponent: React.FC<CartProps> = (props) => {
     const handleDecrease = async () => {
         if (counter > 1) {
             setCounter(counter - 1);
-            dispatch(updateSubTotalPrice(parseInt(item.type.price, 10)));
+            dispatch(updateSubTotalPrice(parseInt(item.price, 10)));
             try {
                 await firestore().collection('cartItem').doc(item.id).update({
                     quantity: counter,
@@ -66,7 +66,7 @@ const OrderComponent: React.FC<CartProps> = (props) => {
 
     const handleIncrease = async () => {
         setCounter(counter + 1);
-        dispatch(updateAddTotalPrice(parseInt(item.type.price, 10)));
+        dispatch(updateAddTotalPrice(parseInt(item.price, 10)));
         try {
             await firestore().collection('cartItem').doc(item.id).update({
                 quantity: counter,
@@ -87,7 +87,7 @@ const OrderComponent: React.FC<CartProps> = (props) => {
                 />
                 <View style={{ width: WIDTH * 0.4 }}>
                     <Text style={{ fontSize: HEIGHT * 0.02, fontWeight: 'bold' }}>{item.name}</Text>
-                    <Text style={{ marginTop: HEIGHT * 0.005, color: colors.grayColor }}>$ {item.type.price}</Text>
+                    <Text style={{ marginTop: HEIGHT * 0.005, color: colors.grayColor }}>$ {item.price}</Text>
                 </View>
                 {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.04, position: 'absolute' }} > */}
                 <Pressable style={{ width: WIDTH * 0.07, height: WIDTH * 0.07, borderRadius: '50%', backgroundColor: colors.commonWhite, alignItems: 'center', justifyContent: 'center' }}

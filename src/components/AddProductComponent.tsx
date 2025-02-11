@@ -1,30 +1,29 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, TextInput, Image, Pressable, ScrollView, Alert } from 'react-native';
 import React, { useState } from 'react';
-import { HEIGHT, WIDTH } from '../constants/dimension';
-import { backIcon, deleteIcon } from '../assets/icons';
-import { colors } from '../constants/colors';
+import { View, Text, SafeAreaView, TextInput, Image, Pressable, ScrollView, Alert } from 'react-native';
 import firebase from '@react-native-firebase/firestore';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { HEIGHT, WIDTH } from '../constants/dimension';
+import { backIcon, plusIcon } from '../assets/icons';
+import { colors } from '../constants/colors';
 import { productProp } from '../constants/types/commonTypes';
 
 const AddProductComponent: React.FC<productProp> = (props) => {
     const { setModalVisible, item, setUpdate, update } = props;
-    const [attributes, setAttributes] = useState([
-        { id: Date.now(), placeholder: 'Add Attribute', value: '' }
-    ]);
     const [formData, setFormData] = useState({
         product: item?.product || '',
         coffeeType: item?.coffeeType || '',
         description: item?.description || '',
+        price: item?.price || '',
     });
+
     const [image, setImage] = useState<string>(item?.image || '');
     const [errors, setErrors] = useState<any>({});
+    const [attributes, setAttributes] = useState(item?.types ? Object.entries(item.types).map(([name, value]) => ({ name, value })) : []);
+    const [attributeName, setAttributeName] = useState('');
+    const [attributeValue, setAttributeValue] = useState('');
 
     const handleTextChange = (text: string, key: string) => {
-        if (key === 'smallPrice' || key === 'mediumPrice' || key === 'largePrice') {
-            text = text.replace(/[^0-9]/g, '');
-        }
         setFormData((prev) => ({ ...prev, [key]: text }));
     };
 
@@ -35,28 +34,32 @@ const AddProductComponent: React.FC<productProp> = (props) => {
                 newErrors[key] = `${key} is required`;
             }
         });
+
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
         }
 
+        const attributesObject = attributes.reduce((acc, attr) => {
+            if (attr.name.trim()) {
+                acc[attr.name] = attr.value;
+            }
+            return acc;
+        }, {});
+
         try {
             if (item?.id) {
                 await firebase().collection('coffeeItem').doc(item.id).update({
-                    product: formData.product,
-                    coffeeType: formData.coffeeType,
-                    description: formData.description,
-                    image: image,
-                    attributes: attributes.map(attr => ({ name: attr.placeholder, value: attr.value }))
+                    ...formData,
+                    image,
+                    types: attributesObject,
                 });
                 Alert.alert('Coffee Item updated Successfully');
             } else {
                 await firebase().collection('coffeeItem').add({
-                    product: formData.product,
-                    coffeeType: formData.coffeeType,
-                    description: formData.description,
-                    image: image,
-                    attributes: attributes.map(attr => ({ name: attr.placeholder, value: attr.value }))
+                    ...formData,
+                    image,
+                    types: attributesObject,
                 });
                 Alert.alert('Product Added Successfully');
             }
@@ -79,27 +82,24 @@ const AddProductComponent: React.FC<productProp> = (props) => {
     };
 
     const addAttribute = () => {
-        setAttributes([...attributes, { id: Date.now(), placeholder: 'Add Attribute', value: '' }]);
+        if (attributeName.trim() && attributeValue.trim()) {
+            setAttributes([...attributes, { name: attributeName, value: attributeValue }]);
+            setAttributeName('');
+            setAttributeValue('');
+        } else {
+            Alert.alert('Both attribute name and value are required');
+        }
     };
 
-    const deleteAttribute = (id) => {
-        setAttributes(attributes.filter((attribute) => attribute.id !== id));
-    };
-
-    const handleChange = (id, newValue) => {
-        setAttributes(attributes.map(attr =>
-            attr.id === id ? { ...attr, value: newValue } : attr
-        ));
-    };
-
-    const finalizeAttributes = () => {
-        const attributeValues = attributes.map(attr => attr.value);
-        console.log('Final Attribute Values:', attributeValues);
+    const deleteAttribute = (index: number) => {
+        const updatedAttributes = [...attributes];
+        updatedAttributes.splice(index, 1);
+        setAttributes(updatedAttributes);
     };
 
     return (
-        <SafeAreaView style={{ paddingHorizontal: WIDTH * 0.05, flex: 1 }}>
-            <ScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: WIDTH * 0.05, marginBottom: HEIGHT * 0.1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: WIDTH * 0.05, marginBottom: HEIGHT * 0.02 }}>
                 <View style={{ flexDirection: 'row', marginVertical: HEIGHT * 0.01 }}>
                     <Pressable onPress={() => setModalVisible(false)}>
                         <Image source={backIcon} />
@@ -111,7 +111,7 @@ const AddProductComponent: React.FC<productProp> = (props) => {
                     <View key={key} style={{ marginTop: HEIGHT * 0.02 }}>
                         <Text style={{ marginBottom: HEIGHT * 0.005, fontSize: 16 }}>{key}</Text>
                         <TextInput
-                            placeholder={'Type here'}
+                            placeholder="Type here"
                             style={{
                                 height: key === 'description' ? HEIGHT * 0.15 : HEIGHT * 0.055,
                                 borderWidth: 0.5,
@@ -122,60 +122,39 @@ const AddProductComponent: React.FC<productProp> = (props) => {
                             multiline={key === 'description'}
                             value={formData[key]}
                             onChangeText={(text) => handleTextChange(text, key)}
-                            keyboardType={key === 'smallPrice' || key === 'mediumPrice' || key === 'largePrice' ? 'numeric' : 'default'}
                         />
                     </View>
                 ))}
 
                 <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.03, marginVertical: HEIGHT * 0.01 }}>Attributes</Text>
-                <View style={{ gap: HEIGHT * 0.01 }}>
-                    <Pressable onPress={addAttribute}
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            backgroundColor: colors.brownColor,
-                            alignItems: 'center',
-                            width: WIDTH * 0.3,
-                            height: HEIGHT * 0.056,
-                            borderRadius: 10,
-                        }}
-                    >
-                        <Text style={{ color: colors.commonWhite }}>Add Columns</Text>
-                    </Pressable>
-
-                    {attributes.map((attribute) => (
-                        <View key={attribute.id} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: HEIGHT * 0.01, gap: WIDTH * 0.02 }}>
-                            <TextInput
-                                placeholder={attribute.placeholder}
-                                style={{ paddingLeft: WIDTH * 0.03, borderRadius: 10, width: WIDTH * 0.35, height: HEIGHT * 0.056, borderWidth: 0.5 }}
-                                value={attribute.value}
-                                onChangeText={text => handleChange(attribute.id, text)}
-                            />
-                            <Pressable onPress={() => deleteAttribute(attribute.id)}><Image source={deleteIcon} /></Pressable>
+                <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
+                    {attributes.map((attribute, index) => (
+                        <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, marginBottom: HEIGHT * 0.01, backgroundColor: colors.brownColor, height: HEIGHT * 0.05, padding: WIDTH * 0.02, borderRadius: 10, marginRight: WIDTH * 0.05 }}>
+                            <Text style={{ color: colors.commonWhite }}>{attribute.name}</Text>
+                            <Text style={{ color: colors.commonWhite }}>{attribute.value}</Text>
+                            <Pressable onPress={() => deleteAttribute(index)}>
+                                <Text style={{ color: colors.commonWhite, fontWeight: '600' }}>X</Text>
+                            </Pressable>
                         </View>
                     ))}
+                </View>
 
-                    <Pressable
-                        onPress={finalizeAttributes}
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            backgroundColor: colors.brownColor,
-                            alignItems: 'center',
-                            width: WIDTH * 0.4,
-                            height: HEIGHT * 0.056,
-                            borderRadius: 10,
-                        }}
-
-                    >
-                        <Text style={{ color: colors.commonWhite }}>Add Attributes</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, marginBottom: HEIGHT * 0.01 }}>
+                    <TextInput
+                        placeholder="Attribute Name"
+                        style={{ paddingLeft: WIDTH * 0.03, borderRadius: 10, width: WIDTH * 0.35, height: HEIGHT * 0.056, borderWidth: 0.5 }}
+                        value={attributeName}
+                        onChangeText={(text) => setAttributeName(text)}
+                    />
+                    <TextInput
+                        placeholder="Attribute Value"
+                        style={{ paddingLeft: WIDTH * 0.03, borderRadius: 10, width: WIDTH * 0.35, height: HEIGHT * 0.056, borderWidth: 0.5 }}
+                        value={attributeValue}
+                        onChangeText={(text) => setAttributeValue(text)}
+                    />
+                    <Pressable style={{ width: WIDTH * 0.1, backgroundColor: colors.commonBlack, height: WIDTH * 0.1, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={addAttribute}>
+                        <Image source={plusIcon} />
                     </Pressable>
-                    {/* {attributeValues.map((values, index) => (
-                        <View>
-                            <Text>{values}</Text>
-                            <TextInput placeholder={values} />
-                        </View>
-                    ))} */}
                 </View>
 
                 <View style={{ marginTop: HEIGHT * 0.02 }}>
@@ -185,32 +164,19 @@ const AddProductComponent: React.FC<productProp> = (props) => {
                         style={{
                             borderWidth: 0.2,
                             borderRadius: 5,
-                            padding: WIDTH * 0.03,
+                            padding: WIDTH * 0.02,
                             backgroundColor: colors.lightGray,
                         }}
                     >
-                        <Text>Select Image</Text>
+                        {image ? <Image source={{ uri: image }} style={{ height: HEIGHT * 0.2, width: WIDTH * 0.88 }} /> : <Text>Pick Image</Text>}
                     </Pressable>
-                    {image && (
-                        <Image
-                            source={{ uri: image }}
-                            style={{
-                                width: WIDTH * 0.8,
-                                height: HEIGHT * 0.2,
-                                marginTop: HEIGHT * 0.02,
-                                borderRadius: 10,
-                            }}
-                        />
-                    )}
                 </View>
             </ScrollView>
-
             <Pressable
                 style={{
-                    position: 'absolute',
                     height: HEIGHT * 0.07,
                     width: WIDTH * 0.9,
-                    bottom: HEIGHT * 0.04,
+                    bottom: HEIGHT * 0.01,
                     backgroundColor: colors.brownColor,
                     alignSelf: 'center',
                     alignItems: 'center',

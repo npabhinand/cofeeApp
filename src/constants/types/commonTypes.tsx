@@ -56,7 +56,8 @@ interface coffeeProps {
         product: string;
         coffeeType: string;
         description: string;
-        type: { size: string; price: number; }[],
+        types: any;
+        price: number;
         rating: number;
         image: string;
     }
@@ -79,7 +80,8 @@ interface CartProps {
         name: string;
         coffeeType: string;
         description: string;
-        type: { size: string; price: string; },
+        price: string;
+        type: {},
         rating: number;
         image: string;
         quantity: number;
@@ -91,7 +93,9 @@ interface productsProps {
     product: string,
     coffeeType: string,
     image: string,
-    type: { size: string, price: number }
+    price: number;
+    profit: number;
+    types: { size: string, price: number }
 }
 interface productItems {
     setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -127,7 +131,7 @@ interface CartItem {
     name: string;
     coffeeType: string;
     description: string;
-    type: { size: string; price: number; }[],
+    type: any,
     rating: number;
     img: number;
     quantity: number;
@@ -140,4 +144,42 @@ interface ContactItem {
     address: string;
     selected: boolean;
 }
-export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState };
+
+interface profitProps {
+    item: productsProps;
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
+}
+interface StockProps {
+    item: {
+        id: string;
+        product: string;
+        coffeeType: string;
+        description: string;
+        types: any,
+        rating: number;
+        image: string;
+        stock: number;
+    }
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
+}
+interface orderDetailProps {
+    item: {
+        id: string;
+        orderTime: number;
+        TotalPrice: number;
+        products: CartItem;
+        address: [{
+            address: string;
+            name: string;
+            phone: string;
+            userId: string;
+
+        }]
+    }
+    handleModal?: () => void;
+}
+export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps };
