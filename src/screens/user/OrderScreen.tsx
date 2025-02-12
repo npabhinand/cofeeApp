@@ -33,55 +33,60 @@ const OrderScreen = () => {
 
 
     useEffect(() => {
-        const onFetchData = async () => {
-            setLoading(true);
-            try {
-                const address = [];
-                await firestore()
-                    .collection('address')
-                    .where('selected', '==', true)
-                    .where('userId', '==', userEmail)
-                    .get()
-                    .then(querySnapshot => {
-                        querySnapshot.forEach(doc => {
-                            address.push(doc.data());
-                        });
-                    });
-                setSelectedContact(address);
-                setLoading(false);
-                // cart item
-            } catch (error) {
-                console.log('Error occurred:', error);
-            }
-        };
+
         onFetchData();
     }, [isFocused]);
 
-
     useEffect(() => {
-        const onFetchCartItem = async () => {
-            try {
-                const carts: [] = [];
-                let total: number = 0;
-                await firestore()
-                    .collection('cartItem').where('userId', '==', userData[0].email)
-                    .get()
-                    .then(querySnapshot => {
-                        querySnapshot.forEach(doc => {
-                            carts.push({ ...doc.data(), id: doc.id });
-                            total += parseInt(doc.data().price * doc.data().quantity, 10);
-                        });
-                    });
-                setPrices(total);
-                setCartItems(carts);
-                dispatch(addTotalPrice(total));
-
-            } catch (error) {
-                console.log('Error occurred while fetching cart data', error);
-            }
-        };
         onFetchCartItem();
     }, [isFocused]);
+
+
+    const onFetchData = async () => {
+        setLoading(true);
+        try {
+            const address = [];
+            await firestore()
+                .collection('address')
+                .where('selected', '==', true)
+                .where('userId', '==', userEmail)
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        address.push(doc.data());
+                    });
+                });
+            setSelectedContact(address);
+            setLoading(false);
+            // cart item
+        } catch (error) {
+            console.log('Error occurred:', error);
+        }
+    };
+
+
+
+    const onFetchCartItem = async () => {
+        try {
+            const carts: [] = [];
+            let total: number = 0;
+            await firestore()
+                .collection('cartItem').where('userId', '==', userData[0].email)
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        carts.push({ ...doc.data(), id: doc.id });
+                        total += parseInt(doc.data().price * doc.data().quantity, 10);
+                    });
+                });
+            setPrices(total);
+            setCartItems(carts);
+            dispatch(addTotalPrice(total));
+
+        } catch (error) {
+            console.log('Error occurred while fetching cart data', error);
+        }
+    };
 
 
     const filterCartItem = cartItems.map(item => ({
@@ -92,6 +97,7 @@ const OrderScreen = () => {
         userId: item.userId,
         image: item.image,
         name: item.name,
+        profit: item.profit,
     }));
 
     // const onDeleteItem = () => {
@@ -126,6 +132,7 @@ const OrderScreen = () => {
             .then(() => {
                 console.log('cartItem deleted deleted!');
             });
+        setLoading(false);
     };
 
 
@@ -193,24 +200,24 @@ const OrderScreen = () => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor, }}>
             {loading ? <>
                 <ActivityIndicator size={'large'} style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }} />
             </> : <>
-                <ScrollView style={{ marginBottom: HEIGHT * 0.27 }} showsVerticalScrollIndicator={false}>
-                    <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.1, marginVertical: HEIGHT * 0.01 }}>
+                <ScrollView style={{ marginBottom: HEIGHT * 0.27, paddingHorizontal: WIDTH * 0.05, }} showsVerticalScrollIndicator={false}>
+                    <View style={{ flexDirection: 'row', marginVertical: HEIGHT * 0.01 }}>
                         <Pressable onPress={() => navigation.goBack()}>
                             <Image source={backIcon} />
                         </Pressable>
                         <Text style={{ fontWeight: '600', fontSize: HEIGHT * 0.02, marginLeft: WIDTH * 0.3 }}>Order</Text>
                     </View>
-                    <View style={{ width: WIDTH * 0.85, backgroundColor: `${colors.grayColor}10`, height: HEIGHT * 0.05, alignSelf: 'center', marginTop: HEIGHT * 0.04, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ width: WIDTH * 0.9, backgroundColor: `${colors.grayColor}10`, height: HEIGHT * 0.05, alignSelf: 'center', marginTop: HEIGHT * 0.04, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         {orderType.map((type, index) => (
                             <Pressable
                                 key={index}
                                 style={[
                                     {
-                                        width: WIDTH * 0.41,
+                                        width: WIDTH * 0.45,
                                         height: HEIGHT * 0.04,
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -225,10 +232,10 @@ const OrderScreen = () => {
                         ))}
                     </View>
                     <View style={{ marginTop: HEIGHT * 0.04, paddingBottom: HEIGHT * 0.03 }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, paddingHorizontal: WIDTH * 0.07, }}> Delivery Address</Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}> Delivery Address</Text>
 
                         {selectedContact.map((item, index) => (
-                            <View key={index} style={{ paddingHorizontal: WIDTH * 0.07 }}>
+                            <View key={index} style={{ paddingHorizontal: WIDTH * 0.02 }}>
                                 <Text style={{ marginTop: HEIGHT * 0.03, fontWeight: '600', fontSize: HEIGHT * 0.018 }}>{item.name}</Text>
                                 <Text style={{ color: colors.grayColor, marginTop: WIDTH * 0.02 }}>{item.address}</Text>
                                 <View style={{ flexDirection: 'row', gap: WIDTH * 0.03, marginTop: HEIGHT * 0.02 }}>
@@ -241,7 +248,7 @@ const OrderScreen = () => {
                         ))}
                         {selectedContact.length === 0 ?
 
-                            <Pressable style={{ marginHorizontal: WIDTH * 0.07, marginTop: HEIGHT * 0.03, flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, borderWidth: 0.5, height: HEIGHT * 0.035, paddingHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.04, backgroundColor: colors.commonWhite, width: WIDTH * 0.4 }} onPress={() => navigation.navigate('AddressScreen')}>
+                            <Pressable style={{ marginHorizontal: WIDTH * 0.02, marginTop: HEIGHT * 0.03, flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, borderWidth: 0.5, height: HEIGHT * 0.035, paddingHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.04, backgroundColor: colors.commonWhite, width: WIDTH * 0.4 }} onPress={() => navigation.navigate('AddressScreen')}>
                                 <Image source={plusIcon} style={{ tintColor: colors.commonBlack }} />
                                 <Text>Add Address</Text>
                             </Pressable> : <></>
@@ -252,7 +259,7 @@ const OrderScreen = () => {
                                 borderBottomColor: `${colors.grayColor}50`,
                                 borderBottomWidth: 0.5,
                                 marginVertical: HEIGHT * 0.02,
-                                marginHorizontal: WIDTH * 0.05,
+
                             }}
                         />
 
@@ -281,7 +288,7 @@ const OrderScreen = () => {
 
 
 
-                        <View style={{ paddingHorizontal: WIDTH * 0.07 }}>
+                        <View >
                             <View style={{ flexDirection: 'row', alignItems: 'center', height: HEIGHT * 0.07, width: WIDTH * 0.88, borderWidth: 1, borderRadius: WIDTH * 0.04, gap: WIDTH * 0.05, paddingHorizontal: WIDTH * 0.07, borderColor: '#F9F2ED', backgroundColor: colors.commonWhite }}>
                                 <Image source={discountIcon} />
                                 <Text>1 Discount is Applies</Text>

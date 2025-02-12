@@ -5,7 +5,8 @@ import contactSlice from './slice/contactSlice';
 import cartCountSlice from './slice/cartCountSlice';
 import userSlice from './slice/userDataSlice';
 import priceTotalSlice from './slice/priceTotalSlice';
-import dropDownSlice from './slice/dropDownSlice';
+// import dropDownSlice from './slice/dropDownSlice';
+// import countSlice from './slice/CountSlice';
 const store = configureStore({
     reducer: {
         cart: cartSlice,
@@ -13,7 +14,8 @@ const store = configureStore({
         cartCount: cartCountSlice,
         user: userSlice,
         totalPrice: priceTotalSlice,
-        isVisible: dropDownSlice,
+        // counts: countSlice,
+        // isVisible: dropDownSlice,
     },
 });
 

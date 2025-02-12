@@ -25,16 +25,16 @@ const AddressScreen = () => {
     const userEmail = userData[0].email;
     // console.log(section)
     useEffect(() => {
-        const fetchData = async () => {
-            const addresses = [];
-            const addressRef = await firestore().collection('address').where('userId', '==', userEmail).get();
-            addressRef.forEach((doc) => {
-                addresses.push({ ...doc.data(), id: doc.id });
-            });
-            setAddressList(addresses);
-        };
         fetchData();
     }, [update]);
+    const fetchData = async () => {
+        const addresses = [];
+        const addressRef = await firestore().collection('address').where('userId', '==', userEmail).get();
+        addressRef.forEach((doc) => {
+            addresses.push({ ...doc.data(), id: doc.id });
+        });
+        setAddressList(addresses);
+    };
 
 
 

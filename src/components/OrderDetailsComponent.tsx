@@ -22,10 +22,10 @@ const OrderDetailsComponent: React.FC<orderDetailProps> = (props) => {
     ];
 
     return (
-        <ScrollView>
+        <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
             <Pressable style={{ flex: 1 }} onPress={handleModal}>
 
-                <View style={{ width: WIDTH * 1, alignSelf: 'center', marginTop: HEIGHT * 0.25, height: HEIGHT * 0.75, backgroundColor: colors.commonWhite, paddingHorizontal: WIDTH * 0.05, borderTopLeftRadius: 50, borderTopRightRadius: 50, shadowColor: colors.commonBlack, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.39, shadowRadius: 8.30, elevation: 8 }}>
+                <View style={{ width: WIDTH * 1, alignSelf: 'center', marginTop: HEIGHT * 0.4, paddingBottom: HEIGHT * 0.05, backgroundColor: colors.commonWhite, paddingHorizontal: WIDTH * 0.05, borderTopLeftRadius: 50, borderTopRightRadius: 50, shadowColor: colors.commonBlack, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.39, shadowRadius: 8.30, elevation: 8 }}>
                     <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.03, alignItems: 'center', gap: WIDTH * 0.1, justifyContent: 'space-between' }}>
 
                         <Text style={{ fontWeight: '600', fontSize: 19, marginVertical: HEIGHT * 0.02, color: colors.grayColor }}>Delivery Address</Text>

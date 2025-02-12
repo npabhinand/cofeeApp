@@ -55,6 +55,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                     image: item.image,
                     quantity: 1,
                     productId: item.id,
+                    profit: item.profit,
                 });
 
                 const cartItemRef = firestore().collection('cartItem').where('userId', '==', userId);
@@ -73,20 +74,20 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
 
 
     return (
-        <Pressable style={{ backgroundColor: colors.commonWhite, marginTop: HEIGHT * 0.02, marginBottom: HEIGHT * 0.01, width: WIDTH * 0.42, height: HEIGHT * 0.3, borderRadius: 15, marginLeft: WIDTH * 0.04 }} onPress={() => {
+        <Pressable style={{ backgroundColor: colors.commonWhite, marginTop: HEIGHT * 0.02, marginBottom: HEIGHT * 0.01, width: WIDTH * 0.42, height: HEIGHT * 0.3, borderRadius: 15, marginRight: WIDTH * 0.05 }} onPress={() => {
             navigation.navigate('ProductDetailScreen', {
                 section: { item },
             });
         }}>
-            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.38, borderRadius: 15, height: HEIGHT * 0.16, position: 'absolute', alignSelf: 'center', marginTop: HEIGHT * 0.01 }} />
+            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.38, borderRadius: 15, height: HEIGHT * 0.16, position: 'absolute', alignSelf: 'center', marginTop: HEIGHT * 0.01, }} />
 
             <View style={{ flexDirection: 'row', alignItems: 'center', right: WIDTH * 0.02, position: 'absolute', top: HEIGHT * 0.01, backgroundColor: `${colors.commonBlack}30`, height: HEIGHT * 0.04, width: WIDTH * 0.15, borderTopRightRadius: 15, paddingLeft: HEIGHT * 0.015, borderBottomLeftRadius: 30 }}>
                 <Image source={starIcon} style={{ height: HEIGHT * 0.015, marginRight: WIDTH * 0.02 }} />
                 <Text style={{ color: colors.commonWhite, fontSize: 10 }}>4.8</Text>
             </View>
             <View style={{ marginTop: HEIGHT * 0.19, marginLeft: WIDTH * 0.03 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>{item.product}</Text>
-                <Text style={{ marginTop: HEIGHT * 0.005, color: colors.grayColor }}>{item.coffeeType}</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, textTransform: 'capitalize' }}>{item.product}</Text>
+                <Text style={{ marginTop: HEIGHT * 0.005, color: colors.grayColor, textTransform: 'capitalize' }}>{item.coffeeType}</Text>
 
                 <View style={{ marginTop: HEIGHT * 0.005, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginRight: WIDTH * 0.03 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>$ {item.price}</Text>

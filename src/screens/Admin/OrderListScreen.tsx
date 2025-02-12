@@ -15,32 +15,44 @@ const OrderListScreen = () => {
     const [orderList, setOrderList] = useState<[]>([]);
     const [fullOrderList, setFullOrderList] = useState<[]>([]);
     const [price, setPrice] = useState<number>(0);
-    const [profit, setProfit] = useState<string>();
+    const [profit, setProfit] = useState<number>(0);
+
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const orders: [] = [];
-                let totalPrice = 0;
-                await firestore().collection('orders').get().then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        orders.push({ ...doc.data(), id: doc.id });
-                        totalPrice += doc.data().TotalPrice;
-                    });
-                });
-                setFullOrderList(orders);
-                setOrderList(orders);
-                setPrice(totalPrice);
-                setProfit((totalPrice * 0.2).toFixed(2));
-            }
-            catch (err) {
-                console.log('Error while fetching data');
-            }
-        };
         fetchOrders();
     }, []);
 
+    const fetchOrders = async () => {
+        try {
+            const orders: [] = [];
+            let totalPrice = 0;
+            await firestore().collection('orders').get().then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    orders.push({ ...doc.data(), id: doc.id });
+                    totalPrice += doc.data().TotalPrice;
+                });
+            });
 
+            const orderWithProfit = orders.map(order => {
+                let orderProfit = 0;
+                order.products.forEach(product => {
+                    orderProfit += parseInt(product.price, 10) * product.profit / 100;
+                });
+                console.log(orderProfit, '>>>>>');
+                return { ...order, profit: orderProfit.toFixed(2) };
+
+            });
+            setFullOrderList(orderWithProfit);
+            setOrderList(orderWithProfit);
+            setPrice(totalPrice);
+            // const totalProfit = orderWithProfit.reduce((profits, curr) => curr.products.map((product) => profits += parseInt(product.price) * profit / 100), 0);
+            const totalProfit = orderWithProfit.reduce((profits, curr) => profits += parseFloat(curr.profit), 0);
+            setProfit(totalProfit);
+        }
+        catch (err) {
+            console.log('Error while fetching data');
+        }
+    };
     const handleDateSelected = (selectedDate: string) => {
 
         const filteredOrders = fullOrderList.filter(order => {
@@ -49,15 +61,15 @@ const OrderListScreen = () => {
         });
         setOrderList(filteredOrders);
         const updatedPrice = filteredOrders.reduce((total, order) => total + order.TotalPrice, 0);
+        const updatedProfit = filteredOrders.reduce((profits, curr) => profits += parseFloat(curr.profit), 0);
+        setProfit(updatedProfit);
         setPrice(updatedPrice);
-        const updatedProfit = updatedPrice * 0.2;
-        setProfit(updatedProfit.toFixed(2));
     };
 
     const orderInventoryArray = [
         { id: 1, name: 'Orders', count: orderList.length || 0 },
-        { id: 2, name: 'Income', count: price },
-        { id: 3, name: 'Profit', count: profit },
+        { id: 2, name: 'Income', count: `₹${price}` },
+        { id: 3, name: 'Profit', count: `₹${profit}` },
     ];
 
 

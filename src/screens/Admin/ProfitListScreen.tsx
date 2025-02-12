@@ -13,24 +13,29 @@ const ProfitListScreen = () => {
     const [coffeeData, setCoffeeData] = useState([]);
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
-        const fetchData = async () => {
-            const coffees: any = [];
-            try {
-                const coffeeRef = await firestore().collection('coffeeItem').get();
-                coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
-                setCoffeeData(coffees);
-            } catch (error) {
-                console.log('error while fetching data', error);
-            }
-        };
         fetchData();
-    }, [loading]);
+    }, []);
+
+    const fetchData = async () => {
+        const coffees: any = [];
+
+        try {
+            setLoading(true);
+            const coffeeRef = await firestore().collection('coffeeItem').get();
+            coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
+            setCoffeeData(coffees);
+            setLoading(false);
+        } catch (error) {
+            console.log('error while fetching data', error);
+
+        }
+        setLoading(false);
+    };
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            {loading ?
-
-                <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }} /> :
+            {loading ? <ActivityIndicator size={'large'} color={colors.brownColor} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} /> :
 
                 <>
                     <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.01 }}>

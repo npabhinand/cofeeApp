@@ -7,7 +7,7 @@ import { colors } from '../constants/colors';
 
 const PromoComponent = () => {
     return (
-        <View style={{ backgroundColor: colors.promoBackground, height: HEIGHT * 0.18, width: WIDTH * 0.88, marginLeft: WIDTH * 0.06, borderRadius: WIDTH * 0.05, overflow: 'hidden' }}>
+        <View style={{ backgroundColor: colors.promoBackground, height: HEIGHT * 0.18, width: WIDTH * 0.9, marginLeft: WIDTH * 0.05, borderRadius: WIDTH * 0.05, overflow: 'hidden' }}>
             <Image source={banner} style={{ position: 'absolute', width: '100%', top: HEIGHT * 0.01 }} />
             <View style={{ marginTop: HEIGHT * 0.015, marginLeft: WIDTH * 0.07 }}>
                 <View style={{ backgroundColor: colors.redButtonColor, width: WIDTH * 0.18, height: HEIGHT * 0.04, marginBottom: HEIGHT * 0.01, alignItems: 'center', borderRadius: WIDTH * 0.02, justifyContent: 'center' }}>

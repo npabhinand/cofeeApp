@@ -62,6 +62,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                     userId: userId,
                     image: section.item.image,
                     quantity: 1,
+                    profit: section.item.profit,
                     productId: section.item.id,
                 });
 
@@ -100,7 +101,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                 <ActivityIndicator size={'large'} style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }} />
             </> : <>
                 <ScrollView>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: WIDTH * 0.1, marginTop: HEIGHT * 0.03, marginBottom: HEIGHT * 0.02 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: WIDTH * 0.05, marginTop: HEIGHT * 0.03, marginBottom: HEIGHT * 0.02 }}>
                         <Pressable onPress={() => navigation.goBack()}>
                             <Image source={backIcon} />
                         </Pressable>
@@ -109,7 +110,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                             <Image source={heartIcon} />
                         </Pressable>
                     </View>
-                    <View style={{ paddingHorizontal: WIDTH * 0.06, marginTop: HEIGHT * 0.02, paddingBottom: HEIGHT * 0.15 }}>
+                    <View style={{ paddingHorizontal: WIDTH * 0.05, marginTop: HEIGHT * 0.02, paddingBottom: HEIGHT * 0.15 }}>
                         <Image source={{ uri: section.item.image }} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.24, borderRadius: WIDTH * 0.04 }} />
                         <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginTop: HEIGHT * 0.02, textTransform: 'capitalize' }}>{section.item.product}</Text>
 
@@ -167,14 +168,11 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         {/* size buttons */}
                         {/* <Text style={{ marginTop: HEIGHT * 0.035, fontWeight: '600', fontSize: HEIGHT * 0.02, marginBottom: HEIGHT * 0.015 }}>Size</Text> */}
 
-                        <View style={{ marginTop: HEIGHT * 0.01, display: 'flex', gap: HEIGHT * 0.01 }}>
+                        <View style={{ marginTop: HEIGHT * 0.01, flexDirection: 'row', flexWrap: 'wrap', gap: HEIGHT * 0.01 }}>
                             {Object.keys(section.item.types).map((key) => (
-                                <View key={key} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Text style={{ color: colors.grayColor, textTransform: 'capitalize' }}>{key}: </Text>
-                                    {/* <Pressable style={[{
-                                        width: WIDTH * 0.25, height: HEIGHT * 0.05, backgroundColor: colors.brownColor, borderWidth: 0.5, borderRadius: WIDTH * 0.03, borderColor: `${colors.grayColor}60`, justifyContent: 'center', alignItems: 'center',
-                                    }]} > */}
-                                    <Text style={{ color: colors.grayColor }}>{section.item.types[key]}</Text>
+                                <View key={key} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: `${colors.grayColor}90`, padding: 10, borderRadius: 10 }}>
+                                    <Text style={{ color: colors.commonWhite, textTransform: 'capitalize' }}>{key}: </Text>
+                                    <Text style={{ color: colors.commonWhite }}>{section.item.types[key]}</Text>
                                     {/* </Pressable> */}
                                 </View>
                             ))}
@@ -182,7 +180,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         </View>
                     </View>
                 </ScrollView>
-                <View style={{ backgroundColor: colors.commonWhite, flexDirection: 'row', justifyContent: 'space-between', position: 'absolute', bottom: HEIGHT * 0.01, paddingHorizontal: WIDTH * 0.06, height: HEIGHT * 0.13, width: WIDTH * 1, borderTopLeftRadius: HEIGHT * 0.03, borderTopRightRadius: HEIGHT * 0.03, paddingTop: HEIGHT * 0.02 }}>
+                <View style={{ backgroundColor: colors.commonWhite, flexDirection: 'row', justifyContent: 'space-between', position: 'absolute', bottom: HEIGHT * 0.01, paddingHorizontal: WIDTH * 0.05, height: HEIGHT * 0.13, width: WIDTH * 1, borderTopLeftRadius: HEIGHT * 0.03, borderTopRightRadius: HEIGHT * 0.03, paddingTop: HEIGHT * 0.02 }}>
                     <View>
                         <Text style={{ marginBottom: HEIGHT * 0.01, color: colors.grayColor }}>Price</Text>
                         <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.02, fontWeight: 'bold' }}>$ {section.item.price}</Text>

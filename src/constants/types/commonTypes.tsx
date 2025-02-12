@@ -43,11 +43,12 @@ interface productProp {
     update: boolean;
     item?: {
         id: string,
+        price: number;
         product: string,
         coffeeType: string,
         image: string,
         description: string;
-        type: { size: string, price: number }
+        types: {}
     };
 }
 interface coffeeProps {
@@ -60,6 +61,7 @@ interface coffeeProps {
         price: number;
         rating: number;
         image: string;
+        profit: string;
     }
     userId: string;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -126,6 +128,15 @@ interface dropDownState {
 interface PriceState {
     totalPrice: number;
 }
+
+interface countState {
+
+    productCount: number;
+    userCount: number;
+    orderCount: number;
+    profit: number;
+    stockCount: number;
+}
 interface CartItem {
     id: number;
     name: string;
@@ -172,6 +183,7 @@ interface orderDetailProps {
         orderTime: number;
         TotalPrice: number;
         products: CartItem;
+        profit: number;
         address: [{
             address: string;
             name: string;
@@ -182,4 +194,4 @@ interface orderDetailProps {
     }
     handleModal?: () => void;
 }
-export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps };
+export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState };

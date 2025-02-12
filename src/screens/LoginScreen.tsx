@@ -94,7 +94,7 @@ const LoginScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.matteBlack }}>
             {loading ? <>
-                <ActivityIndicator size="large" style={{ marginTop: HEIGHT * 0.45 }} color={colors.commonWhite} />
+                <ActivityIndicator size="large" style={{ width: WIDTH * 1, flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: colors.commonWhite }} color={colors.brownColor} />
             </> :
                 <View>
                     <Image source={background1} style={{ width: WIDTH * 1.0, height: HEIGHT * 0.4, position: 'absolute' }} />
