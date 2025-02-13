@@ -2,6 +2,7 @@
 import { View, Text, Pressable, Image, TextInput, Alert } from 'react-native';
 import React, { useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
+
 import { colors } from '../constants/colors';
 import { backIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
@@ -17,7 +18,7 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState<addressProps>({ name: name || '', phone: phone || null, address: address || '' });
     const userData = useSelector(selectedUserData);
-    const userEmail = userData[0].email;
+    const { email } = userData[0];
     const AddOrUpdateAddress = async () => {
         let newErrors = {};
         Object.keys(formData).forEach((key) => {
@@ -51,7 +52,7 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
                     phone: formData.phone,
                     address: formData.address,
                     selected: false,
-                    userId: userEmail,
+                    userId: email,
                 });
                 Alert.alert('Address Added Successfully');
             } catch (error) {

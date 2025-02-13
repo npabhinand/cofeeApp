@@ -1,13 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image, Modal, Alert } from 'react-native';
 import React, { useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
+import { useSelector } from 'react-redux';
+
 import { deleteIcon, editIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import AddAddressComponent from './AddAddressComponent';
-import firestore from '@react-native-firebase/firestore';
 import { contactProps } from '../constants/types/commonTypes';
-import { useSelector } from 'react-redux';
 import { selectedUserData } from '../redux/slice/userDataSlice';
 
 
@@ -16,7 +17,7 @@ const AddressRenderItem: React.FC<contactProps> = (props) => {
     const { item, setUpdate, update } = props;
     // const dispatch = useDispatch();
     const userData = useSelector(selectedUserData);
-    const userEmail = userData[0].email;
+    const { email } = userData[0];
 
     const onDeleteItem = () => {
         firestore()
@@ -56,7 +57,7 @@ const AddressRenderItem: React.FC<contactProps> = (props) => {
         try {
 
             await firestore().collection('address')
-                .where('userId', '==', userEmail)
+                .where('userId', '==', email)
                 .where('selected', '==', true)
                 .get()
                 .then(function (querySnapshot) {

@@ -1,10 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Image, Pressable, Modal, TextInput, Alert, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import { backIcon } from '../assets/icons';
-import firestore from '@react-native-firebase/firestore';
 import { StockProps } from '../constants/types/commonTypes';
 
 const StockRenderItem: React.FC<StockProps> = (props) => {

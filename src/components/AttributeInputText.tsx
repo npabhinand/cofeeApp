@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, TextInput, Pressable, Image } from 'react-native';
 import React from 'react';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { deleteIcon } from '../assets/icons';
 

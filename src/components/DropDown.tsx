@@ -3,6 +3,7 @@ import { View, Pressable, Alert, Image, Modal, Text } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import { back, bottomArrowIcon, logout, profile, profileIcon } from '../assets/icons';

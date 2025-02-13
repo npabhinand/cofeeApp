@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Text, Pressable, Image, View, Alert } from 'react-native';
 import React from 'react';
+import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { plusIcon, starIcon } from '../assets/icons';
-import { useNavigation } from '@react-navigation/native';
 import { colors } from '../constants/colors';
-import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
-import { useDispatch } from 'react-redux';
 import { addCartCount } from '../redux/slice/cartCountSlice';
 import { coffeeProps } from '../constants/types/commonTypes';
 

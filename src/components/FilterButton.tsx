@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Text, Pressable } from 'react-native';
 import React from 'react';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import { buttonProps } from '../constants/types/commonTypes';

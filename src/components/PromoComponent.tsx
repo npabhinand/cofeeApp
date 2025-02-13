@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Image } from 'react-native';
 import React from 'react';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { banner } from '../assets/images';
 import { colors } from '../constants/colors';

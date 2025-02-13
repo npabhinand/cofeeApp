@@ -1,13 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, SafeAreaView, Image, Pressable, ScrollView, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
-import { backIcon, beansIcon, deliveryIcon, heartIcon, milkCanIcon, rateIcon } from '../../assets/icons';
-import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../../constants/colors';
-import { ProductDetailScreenProps } from '../../constants/types/commonTypes';
 import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { backIcon, beansIcon, deliveryIcon, heartIcon, milkCanIcon, rateIcon } from '../../assets/icons';
+import { HEIGHT, WIDTH } from '../../constants/dimension';
+import { colors } from '../../constants/colors';
+import { ProductDetailScreenProps } from '../../constants/types/commonTypes';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import { addCartCount } from '../../redux/slice/cartCountSlice';
 // import { addCart } from '../../redux/slice/cartSlice';

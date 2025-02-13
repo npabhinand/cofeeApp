@@ -1,19 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, SafeAreaView, Pressable, Image, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { backIcon, bottomArrowIcon, deleteIcon, discountIcon, plusIcon, rightArrowIcon, walletIcon } from '../../assets/icons';
+import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+import { SwipeListView } from 'react-native-swipe-list-view';
+
+import { backIcon, bottomArrowIcon, deleteIcon, discountIcon, plusIcon, rightArrowIcon, walletIcon } from '../../assets/icons';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { orderType, editAdressArray } from '../../constants/data/dataArray';
 import { colors } from '../../constants/colors';
-// import { selectedCarts } from '../redux/slice/cartSlice';
-import { useDispatch, useSelector } from 'react-redux';
 import OrderComponent from '../../components/OrderComponent';
 // import { addedContacts } from '../redux/slice/contactSlice';
-import firestore from '@react-native-firebase/firestore';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import { addTotalPrice, selectedPrice } from '../../redux/slice/priceTotalSlice';
-import { SwipeListView } from 'react-native-swipe-list-view';
+
 
 const OrderScreen = () => {
     const navigation = useNavigation();
@@ -27,25 +28,19 @@ const OrderScreen = () => {
     const dispatch = useDispatch();
     const [prices, setPrices] = useState(totalPrice);
     const [loading, setLoading] = useState<boolean>(false);
-    // useEffect(() => {
-    //     console.log('rendering')
-    // }, [isFocused])
-
 
     useEffect(() => {
 
         onFetchData();
-    }, [isFocused]);
-
-    useEffect(() => {
         onFetchCartItem();
     }, [isFocused]);
+
 
 
     const onFetchData = async () => {
         setLoading(true);
         try {
-            const address = [];
+            const address: any = [];
             await firestore()
                 .collection('address')
                 .where('selected', '==', true)
@@ -68,7 +63,7 @@ const OrderScreen = () => {
 
     const onFetchCartItem = async () => {
         try {
-            const carts: [] = [];
+            const carts: any = [];
             let total: number = 0;
             await firestore()
                 .collection('cartItem').where('userId', '==', userData[0].email)
@@ -94,7 +89,6 @@ const OrderScreen = () => {
         quantity: item.quantity,
         type: item.types,
         price: item.price,
-        userId: item.userId,
         image: item.image,
         name: item.name,
         profit: item.profit,
@@ -163,11 +157,12 @@ const OrderScreen = () => {
                 await firestore().collection('orders').add({
                     products: filterCartItem,
                     address: selectedContact,
+                    userId: userEmail,
                     TotalPrice: prices + 1,
                     orderTime: Date.now(),
                 });
                 Alert.alert('Order placed successfully');
-                navigation.navigate('DeliveryScreen');
+                navigation.navigate('UserOrderListScreen');
                 setLoading(false);
 
             } catch (error) {
@@ -200,7 +195,7 @@ const OrderScreen = () => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor, }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>
             {loading ? <>
                 <ActivityIndicator size={'large'} style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }} />
             </> : <>

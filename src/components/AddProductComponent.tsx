@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, SafeAreaView, TextInput, Image, Pressable, ScrollView, Alert } from 'react-native';
 import firebase from '@react-native-firebase/firestore';
 import { launchImageLibrary } from 'react-native-image-picker';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { backIcon, plusIcon } from '../assets/icons';
 import { colors } from '../constants/colors';

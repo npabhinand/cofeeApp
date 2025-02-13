@@ -2,11 +2,13 @@
 import { View, Text, SafeAreaView, Pressable, Image, FlatList, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { backIcon } from '../../assets/icons';
-import firestore from '@react-native-firebase/firestore';
 import StockRenderItem from '../../components/StockRenderItem';
 import { colors } from '../../constants/colors';
+import HeaderComponent from '../../components/HeaderComponent';
 
 const StockListScreen = () => {
     const [coffeeData, setCoffeeData] = useState([]);
@@ -36,12 +38,7 @@ const StockListScreen = () => {
         <SafeAreaView style={{ flex: 1 }}>
             {update ? <ActivityIndicator size={'large'} color={colors.brownColor} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} /> :
                 <>
-                    <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.01, alignItems: 'center' }}>
-                        <Pressable onPress={() => navigation.goBack()}>
-                            <Image source={backIcon} />
-                        </Pressable>
-                        <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Stocks</Text>
-                    </View>
+                    <HeaderComponent header={'stocks'} />
                     {/*  */}
                     <FlatList
                         data={coffeeData}

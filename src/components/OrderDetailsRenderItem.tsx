@@ -1,16 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Modal, Image } from 'react-native';
 import React, { useState } from 'react';
+import moment from 'moment';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
-import moment from 'moment';
 import OrderDetailsComponent from './OrderDetailsComponent';
 import { rightArrowIcon } from '../assets/icons';
-import { orderDetailProps } from '../constants/types/commonTypes';
+import { addressProps, orderComponentProps } from '../constants/types/commonTypes';
 
-const OrderDetailsRenderItem: React.FC<orderDetailProps> = (props) => {
+const OrderDetailsRenderItem: React.FC<orderComponentProps> = (props) => {
     const { item } = props;
-    // const navigation = useNavigation();
     const [isVisible, setIsVisible] = useState(false);
     const date = moment(item.orderTime).format('ddd,MM Do YY, h:mm:ss a');
     const handleModal = () => {
@@ -18,27 +18,22 @@ const OrderDetailsRenderItem: React.FC<orderDetailProps> = (props) => {
     };
 
     const orderArray = [
-        { name: 'track Order', value: item.id, icon: <Pressable onPress={handleModal}><Image source={rightArrowIcon} tintColor={colors.brownColor} /></Pressable> },
-        { name: 'order Price', value: `₹${item.TotalPrice} ` },
+        { name: 'Order Id', value: item.id, icon: <Pressable onPress={handleModal}><Image source={rightArrowIcon} tintColor={colors.brownColor} /></Pressable> },
         { name: 'order Time', value: date },
+        { name: 'order Price', value: `₹${item.TotalPrice} ` },
         { name: 'profit', value: `₹${item.profit}` },
     ];
+
     return (
-        <Pressable style={{ backgroundColor: colors.commonWhite, width: WIDTH * 0.9, height: 120, alignSelf: 'center', padding: HEIGHT * 0.01, borderRadius: 12, marginBottom: HEIGHT * 0.02, shadowColor: colors.commonWhite, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 5 }}>
+        <Pressable style={{ backgroundColor: colors.commonWhite, width: WIDTH * 0.9, height: 120, alignSelf: 'center', padding: HEIGHT * 0.02, borderRadius: 12, marginBottom: HEIGHT * 0.02, shadowColor: colors.commonWhite, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 5 }}>
             {orderArray.map((details, index) => (
-                <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: WIDTH * 0.01, marginBottom: HEIGHT * 0.01 }}>
-                    <Text style={{ color: colors.brownColor, fontSize: 16, fontWeight: '600', marginRight: 10, width: WIDTH * 0.25, textTransform: 'capitalize' }}>
-                        {details.name}
-                    </Text>
-                    <Text style={{ fontSize: 15, color: colors.grayColor, marginRight: 10 }}>{details.value}</Text>
-                    {details.icon}
-
-                </View>
+                <OrderDetails details={details} key={index} />
             ))}
-
             {/* Modal */}
             <Modal visible={isVisible} animationType="slide" transparent={true}>
-                <OrderDetailsComponent item={item} handleModal={handleModal} />
+                <View style={{ flex: 1 }}>
+                    <OrderDetailsComponent item={item} handleModal={handleModal} marginTop={HEIGHT * 0.4} />
+                </View>
             </Modal>
         </Pressable >
 
@@ -46,3 +41,19 @@ const OrderDetailsRenderItem: React.FC<orderDetailProps> = (props) => {
 };
 
 export default OrderDetailsRenderItem;
+
+
+
+const OrderDetails: React.FC<addressProps> = (props) => {
+    const { details } = props;
+    return (
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: WIDTH * 0.01, marginBottom: HEIGHT * 0.01 }}>
+            <Text style={{ color: colors.brownColor, fontSize: 16, fontWeight: '600', marginRight: 10, width: WIDTH * 0.25, textTransform: 'capitalize' }}>
+                {details.name}
+            </Text>
+            <Text style={{ fontSize: 15, color: colors.grayColor, marginRight: 10 }}>{details.value}</Text>
+            {details.icon}
+        </View>
+    );
+};
+

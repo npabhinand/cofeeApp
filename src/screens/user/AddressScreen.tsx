@@ -1,15 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image, SafeAreaView, Modal, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+import { useSelector } from 'react-redux';
+
+import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { backIcon } from '../../assets/icons';
 import { colors } from '../../constants/colors';
 import AddressRenderItem from '../../components/AddressRenderItem';
 import AddAddressComponent from '../../components/AddAddressComponent';
-import firestore from '@react-native-firebase/firestore';
-import { useSelector } from 'react-redux';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
+import HeaderComponent from '../../components/HeaderComponent';
 // import { useSelector } from 'react-redux';
 // import { addedContacts } from '../redux/slice/contactSlice';
 
@@ -22,14 +24,14 @@ const AddressScreen = () => {
     const [addressList, setAddressList] = useState();
     const [update, setUpdate] = useState<boolean>(false);
     const userData = useSelector(selectedUserData);
-    const userEmail = userData[0].email;
+    const { email } = userData[0];
     // console.log(section)
     useEffect(() => {
         fetchData();
     }, [update]);
     const fetchData = async () => {
         const addresses = [];
-        const addressRef = await firestore().collection('address').where('userId', '==', userEmail).get();
+        const addressRef = await firestore().collection('address').where('userId', '==', email).get();
         addressRef.forEach((doc) => {
             addresses.push({ ...doc.data(), id: doc.id });
         });
@@ -40,12 +42,7 @@ const AddressScreen = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>
-            <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.1, marginVertical: HEIGHT * 0.01 }}>
-                <Pressable onPress={() => navigation.goBack()}>
-                    <Image source={backIcon} />
-                </Pressable>
-                <Text style={{ fontWeight: '600', fontSize: HEIGHT * 0.02, marginLeft: WIDTH * 0.3 }}>Add Adress</Text>
-            </View>
+            <HeaderComponent header={'Add Address'} />
             {/*  */}
             <FlatList
                 data={addressList}

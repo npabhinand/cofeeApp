@@ -1,30 +1,26 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react-native/no-inline-styles */
+import { useEffect, useState } from 'react';
+import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
 import { View, Text, SafeAreaView, FlatList, ActivityIndicator } from 'react-native';
+
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { colors } from '../../constants/colors';
 import CardRenderItem from '../../components/AdminCardRenderItem';
 import DropDown from '../../components/DropDown';
-// import { addModalVisible, selectVisibleModal } from '../../redux/slice/dropDownSlice';
-import { useEffect, useState } from 'react';
-import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
-import { useIsFocused } from '@react-navigation/native';
-// import { addCounts, selectedCounts } from '../../redux/slice/CountSlice';
 
-// import { cardArray } from '../../constants/data/dataArray';
 
 
 
 const AdminHomeScreen = () => {
     const [isVisible, setIsVisible] = useState<boolean>(false);
-    const isFocused = useIsFocused();
-    // const dispatch = useDispatch();
+
     const [loading, setLoading] = useState<boolean>(false);
     const [counts, setCounts] = useState<{}>([]);
 
     useEffect(() => {
         fetchCounts();
-    }, [isFocused]);
+    }, []);
 
     const fetchCounts = async () => {
         try {

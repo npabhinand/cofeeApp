@@ -1,9 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
-import { useNavigation } from '@react-navigation/native';
 
 interface cardProps {
     item: {

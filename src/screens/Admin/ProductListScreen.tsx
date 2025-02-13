@@ -1,13 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import { ActivityIndicator, FlatList, Image, Modal, Pressable, SafeAreaView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import firebase from '@react-native-firebase/firestore';
+
 import ProductRenderItem from '../../components/ProductRenderItem';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { colors } from '../../constants/colors';
 import AddProductComponent from '../../components/AddProductComponent';
-import firebase from '@react-native-firebase/firestore';
 import { backIcon } from '../../assets/icons';
-import { useNavigation } from '@react-navigation/native';
+import HeaderComponent from '../../components/HeaderComponent';
+
 // import { useSelector } from 'react-redux';
 // import { selectedCounts } from '../../redux/slice/CountSlice';
 
@@ -47,12 +50,7 @@ const ProductListScreen = () => {
             {loading ? <ActivityIndicator size={'large'} color={colors.brownColor} style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }} /> :
 
                 <>
-                    <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.01, alignItems: 'center' }}>
-                        <Pressable onPress={() => navigation.goBack()}>
-                            <Image source={backIcon} />
-                        </Pressable>
-                        <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Products</Text>
-                    </View>
+                    <HeaderComponent header={'Products'} />
 
                     <FlatList
                         data={productList}

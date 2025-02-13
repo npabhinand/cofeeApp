@@ -1,15 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, TextInput, Image, Pressable, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
-import { background1 } from '../assets/images';
-import { HEIGHT, WIDTH } from '../constants/dimension';
-import { colors } from '../constants/colors';
-import { notVisibleIcon, visibleIcon } from '../assets/icons';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
+
+import { colors } from '../constants/colors';
+import { notVisibleIcon, visibleIcon } from '../assets/icons';
+import { background1 } from '../assets/images';
+import { HEIGHT, WIDTH } from '../constants/dimension';
 import { addUserData } from '../redux/slice/userDataSlice';
 
 const LoginScreen = () => {
@@ -21,7 +22,7 @@ const LoginScreen = () => {
     const dispatch = useDispatch();
 
     const handleLogin = async () => {
-        let newErrors = {};
+        let newErrors: any = {};
 
 
         Object.keys(formData).forEach((key) => {

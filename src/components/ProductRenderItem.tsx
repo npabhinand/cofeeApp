@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Image, Pressable, Modal, Alert } from 'react-native';
 import React, { useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
+
 // import { coffee1 } from '../assets/images';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import { deleteIcon, editIcon } from '../assets/icons';
 import AddProductComponent from './AddProductComponent';
-import firestore from '@react-native-firebase/firestore';
 import { productItems } from '../constants/types/commonTypes';
 
 

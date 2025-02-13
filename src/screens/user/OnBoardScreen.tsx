@@ -1,14 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Image, Pressable } from 'react-native';
 import React from 'react';
-import { background1 } from '../../assets/images';
-import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { onBoardScreenData } from '../../constants/data/dataArray';
 import { colors } from '../../constants/colors';
-import { useDispatch } from 'react-redux';
-// import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { background1 } from '../../assets/images';
+import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { addUserData } from '../../redux/slice/userDataSlice';
 // import { addCartCount } from '../../redux/slice/cartCountSlice';
 
@@ -75,7 +75,7 @@ const OnBoardScreen = () => {
                 {/* </Image> */}
             </View>
 
-            <Pressable onPress={handleClick} style={{ position: 'absolute', bottom: HEIGHT * 0.06, alignSelf: 'center', width: WIDTH * 0.9, backgroundColor: colors.brownColor, height: HEIGHT * 0.07, alignItems: 'center', justifyContent: 'center', borderRadius: HEIGHT * 0.02, zIndex: 1 }}>
+            <Pressable onPress={handleClick} style={{ position: 'absolute', bottom: HEIGHT * 0.06, alignSelf: 'center', width: WIDTH * 0.9, backgroundColor: colors.brownColor, height: HEIGHT * 0.07, alignItems: 'center', justifyContent: 'center', borderRadius: 10, zIndex: 1 }}>
                 <Text style={{ color: colors.commonWhite, fontWeight: 'bold' }}>Get Started</Text>
             </Pressable>
         </View>

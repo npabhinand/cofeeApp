@@ -3,11 +3,12 @@ import { View, Text, TextInput, Image, Pressable, ScrollView, FlatList, Activity
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
-import { HEIGHT, WIDTH } from '../../constants/dimension';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import { back, bottomArrowIcon, documentIcon, filterIcon, logout, profile, profileIcon, searchIcon } from '../../assets/icons';
+
+import { HEIGHT, WIDTH } from '../../constants/dimension';
+import { bottomArrowIcon, documentIcon, filterIcon, logout, profile, profileIcon, searchIcon } from '../../assets/icons';
 import PromoComponent from '../../components/PromoComponent';
 import { filterArray } from '../../constants/data/dataArray';
 import FilterButton from '../../components/FilterButton';
@@ -20,8 +21,9 @@ const HomeScreen = () => {
     const [isSelected, setIsSelected] = useState<number>();
     const [coffeeArray, setCoffeeArray] = useState<[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const userData = useSelector(selectedUserData);
     const [isVisible, setIsVisible] = useState<boolean>(false);
+    const userData = useSelector(selectedUserData);
+    const { email } = userData[0];
     const navigation = useNavigation();
 
 
@@ -30,7 +32,7 @@ const HomeScreen = () => {
     }, []);
 
     const fetchCoffee = async () => {
-        const coffees = [];
+        const coffees: [] = [];
         try {
             setLoading(true);
             const coffeeRef = await firestore().collection('coffeeItem').where('stock', '>', 0).get();
@@ -45,7 +47,7 @@ const HomeScreen = () => {
         Alert.alert('Are You want to Logout', '', [
             {
                 text: 'Cancel',
-                onPress: () => onPressClose(),
+                // onPress: () => onPressClose(),
                 style: 'cancel',
             },
             {
@@ -152,7 +154,7 @@ const HomeScreen = () => {
                         scrollEnabled={false}
                         contentContainerStyle={{ marginBottom: HEIGHT * 0.13, paddingHorizontal: WIDTH * 0.05, justifyContent: 'space-between' }}
                         renderItem={({ item }) => (
-                            <CoffeeCard item={item} userId={userData[0].email} setLoading={setLoading} />
+                            <CoffeeCard item={item} userId={email} setLoading={setLoading} />
                         )} />
                 </ScrollView>
             }

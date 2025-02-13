@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Image, Text } from 'react-native';
 import React from 'react';
+
 import { profileIcon } from '../assets/icons';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';

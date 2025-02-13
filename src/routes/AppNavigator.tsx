@@ -16,6 +16,7 @@ import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/user/HomeScreen';
 import ProfitListScreen from '../screens/Admin/ProfitListScreen';
 import UserOrderListScreen from '../screens/user/UserOrderListScreen';
+import Orders from '../screens/Admin/Orders';
 
 
 const AppNavigator = () => {
@@ -37,6 +38,7 @@ const AppNavigator = () => {
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="ProfitListScreen" component={ProfitListScreen} />
             <Stack.Screen name="UserOrderListScreen" component={UserOrderListScreen} />
+            <Stack.Screen name="Orders" component={Orders} />
         </Stack.Navigator>
     );
 };

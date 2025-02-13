@@ -3,10 +3,12 @@ import { View, Text, SafeAreaView, Pressable, Image, FlatList, ActivityIndicator
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import firebase from '@react-native-firebase/firestore';
+
 import { backIcon } from '../../assets/icons';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import UserRenderItem from '../../components/UserRenderItem';
 import { colors } from '../../constants/colors';
+import HeaderComponent from '../../components/HeaderComponent';
 
 interface userType {
     name?: string;
@@ -41,12 +43,7 @@ const UserListScreen: React.FC<userType> = () => {
         <SafeAreaView style={{ flex: 1 }}>
             {loading ? <ActivityIndicator size={'large'} color={colors.brownColor} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} /> :
                 <>
-                    <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.1, marginVertical: HEIGHT * 0.01, alignItems: 'center' }}>
-                        <Pressable onPress={() => navigation.goBack()}>
-                            <Image source={backIcon} />
-                        </Pressable>
-                        <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Users</Text>
-                    </View>
+                    <HeaderComponent header={'Users'} />
                     <FlatList
                         data={usersList}
                         keyExtractor={(item) => item.id}

@@ -24,6 +24,7 @@ interface addressProps {
     phone?: number;
     address?: string;
     selected?: boolean;
+    details?: any
 }
 
 interface contactProps {
@@ -90,6 +91,8 @@ interface CartProps {
         // }
     }
 }
+
+
 interface productsProps {
     id: string,
     product: string,
@@ -145,9 +148,21 @@ interface CartItem {
     type: any,
     rating: number;
     img: number;
+    price?: number;
+    image?: string;
     quantity: number;
 }
-
+interface products {
+    product: {
+        name: string;
+        quantity: number;
+    }
+}
+interface productItem {
+    product: {
+        item: CartItem
+    };
+}
 interface ContactItem {
     id: number;
     name: string;
@@ -182,16 +197,49 @@ interface orderDetailProps {
         id: string;
         orderTime: number;
         TotalPrice: number;
-        products: CartItem;
+        products: [CartItem];
         profit: number;
-        address: [{
+        status: string;
+        address: {
             address: string;
             name: string;
             phone: string;
             userId: string;
 
-        }]
+        }[]
     }
+    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+    onNavigation?: () => void;
+    marginTop?: number;
     handleModal?: () => void;
 }
-export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState };
+interface orderComponentProps {
+    item: {
+        id: string;
+        orderTime: number;
+        TotalPrice: number;
+        products: [CartItem];
+        profit: number;
+        status: string;
+        address: {
+            address: string;
+            name: string;
+            phone: string;
+            userId: string;
+
+        }[]
+    }
+    onNavigation?: () => void;
+    marginTop?: number;
+    handleModal?: () => void;
+}
+interface headerProps {
+    header: string;
+}
+interface detailProps {
+    detail: {
+        label: string;
+        value: string;
+    }
+}
+export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products };

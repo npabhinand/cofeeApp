@@ -1,14 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, Pressable, Image, FlatList, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, FlatList, ScrollView, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import CalendarStrip from 'react-native-calendar-strip';
+import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
+
 import { colors } from '../../constants/colors';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
-import { backIcon } from '../../assets/icons';
-import firestore from '@react-native-firebase/firestore';
 import OrderDetailsRenderItem from '../../components/OrderDetailsRenderItem';
-import moment from 'moment';
+import HeaderComponent from '../../components/HeaderComponent';
+import { useNavigation } from '@react-navigation/native';
+
 
 const OrderListScreen = () => {
     const navigation = useNavigation();
@@ -24,14 +26,16 @@ const OrderListScreen = () => {
 
     const fetchOrders = async () => {
         try {
-            const orders: [] = [];
+            const orders: any = [];
             let totalPrice = 0;
-            await firestore().collection('orders').get().then(querySnapshot => {
-                querySnapshot.forEach(doc => {
-                    orders.push({ ...doc.data(), id: doc.id });
-                    totalPrice += doc.data().TotalPrice;
+            await firestore().collection('orders')
+                .where('status', '==', 'delivered')
+                .get().then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        orders.push({ ...doc.data(), id: doc.id });
+                        totalPrice += doc.data().TotalPrice;
+                    });
                 });
-            });
 
             const orderWithProfit = orders.map(order => {
                 let orderProfit = 0;
@@ -76,15 +80,9 @@ const OrderListScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
-            <View style={{ flexDirection: 'row', paddingHorizontal: WIDTH * 0.1, marginVertical: HEIGHT * 0.01 }}>
-                <Pressable onPress={() => navigation.goBack()}>
-                    <Image source={backIcon} />
-                </Pressable>
-                <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Orders</Text>
-            </View>
+            <HeaderComponent header={'Orders'} />
 
             <CalendarStrip
-                // key={ }
                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                 daySelectionAnimation={{ type: 'border', duration: 200, borderWidth: 1, borderHighlightColor: 'white' }}
                 style={{ height: HEIGHT * 0.12, paddingTop: 10 }}
@@ -97,14 +95,14 @@ const OrderListScreen = () => {
                 onDateSelected={(date) => handleDateSelected(moment(date).format('DD/MM/YYYY'))}
             />
             <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={false} style={{}}>
-                <View style={{ flexDirection: 'row', backgroundColor: colors.commonWhite, alignItems: 'center', height: HEIGHT * 0.15, justifyContent: 'space-evenly' }}>
+                <Pressable style={{ flexDirection: 'row', backgroundColor: colors.commonWhite, alignItems: 'center', height: HEIGHT * 0.15, justifyContent: 'space-evenly' }} onPress={() => navigation.navigate('Orders')}>
                     {orderInventoryArray.map((item, index) => (
                         <View key={index}>
                             <Text style={{ textAlign: 'center', fontSize: 25, fontWeight: 'bold', color: colors.brownColor }}>{item.count}</Text>
                             <Text style={{ color: colors.grayColor }}>{item.name}</Text>
                         </View>
                     ))}
-                </View>
+                </Pressable>
                 <Text style={{ fontSize: 25, margin: WIDTH * 0.05 }}>Order Details</Text>
 
                 <FlatList
@@ -114,7 +112,7 @@ const OrderListScreen = () => {
                     renderItem={(item) => (
                         <OrderDetailsRenderItem item={item.item} />
                     )} />
-                {/*  */}
+
             </ScrollView>
         </SafeAreaView >
     );
