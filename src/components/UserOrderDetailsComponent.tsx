@@ -1,19 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, ScrollView, FlatList, Alert } from 'react-native';
+import { View, Text, ScrollView, FlatList, Alert, Image } from 'react-native';
 import React from 'react';
 import moment from 'moment';
 import firestore from '@react-native-firebase/firestore';
 
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
-import { detailProps, orderComponentProps } from '../constants/types/commonTypes';
-import ProductComponent from './ProductCompnent';
+import { detailProps, orderComponentProps, productItem } from '../constants/types/commonTypes';
 import HandleOrderButtons from './HandleOrderButtons';
 
 
-const OrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
-    const { handleModal, marginTop, item, userType, setLoading } = props;
-    const { name, userId, address, phone } = item.address[0];
+const UserOrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
+    const { handleModal, item, userType, marginTop, setLoading } = props;
+    // const { name, userId, address, phone } = item.address[0];
 
     const date = moment(item.orderTime).format('ddd,MM Do YY, h:mm:ss a');
 
@@ -23,12 +22,12 @@ const OrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
         { label: 'Order Time', value: date },
         { label: 'Status', value: item.status },
     ];
-    const addressDetails = [
-        { label: 'Name', value: name },
-        { label: 'UserId', value: userId },
-        { label: 'Address', value: address },
-        { label: 'Phone', value: phone },
-    ];
+    // const addressDetails = [
+    //     { label: 'Name', value: name },
+    //     { label: 'UserId', value: userId },
+    //     { label: 'Address', value: address },
+    //     { label: 'Phone', value: phone },
+    // ];
 
     const handleCancelAlert = () => {
         Alert.alert('Are You sure want to cancel order', '', [
@@ -91,16 +90,16 @@ const OrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
 
     return (
 
-        <ScrollView showsVerticalScrollIndicator={false} bounces={false} contentContainerStyle={{ marginTop: marginTop, backgroundColor: colors.commonWhite, borderTopLeftRadius: 50, borderTopRightRadius: 50, paddingBottom: HEIGHT * 0.2 }}>
-            <View style={{ alignSelf: 'center', width: WIDTH, paddingHorizontal: WIDTH * 0.05 }}>
-                <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.03, alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontWeight: '600', fontSize: 19, marginVertical: HEIGHT * 0.02, color: colors.grayColor }}>Delivery Address</Text>
-                    <Text style={{ fontWeight: 'bold', fontSize: 20, color: colors.grayColor }} onPress={handleModal}>X</Text>
-                </View>
+        <ScrollView showsVerticalScrollIndicator={false} bounces={false} contentContainerStyle={{ marginTop: marginTop, borderTopLeftRadius: 50, borderTopRightRadius: 50, width: WIDTH * 0.9, alignSelf: 'center' }}>
+            <View style={{ alignSelf: 'center', width: WIDTH, paddingHorizontal: WIDTH * 0.05, justifyContent: 'center', backgroundColor: colors.commonWhite }}>
+                <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.03, alignItems: 'center', justifyContent: 'space-between', marginBottom: HEIGHT * 0.01 }}>
 
-                {addressDetails.map((detail, index) => (
-                    <AddressDetailComponent key={index} detail={detail} />
-                ))}
+                    <Text style={{ fontWeight: '600', fontSize: 19, color: colors.grayColor }}>Order No - {item.id}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 20, color: colors.grayColor }} onPress={handleModal}>X</Text>
+
+                </View>
+                <Text style={{ color: colors.brownColor, marginLeft: WIDTH * 0.2, fontSize: 18, fontWeight: '600' }}>{item.status}</Text>
+
 
                 <FlatList
                     data={item.products}
@@ -124,18 +123,31 @@ const OrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
     );
 };
 
-export default OrderDetailsComponent;
+export default UserOrderDetailsComponent;
 
 
-const AddressDetailComponent: React.FC<detailProps> = (props) => {
-    const { detail } = props;
+const ProductComponent: React.FC<productItem> = (props) => {
+    const { product } = props;
     return (
-        <View style={{ alignSelf: 'center', flexDirection: 'row', marginBottom: HEIGHT * 0.01 }} >
-            <Text style={{ color: colors.brownColor, fontSize: 16, fontWeight: '600', marginRight: 10, width: WIDTH * 0.3 }}>{detail?.label}</Text>
-            <Text style={{ fontSize: 15, fontWeight: '500', color: colors.commonBlack, width: WIDTH * 0.6 }}>{detail?.value}</Text>
+        <View style={{ borderBottomWidth: 0.5, flexDirection: 'row', alignItems: 'center', borderColor: colors.brownColor, paddingBottom: HEIGHT * 0.01, marginTop: HEIGHT * 0.02, paddingHorizontal: WIDTH * 0.02 }} >
+
+            <Image
+                source={{ uri: product.item.image }}
+                style={{ height: WIDTH * 0.18, width: WIDTH * 0.2, borderRadius: 12, marginRight: WIDTH * 0.05, backgroundColor: colors.lightGray }} />
+            <View style={{ flex: 1, justifyContent: 'space-between', marginVertical: HEIGHT * 0.02 }}>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: colors.commonBlack, textTransform: 'capitalize' }}>{product.item.name}</Text>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: HEIGHT * 0.01 }}>
+                    <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.02 }}>
+                        ${product.item.price}
+                    </Text>
+                    {/* <Text style={{ color: colors.brownColor, fontWeight: '600', fontSize: HEIGHT * 0.018 }}>View Details</Text> */}
+                    <Text style={{ color: colors.grayColor, fontSize: HEIGHT * 0.018 }}>{product.item.quantity} items</Text>
+                </View>
+            </View>
         </View>
-    );
-};
+    )
+}
 
 const OrderDetails: React.FC<detailProps> = (props) => {
     const { detail } = props;

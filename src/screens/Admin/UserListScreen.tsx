@@ -1,11 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, Pressable, Image, FlatList, ActivityIndicator } from 'react-native';
+import { SafeAreaView, FlatList, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import firebase from '@react-native-firebase/firestore';
 
-import { backIcon } from '../../assets/icons';
-import { HEIGHT, WIDTH } from '../../constants/dimension';
 import UserRenderItem from '../../components/UserRenderItem';
 import { colors } from '../../constants/colors';
 import HeaderComponent from '../../components/HeaderComponent';
@@ -19,12 +16,12 @@ interface userType {
 const UserListScreen: React.FC<userType> = () => {
     const [usersList, setUsersList] = useState<[]>();
     const [loading, setLoading] = useState<boolean>(false);
-    const navigation = useNavigation();
+    // const navigation = useNavigation();
     useEffect(() => {
         fetchProductData();
     }, []);
     const fetchProductData = async () => {
-        const usersArray: [] = [];
+        const usersArray: any = [];
         setLoading(true);
         try {
             const userRef = await firebase().collection('user').where('userType', '==', 'user').get();

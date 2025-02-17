@@ -15,16 +15,16 @@ const DeliveryScreen = () => {
 
     return (
         <View style={{ flex: 1, paddingHorizontal: WIDTH * 0.05 }}>
-            <Image source={map} style={{ position: 'absolute', alignSelf: 'center' }} />
+            <Image source={map} style={{ position: 'absolute', alignSelf: 'center', flex: 1 }} />
 
             <View style={{ marginTop: HEIGHT * 0.075, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Pressable style={{ backgroundColor: colors.lightGray, width: WIDTH * 0.12, height: WIDTH * 0.12, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.03 }} onPress={() => navigation.goBack()}><Image source={backIcon} /></Pressable>
                 <Pressable style={{ backgroundColor: colors.lightGray, width: WIDTH * 0.12, height: WIDTH * 0.12, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.03 }}><Image source={gpsIcon} /></Pressable>
             </View>
 
-            <Image source={route} style={{ top: HEIGHT * 0.195, left: WIDTH * 0.22, position: 'absolute' }} />
-            <Image source={locationIcon} style={{ marginTop: HEIGHT * 0.115, marginLeft: WIDTH * 0.2 }} />
-            <Pressable style={{ marginLeft: WIDTH * 0.62, marginTop: HEIGHT * 0.1, backgroundColor: colors.commonWhite, width: WIDTH * 0.1, height: WIDTH * 0.1, borderRadius: '50%', justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={route} style={{ top: 165, left: WIDTH * 0.22, position: 'absolute' }} />
+            <Image source={locationIcon} style={{ marginTop: 110, marginLeft: WIDTH * 0.15 }} />
+            <Pressable style={{ marginLeft: WIDTH * 0.56, marginTop: HEIGHT * 0.1, backgroundColor: colors.commonWhite, width: WIDTH * 0.1, height: WIDTH * 0.1, borderRadius: '50%', justifyContent: 'center', alignItems: 'center' }}>
                 <Image source={driverIcon} />
             </Pressable>
 

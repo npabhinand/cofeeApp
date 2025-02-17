@@ -23,7 +23,7 @@ const OrderScreen = () => {
     const [selectedContact, setSelectedContact] = useState<[]>([]);
     const [cartItems, setCartItems] = useState<[]>([]);
     const userData = useSelector(selectedUserData);
-    const userEmail = userData[0].email;
+    const { email } = userData[0];
     const totalPrice = useSelector(selectedPrice);
     const dispatch = useDispatch();
     const [prices, setPrices] = useState(totalPrice);
@@ -44,7 +44,7 @@ const OrderScreen = () => {
             await firestore()
                 .collection('address')
                 .where('selected', '==', true)
-                .where('userId', '==', userEmail)
+                .where('userId', '==', email)
                 .get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(doc => {
@@ -66,7 +66,7 @@ const OrderScreen = () => {
             const carts: any = [];
             let total: number = 0;
             await firestore()
-                .collection('cartItem').where('userId', '==', userData[0].email)
+                .collection('cartItem').where('userId', '==', email)
                 .get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(doc => {
@@ -157,7 +157,8 @@ const OrderScreen = () => {
                 await firestore().collection('orders').add({
                     products: filterCartItem,
                     address: selectedContact,
-                    userId: userEmail,
+                    userId: email,
+                    status: 'processing',
                     TotalPrice: prices + 1,
                     orderTime: Date.now(),
                 });

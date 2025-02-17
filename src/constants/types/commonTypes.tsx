@@ -70,7 +70,9 @@ interface coffeeProps {
 interface ProductDetailScreenProps {
     route: { params: { section: coffeeProps } };
 }
-
+interface ordersScreenProps {
+    route: { params: { orderTypes: string; buttonNames: [{ id: number; name: string; }] } };
+}
 interface buttonProps {
     buttonName: string;
     selected: boolean;
@@ -214,6 +216,8 @@ interface orderDetailProps {
     handleModal?: () => void;
 }
 interface orderComponentProps {
+    userType?: string;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     item: {
         id: string;
         orderTime: number;
@@ -221,6 +225,7 @@ interface orderComponentProps {
         products: [CartItem];
         profit: number;
         status: string;
+
         address: {
             address: string;
             name: string;
@@ -242,4 +247,11 @@ interface detailProps {
         value: string;
     }
 }
-export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products };
+
+interface buttonProp {
+    onPress1: () => void;
+    onPress2: () => void;
+    text1: string;
+    text2: string;
+}
+export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products, ordersScreenProps, buttonProp };

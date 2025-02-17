@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { HEIGHT, WIDTH } from '../../constants/dimension';
-import { bottomArrowIcon, documentIcon, filterIcon, logout, profile, profileIcon, searchIcon } from '../../assets/icons';
+import { bottomArrowIcon, filterIcon, logout, orderIcon, profile, profileIcon, searchIcon } from '../../assets/icons';
 import PromoComponent from '../../components/PromoComponent';
 import { filterArray } from '../../constants/data/dataArray';
 import FilterButton from '../../components/FilterButton';
@@ -32,7 +32,7 @@ const HomeScreen = () => {
     }, []);
 
     const fetchCoffee = async () => {
-        const coffees: [] = [];
+        const coffees: any = [];
         try {
             setLoading(true);
             const coffeeRef = await firestore().collection('coffeeItem').where('stock', '>', 0).get();
@@ -43,7 +43,7 @@ const HomeScreen = () => {
             console.log('error while fetching coffee items');
         }
     };
-    const handleDeleteAlert = () =>
+    const handleLogoutAlert = () =>
         Alert.alert('Are You want to Logout', '', [
             {
                 text: 'Cancel',
@@ -69,11 +69,12 @@ const HomeScreen = () => {
         }
 
     };
+    // handleDeleteAlert
     const profileArray = [
-        { id: 1, name: 'Profile', icon: profile, handleClick: () => { console.log('profile button pressed'); } },
-        { id: 2, name: 'Sign Out', icon: logout, handleClick: handleDeleteAlert },
+        { id: 1, name: 'Profile', icon: profile, handleClick: () => { console.log('profile button pressed'); setIsVisible(!isVisible); } },
+        { id: 2, name: 'Sign Out', icon: logout, handleClick: () => { handleLogoutAlert(); setIsVisible(!isVisible); } },
         // { id: 3, name: 'Cancel', icon: back, handleClick: () => setIsVisible(!isVisible) },
-        { id: 3, name: 'Orders', icon: documentIcon, handleClick: () => navigation.navigate('UserOrderListScreen') },
+        { id: 3, name: 'Orders', icon: orderIcon, handleClick: () => { navigation.navigate('UserOrderListScreen'); setIsVisible(!isVisible); } },
     ];
     return (
         <View style={{ flex: 1 }}>

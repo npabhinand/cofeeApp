@@ -30,7 +30,9 @@ const UserOrderListScreen = () => {
     const fetchCurrentOrders = async () => {
         const orders: any = [];
         try {
-            setLoading(true);
+            setTimeout(() => {
+                setLoading(true);
+            }, 150);
             await firestore().collection('orders')
                 .where('userId', '==', email)
                 .where('status', '==', 'processing').get()
@@ -68,25 +70,35 @@ const UserOrderListScreen = () => {
         navigation.navigate('DeliveryScreen');
     };
 
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             {loading ? <ActivityIndicator size={'large'} color={colors.brownColor} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} /> :
-                <View>
+                <View style={{}}>
                     <HeaderComponent header={'My Orders'} />
-                    <ScrollView style={{ paddingHorizontal: WIDTH * 0.05 }}>
+                    <ScrollView style={{ paddingHorizontal: WIDTH * 0.05, paddingBottom: 100 }} bounces={false}>
 
+                        {currentOrderList.length > 0 && (
+                            <Text style={{ fontSize: 18, marginBottom: HEIGHT * 0.02, fontWeight: '600' }}>Current Orders</Text>
+                        )}
 
-                        <Text style={{ fontSize: 18, marginVertical: 10, fontWeight: '600' }}>Current Orders</Text>
                         <FlatList
                             data={currentOrderList}
+                            keyExtractor={(item) => item.id}
                             scrollEnabled={false}
                             renderItem={(item) => (
                                 <MyOrderComponent item={item.item} setUpdate={setUpdate} onNavigation={onNavigation} />
                             )} />
-                        <Text style={{ fontSize: 18, marginTop: HEIGHT * 0.02, fontWeight: '600' }}>Past Orders</Text>
+
+
+                        {pastOrderList.length > 0 && (
+                            <Text style={{ fontSize: 18, marginBottom: HEIGHT * 0.02, fontWeight: '600' }}>Past Orders</Text>
+                        )}
+
                         <FlatList
                             data={pastOrderList}
                             scrollEnabled={false}
+                            keyExtractor={(item) => item.id}
                             renderItem={(item) => (
                                 <MyOrderComponent item={item.item} setUpdate={setUpdate} />
                             )} />
