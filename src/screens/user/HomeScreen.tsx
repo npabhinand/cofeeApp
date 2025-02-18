@@ -71,7 +71,7 @@ const HomeScreen = () => {
     };
     // handleDeleteAlert
     const profileArray = [
-        { id: 1, name: 'Profile', icon: profile, handleClick: () => { console.log('profile button pressed'); setIsVisible(!isVisible); } },
+        { id: 1, name: 'Profile', icon: profile, handleClick: () => { navigation.navigate('ProfileScreen'); setIsVisible(!isVisible); } },
         { id: 2, name: 'Sign Out', icon: logout, handleClick: () => { handleLogoutAlert(); setIsVisible(!isVisible); } },
         // { id: 3, name: 'Cancel', icon: back, handleClick: () => setIsVisible(!isVisible) },
         { id: 3, name: 'Orders', icon: orderIcon, handleClick: () => { navigation.navigate('UserOrderListScreen'); setIsVisible(!isVisible); } },
@@ -95,8 +95,6 @@ const HomeScreen = () => {
                                     <Image source={profileIcon} style={{ width: WIDTH * 0.1, height: WIDTH * 0.1, tintColor: colors.commonWhite }} />
                                     <Image source={bottomArrowIcon} style={{ marginTop: HEIGHT * 0.01, tintColor: colors.commonWhite }} />
                                 </Pressable>
-
-
                             </View>
 
                             <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.03, justifyContent: 'space-between' }}>

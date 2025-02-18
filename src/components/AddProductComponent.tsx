@@ -5,7 +5,7 @@ import firebase from '@react-native-firebase/firestore';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 import { HEIGHT, WIDTH } from '../constants/dimension';
-import { backIcon, plusIcon } from '../assets/icons';
+import { backIcon } from '../assets/icons';
 import { colors } from '../constants/colors';
 import { productProp } from '../constants/types/commonTypes';
 
@@ -20,9 +20,9 @@ const AddProductComponent: React.FC<productProp> = (props) => {
 
     const [image, setImage] = useState<string>(item?.image || '');
     const [errors, setErrors] = useState<any>({});
-    const [attributes, setAttributes] = useState(item?.types ? Object.entries(item.types).map(([name, value]) => ({ name, value })) : []);
-    const [attributeName, setAttributeName] = useState('');
-    const [attributeValue, setAttributeValue] = useState('');
+    // const [attributes, setAttributes] = useState(item?.types ? Object.entries(item.types).map(([name, value]) => ({ name, value })) : []);
+    // const [attributeName, setAttributeName] = useState('');
+    // const [attributeValue, setAttributeValue] = useState('');
 
     const handleTextChange = (text: string, key: string) => {
         setFormData((prev) => ({ ...prev, [key]: text }));
@@ -41,26 +41,26 @@ const AddProductComponent: React.FC<productProp> = (props) => {
             return;
         }
 
-        const attributesObject = attributes.reduce((acc, attr) => {
-            if (attr.name.trim()) {
-                acc[attr.name] = attr.value;
-            }
-            return acc;
-        }, {});
+        // const attributesObject = attributes.reduce((acc, attr) => {
+        //     if (attr.name.trim()) {
+        //         acc[attr.name] = attr.value;
+        //     }
+        //     return acc;
+        // }, {});
 
         try {
             if (item?.id) {
                 await firebase().collection('coffeeItem').doc(item.id).update({
                     ...formData,
                     image,
-                    types: attributesObject,
+                    // types: attributesObject,
                 });
                 Alert.alert('Coffee Item updated Successfully');
             } else {
                 await firebase().collection('coffeeItem').add({
                     ...formData,
                     image,
-                    types: attributesObject,
+                    // types: attributesObject,
                 });
                 Alert.alert('Product Added Successfully');
             }
@@ -82,21 +82,21 @@ const AddProductComponent: React.FC<productProp> = (props) => {
         });
     };
 
-    const addAttribute = () => {
-        if (attributeName.trim() && attributeValue.trim()) {
-            setAttributes([...attributes, { name: attributeName, value: attributeValue }]);
-            setAttributeName('');
-            setAttributeValue('');
-        } else {
-            Alert.alert('Both attribute name and value are required');
-        }
-    };
+    // const addAttribute = () => {
+    //     if (attributeName.trim() && attributeValue.trim()) {
+    //         setAttributes([...attributes, { name: attributeName, value: attributeValue }]);
+    //         setAttributeName('');
+    //         setAttributeValue('');
+    //     } else {
+    //         Alert.alert('Both attribute name and value are required');
+    //     }
+    // };
 
-    const deleteAttribute = (index: number) => {
-        const updatedAttributes = [...attributes];
-        updatedAttributes.splice(index, 1);
-        setAttributes(updatedAttributes);
-    };
+    // const deleteAttribute = (index: number) => {
+    //     const updatedAttributes = [...attributes];
+    //     updatedAttributes.splice(index, 1);
+    //     setAttributes(updatedAttributes);
+    // };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -126,8 +126,8 @@ const AddProductComponent: React.FC<productProp> = (props) => {
                         />
                     </View>
                 ))}
-
-                <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.03, marginVertical: HEIGHT * 0.01 }}>Attributes</Text>
+                {/* attribute */}
+                {/* <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.03, marginVertical: HEIGHT * 0.01 }}>Attributes</Text>
                 <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
                     {attributes.map((attribute, index) => (
                         <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, marginBottom: HEIGHT * 0.01, backgroundColor: colors.brownColor, height: HEIGHT * 0.05, padding: WIDTH * 0.02, borderRadius: 10, marginRight: WIDTH * 0.05 }}>
@@ -156,7 +156,8 @@ const AddProductComponent: React.FC<productProp> = (props) => {
                     <Pressable style={{ width: WIDTH * 0.1, backgroundColor: colors.commonBlack, height: WIDTH * 0.1, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={addAttribute}>
                         <Image source={plusIcon} />
                     </Pressable>
-                </View>
+                </View> */}
+                {/*  */}
 
                 <View style={{ marginTop: HEIGHT * 0.02 }}>
                     <Text style={{ marginBottom: HEIGHT * 0.005, fontSize: 16 }}>Product Image</Text>

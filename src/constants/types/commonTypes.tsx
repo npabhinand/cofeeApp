@@ -71,7 +71,7 @@ interface ProductDetailScreenProps {
     route: { params: { section: coffeeProps } };
 }
 interface ordersScreenProps {
-    route: { params: { orderTypes: string; buttonNames: [{ id: number; name: string; }] } };
+    route: { params: { orderTypes: string; buttonNames: [{ id: number; name: string; }]; showItem: string } };
 }
 interface buttonProps {
     buttonName: string;
@@ -107,7 +107,8 @@ interface productsProps {
 interface productItems {
     setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
     update: boolean;
-    item: productsProps
+    item: productsProps;
+    showButtons: boolean;
 }
 
 interface userProps {
@@ -237,6 +238,7 @@ interface orderComponentProps {
     onNavigation?: () => void;
     marginTop?: number;
     handleModal?: () => void;
+    showItem?: string
 }
 interface headerProps {
     header: string;

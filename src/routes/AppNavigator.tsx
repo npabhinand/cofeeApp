@@ -17,6 +17,10 @@ import HomeScreen from '../screens/user/HomeScreen';
 import ProfitListScreen from '../screens/Admin/ProfitListScreen';
 import UserOrderListScreen from '../screens/user/UserOrderListScreen';
 import Orders from '../screens/Admin/Orders';
+import ProfileScreen from '../screens/ProfileScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
+import WishListScreen from '../screens/user/WishListScreen';
+import StockProductScreen from '../screens/Admin/StockProductScreen';
 
 
 const AppNavigator = () => {
@@ -39,6 +43,10 @@ const AppNavigator = () => {
             <Stack.Screen name="ProfitListScreen" component={ProfitListScreen} />
             <Stack.Screen name="UserOrderListScreen" component={UserOrderListScreen} />
             <Stack.Screen name="Orders" component={Orders} />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+            <Stack.Screen name="WishListScreen" component={WishListScreen} />
+            <Stack.Screen name="StockProductScreen" component={StockProductScreen} />
         </Stack.Navigator>
     );
 };

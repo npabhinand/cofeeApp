@@ -43,7 +43,7 @@ const DropDown: React.FC<dropDownProps> = (props) => {
 
     };
     const profileArray = [
-        { id: 1, name: 'Profile', icon: profile, handleClick: () => { console.log('profile button pressed'); } },
+        { id: 1, name: 'Profile', icon: profile, handleClick: () => navigation.navigate('ProfileScreen') },
         { id: 2, name: 'Sign Out', icon: logout, handleClick: handleDeleteAlert },
         { id: 3, name: 'Cancel', icon: back, handleClick: onPressClose },
     ];

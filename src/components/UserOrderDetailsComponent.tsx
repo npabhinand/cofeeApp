@@ -20,7 +20,7 @@ const UserOrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
         { label: 'Order Id', value: item.id },
         { label: 'Order Price', value: `$${item.TotalPrice} ` },
         { label: 'Order Time', value: date },
-        { label: 'Status', value: item.status },
+        // { label: 'Status', value: item.status },
     ];
     // const addressDetails = [
     //     { label: 'Name', value: name },
@@ -91,7 +91,7 @@ const UserOrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
     return (
 
         <ScrollView showsVerticalScrollIndicator={false} bounces={false} contentContainerStyle={{ marginTop: marginTop, borderTopLeftRadius: 50, borderTopRightRadius: 50, width: WIDTH * 0.9, alignSelf: 'center' }}>
-            <View style={{ alignSelf: 'center', width: WIDTH, paddingHorizontal: WIDTH * 0.05, justifyContent: 'center', backgroundColor: colors.commonWhite }}>
+            <View style={{ alignSelf: 'center', width: WIDTH, paddingHorizontal: WIDTH * 0.05, justifyContent: 'center', backgroundColor: colors.commonWhite, paddingBottom: HEIGHT * 0.03, borderRadius: 20 }}>
                 <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.03, alignItems: 'center', justifyContent: 'space-between', marginBottom: HEIGHT * 0.01 }}>
 
                     <Text style={{ fontWeight: '600', fontSize: 19, color: colors.grayColor }}>Order No - {item.id}</Text>

@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Text, Pressable, Image, View, Alert } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 
 import { HEIGHT, WIDTH } from '../constants/dimension';
-import { plusIcon, starIcon } from '../assets/icons';
+import { heartFilledIcon, heartIcon, plusIcon, starIcon } from '../assets/icons';
 import { colors } from '../constants/colors';
 import { addCartCount } from '../redux/slice/cartCountSlice';
 import { coffeeProps } from '../constants/types/commonTypes';
@@ -16,6 +16,9 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
     const { item, userId, setLoading } = props;
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const [isSelected, setIsSelected] = useState<boolean>(false);
+
+
     const handleAddCart = async () => {
         try {
             const carts = [];
@@ -80,7 +83,14 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 section: { item },
             });
         }}>
-            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.38, borderRadius: 15, height: HEIGHT * 0.16, position: 'absolute', alignSelf: 'center', marginTop: HEIGHT * 0.01, }} />
+            {isSelected ?
+                <Pressable style={{ position: 'absolute', top: HEIGHT * 0.02, left: WIDTH * 0.05, zIndex: 1, backgroundColor: colors.lightGray, width: WIDTH * 0.07, height: WIDTH * 0.07, borderRadius: '50%', alignItems: 'center', justifyContent: 'center' }} onPress={() => setIsSelected(!isSelected)}>
+                    <Image source={heartFilledIcon} style={{ width: WIDTH * 0.05, height: WIDTH * 0.05 }} /></Pressable>
+                :
+                <Pressable style={{ position: 'absolute', top: HEIGHT * 0.02, left: WIDTH * 0.05, zIndex: 1, backgroundColor: colors.lightGray, width: WIDTH * 0.07, height: WIDTH * 0.07, borderRadius: '50%', alignItems: 'center', justifyContent: 'center' }} onPress={() => setIsSelected(!isSelected)}>
+                    <Image source={heartIcon} style={{ width: WIDTH * 0.05, height: WIDTH * 0.05 }} /></Pressable>
+            }
+            <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.38, borderRadius: 15, height: HEIGHT * 0.16, position: 'absolute', alignSelf: 'center', marginTop: HEIGHT * 0.01 }} />
 
             <View style={{ flexDirection: 'row', alignItems: 'center', right: WIDTH * 0.02, position: 'absolute', top: HEIGHT * 0.01, backgroundColor: `${colors.commonBlack}30`, height: HEIGHT * 0.04, width: WIDTH * 0.15, borderTopRightRadius: 15, paddingLeft: HEIGHT * 0.015, borderBottomLeftRadius: 30 }}>
                 <Image source={starIcon} style={{ height: HEIGHT * 0.015, marginRight: WIDTH * 0.02 }} />

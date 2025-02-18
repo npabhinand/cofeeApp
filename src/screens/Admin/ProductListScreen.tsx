@@ -1,14 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import { ActivityIndicator, FlatList, Image, Modal, Pressable, SafeAreaView, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Modal, Pressable, SafeAreaView, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import firebase from '@react-native-firebase/firestore';
 
 import ProductRenderItem from '../../components/ProductRenderItem';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { colors } from '../../constants/colors';
 import AddProductComponent from '../../components/AddProductComponent';
-import { backIcon } from '../../assets/icons';
 import HeaderComponent from '../../components/HeaderComponent';
 
 // import { useSelector } from 'react-redux';
@@ -20,7 +18,6 @@ const ProductListScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [productList, setProductList] = useState([]);
     const [update, setUpdate] = useState<boolean>(false);
-    const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
     // const counter = useSelector(selectedCounts);
     // console.log('counter', counter);
@@ -57,7 +54,7 @@ const ProductListScreen = () => {
                         // keyExtractor={(item) => item.id}
                         scrollEventThrottle={1}
                         renderItem={(item) => (
-                            <ProductRenderItem item={item.item} setUpdate={setUpdate} update={update} />
+                            <ProductRenderItem item={item.item} setUpdate={setUpdate} update={update} showButtons={true} />
                         )} />
                     <Pressable style={{ position: 'absolute', bottom: HEIGHT * 0.03, backgroundColor: colors.brownColor, width: WIDTH * 0.9, height: HEIGHT * 0.07, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={() => setModalVisible(true)}>
                         <Text style={{ fontWeight: 'bold', color: colors.commonWhite, fontSize: 18 }}>Add Product</Text>

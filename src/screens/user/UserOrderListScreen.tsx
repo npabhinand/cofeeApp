@@ -76,7 +76,7 @@ const UserOrderListScreen = () => {
             {loading ? <ActivityIndicator size={'large'} color={colors.brownColor} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} /> :
                 <View style={{}}>
                     <HeaderComponent header={'My Orders'} />
-                    <ScrollView style={{ paddingHorizontal: WIDTH * 0.05, paddingBottom: 100 }} bounces={false}>
+                    <ScrollView style={{ paddingHorizontal: WIDTH * 0.05, paddingBottom: 100 }} bounces={false} showsVerticalScrollIndicator={false}>
 
                         {currentOrderList.length > 0 && (
                             <Text style={{ fontSize: 18, marginBottom: HEIGHT * 0.02, fontWeight: '600' }}>Current Orders</Text>

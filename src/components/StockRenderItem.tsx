@@ -1,61 +1,98 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, Image, Pressable, Modal, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Image, Modal } from 'react-native';
 import React, { useState } from 'react';
-import firestore from '@react-native-firebase/firestore';
+// import firestore from '@react-native-firebase/firestore';
 
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
-import { backIcon } from '../assets/icons';
+// import { backIcon, plusIcon } from '../assets/icons';
 import { StockProps } from '../constants/types/commonTypes';
+import AddStockComponent from './AddStockComponent';
 
 const StockRenderItem: React.FC<StockProps> = (props) => {
     const { item, setLoading, loading } = props;
     const [isVisible, setIsVisible] = useState(false);
-    const [formData, setFormData] = useState<{ product: string; stock: number; }>({ product: item.product || '', stock: item.stock || 0 });
-    const [errors, setErrors] = useState({});
-    const [isEdit, setIsEdit] = useState<boolean>(false);
+    // const [formData, setFormData] = useState<{ product: string; stock: number; }>({ product: item.product || '', stock: item.stock || 0 });
+    // const [errors, setErrors] = useState({});
+    // const [isEdit, setIsEdit] = useState<boolean>(false);
+    // const [attributes, setAttributes] = useState(item?.types ? Object.entries(item.types).map(([name, value]) => ({ name, value })) : []);
+    // const [attributeName, setAttributeName] = useState<string>('');
+    // const [attributeValue, setAttributeValue] = useState<string>('');
 
 
-    const handleSubmit = async () => {
-        setLoading(true);
-        let newErrors = {};
-        Object.keys(formData).forEach((key) => {
-            if (!formData[key].trim()) {
-                newErrors[key] = `${key} field is required`;
-            }
-        });
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            setLoading(false);
-            return;
+    // const handleSubmit = async () => {
+    //     setLoading(true);
+    //     let newErrors = {};
+    //     Object.keys(formData).forEach((key) => {
+    //         if (!formData[key].trim()) {
+    //             newErrors[key] = `${key} field is required`;
+    //         }
+    //     });
+    //     if (Object.keys(newErrors).length > 0) {
+    //         setErrors(newErrors);
+    //         setLoading(false);
+    //         return;
 
-        }
+    //     }
+    //     const attributesObject = attributes.reduce((acc, attr) => {
+    //         if (attr.name.trim()) {
+    //             acc[attr.name] = attr.value;
+    //         }
+    //         return acc;
+    //     }, {});
+    //     if (item.id) {
+    //         //     try {
+    //         //         await firestore().collection('stock').doc(item.id).update({
+    //         //             stock: parseInt(formData.stock, 10),
+    //         //         });
+    //         //         Alert.alert('Stock is Updated');
+    //         //         setIsVisible(!isVisible);
+    //         //         setLoading(false);
+    //         //     } catch (error) {
+    //         //         console.log('error while updating stock', error);
+    //         //         Alert.alert('Stock is not updated');
+    //         //         setLoading(false);
+    //         //     }
+    //         // }
+    //         // else {
+    //         try {
+    //             await firestore().collection('stock').add({
+    //                 stock: parseInt(formData.stock, 10),
+    //                 productId: item.id,
+    //                 types: attributesObject,
+    //             });
+    //         } catch (error) {
+    //             console.log('Error occured while adding data', error);
+    //             Alert.alert('Stock is not added');
+    //             setLoading(false);
+    //         }
+    //     }
+    //     setLoading(false);
+    // };
 
+    // const addAttribute = () => {
+    //     if (attributeName.trim() && attributeValue.trim()) {
+    //         setAttributes([...attributes, { name: attributeName, value: attributeValue }]);
+    //         setAttributeName('');
+    //         setAttributeValue('');
+    //     } else {
+    //         Alert.alert('Both Fields in attribute are required');
+    //     }
+    // };
 
-        if (item.id) {
-            try {
-                await firestore().collection('coffeeItem').doc(item.id).update({
-                    stock: parseInt(formData.stock, 10),
-                });
-                Alert.alert('Stock is Updated');
-                setIsVisible(!isVisible);
-                setLoading(false);
-            } catch (error) {
-                console.log('error while updating stock', error);
-                Alert.alert('Stock is not updated');
-                setLoading(false);
-            }
-        }
-        setLoading(false);
-    };
+    // const deleteAttribute = (id: number) => {
+    //     const updatedAttribute = [...attributes];
+    //     updatedAttribute.splice(id, 1);
+    //     setAttributes(updatedAttribute);
+    // };
 
-    const onChangeText = (value: any, key: string) => {
-        if (key === 'stock') {
-            value = value.replace(/[^0-9]/g, '');
-        }
-        setFormData((prev) => ({ ...prev, [key]: value }));
-        setErrors((prev) => ({ ...prev, [key]: '' }));
-    };
+    // const onChangeText = (value: any, key: string) => {
+    //     if (key === 'stock') {
+    //         value = value.replace(/[^0-9]/g, '');
+    //     }
+    //     setFormData((prev) => ({ ...prev, [key]: value }));
+    //     setErrors((prev) => ({ ...prev, [key]: '' }));
+    // };
 
     return (
         <>
@@ -83,31 +120,7 @@ const StockRenderItem: React.FC<StockProps> = (props) => {
             </View>
             {/* Modal */}
             <Modal visible={isVisible} animationType="slide">
-                <View style={{ flex: 1, paddingHorizontal: WIDTH * 0.05 }}>
-                    <View style={{ flexDirection: 'row', marginVertical: HEIGHT * 0.01, marginTop: HEIGHT * 0.1 }}>
-                        <Pressable onPress={() => setIsVisible(!isVisible)}>
-                            <Image source={backIcon} />
-                        </Pressable>
-                        <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>Stock Details</Text>
-                    </View>
-
-                    {Object.keys(formData).map((key) => (
-                        <View key={key}>
-                            <Text style={{ marginTop: HEIGHT * 0.02, fontSize: 16 }}>{key}</Text>
-                            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: HEIGHT * 0.02 }}> */}
-
-                            <Text style={{ color: colors.redColor, textAlign: 'right' }}>{errors[key]}</Text>
-                            {/* </View> */}
-                            <TextInput placeholder={`Enter ${key}`} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.056, borderWidth: 1, borderRadius: 5, padding: 5, borderColor: errors[key] ? colors.redColor : colors.commonBlack, backgroundColor: key === 'product' ? `${colors.grayColor}20` : isEdit ? colors.commonWhite : `${colors.grayColor}20` }} autoFocus={true} onChangeText={(text) => onChangeText(text, key)} value={(formData[key]).toString()} editable={key === 'product' ? false : isEdit} keyboardType="numeric" />
-                        </View>
-                    ))}
-
-
-                    <Pressable style={{ position: 'absolute', bottom: HEIGHT * 0.05, width: WIDTH * 0.9, alignItems: 'center', height: HEIGHT * 0.056, alignSelf: 'center', backgroundColor: colors.brownColor, justifyContent: 'center', borderRadius: 10 }} onPress={isEdit ? handleSubmit : () => setIsEdit(!isEdit)} >
-                        {loading ? <ActivityIndicator color={colors.commonWhite} /> : <Text style={{ color: colors.commonWhite, fontWeight: '600' }} >{isEdit ? 'Update Stock' : 'Edit Stock'}</Text>}
-                    </Pressable>
-                </View>
-
+                <AddStockComponent item={item} setLoading={setLoading} loading={loading} edit={true} setIsVisible={setIsVisible} isVisible={isVisible} />
             </Modal>
         </>
 

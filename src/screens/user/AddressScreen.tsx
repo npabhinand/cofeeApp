@@ -1,25 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, Pressable, Image, SafeAreaView, Modal, FlatList } from 'react-native';
+import { Text, Pressable, SafeAreaView, Modal, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 
 import { HEIGHT, WIDTH } from '../../constants/dimension';
-import { backIcon } from '../../assets/icons';
 import { colors } from '../../constants/colors';
 import AddressRenderItem from '../../components/AddressRenderItem';
 import AddAddressComponent from '../../components/AddAddressComponent';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import HeaderComponent from '../../components/HeaderComponent';
-// import { useSelector } from 'react-redux';
-// import { addedContacts } from '../redux/slice/contactSlice';
 
 
 const AddressScreen = () => {
 
     // const addressList = useSelector(addedContacts);
-    const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [addressList, setAddressList] = useState();
     const [update, setUpdate] = useState<boolean>(false);

@@ -61,7 +61,7 @@ const MyOrderComponent: React.FC<orderDetailProps> = (props) => {
                 <View style={{
                     flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 100,
                 }}>
-                    <UserOrderDetailsComponent item={item} handleModal={handleModal} marginTop={HEIGHT * 0.16} />
+                    <UserOrderDetailsComponent item={item} handleModal={handleModal} marginTop={HEIGHT * 0.3} />
                 </View>
             </Modal>
         </View>
