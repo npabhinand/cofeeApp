@@ -15,17 +15,16 @@ const StockProductScreen = ({ route }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [stockData, setStockData] = useState();
     const [loading, setLoading] = useState<boolean>(false);
-    // console.log(item.id)
 
     useEffect(() => {
         fetchStockData();
-    }, []);
+    }, [loading]);
 
     const fetchStockData = async () => {
         const stocks: any = [];
         try {
-            const stockRef = await firestore().collection('stock').where('productId', '==', item.id).get();
-            stockRef.forEach((doc) => stocks.push({ ...doc.data(), id: doc.id, ...item }));
+            const stockRef = await firestore().collection('items').where('product.id', '==', item.id).get();
+            stockRef.forEach((doc) => stocks.push({ ...doc.data(), ...item, itemId: doc.id }));
             setStockData(stocks);
         } catch (error) {
             console.log('error while fetchingstock data');
@@ -38,6 +37,7 @@ const StockProductScreen = ({ route }) => {
             <HeaderComponent header={'Product Stock'} />
             <FlatList
                 data={stockData}
+                keyExtractor={(item) => item.itemId}
                 renderItem={(stock) => (
                     <StockRenderItem item={stock.item} setLoading={setLoading} loading={loading} />
                 )} />

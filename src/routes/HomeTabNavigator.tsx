@@ -6,7 +6,7 @@ import { Image, Text, View } from 'react-native';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import HomeScreen from '../screens/user/HomeScreen';
 import { cartIcon, dotIcon, heartIcon, homeIcon, notificationIcon } from '../assets/icons';
-import WishListScreen from '../screens/user/WishListScreen';
+import FavoriteScreen from '../screens/user/FavoriteScreen';
 import NotificationScreen from '../screens/user/NotificationScreen';
 import OrderScreen from '../screens/user/OrderScreen';
 import { colors } from '../constants/colors';
@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 
 const tabData = [
     { name: 'Home', component: HomeScreen, icon: homeIcon },
-    { name: 'wishlist', component: WishListScreen, icon: heartIcon },
+    { name: 'wishlist', component: FavoriteScreen, icon: heartIcon },
     { name: 'Cart', component: OrderScreen, icon: cartIcon, number: 5 },
     { name: 'Notification', component: NotificationScreen, icon: notificationIcon },
 ];

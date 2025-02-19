@@ -31,7 +31,7 @@ const ProfitRenderItem: React.FC<profitProps> = (props) => {
 
         if (item.id) {
             try {
-                await firestore().collection('coffeeItem').doc(item.id).update({
+                await firestore().collection('products').doc(item.id).update({
                     profit: parseInt(formData.profit, 10),
                 });
                 Alert.alert('Profit Percentage is Updated');

@@ -35,7 +35,7 @@ const HomeScreen = () => {
         const coffees: any = [];
         try {
             setLoading(true);
-            const coffeeRef = await firestore().collection('coffeeItem').where('stock', '>', 0).get();
+            const coffeeRef = await firestore().collection('items').where('stock', '>', 0).get();
             coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
             setCoffeeArray(coffees);
             setLoading(false);
@@ -73,7 +73,6 @@ const HomeScreen = () => {
     const profileArray = [
         { id: 1, name: 'Profile', icon: profile, handleClick: () => { navigation.navigate('ProfileScreen'); setIsVisible(!isVisible); } },
         { id: 2, name: 'Sign Out', icon: logout, handleClick: () => { handleLogoutAlert(); setIsVisible(!isVisible); } },
-        // { id: 3, name: 'Cancel', icon: back, handleClick: () => setIsVisible(!isVisible) },
         { id: 3, name: 'Orders', icon: orderIcon, handleClick: () => { navigation.navigate('UserOrderListScreen'); setIsVisible(!isVisible); } },
     ];
     return (

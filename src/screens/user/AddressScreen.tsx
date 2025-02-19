@@ -60,3 +60,45 @@ const AddressScreen = () => {
 };
 
 export default AddressScreen;
+
+
+/*
+ const onPressUpdate = async () => {
+        let newErrors = {};
+
+        Object.keys(formData).forEach((key) => {
+            if (!formData[key].trim()) {
+                newErrors[key] = `${key} is required`;
+            }
+        });
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        try {
+            setLoading(true);
+            await reauthenticate(formData.password);
+            await updateEmail(auth.currentUser, formData.email);
+
+            const updateData = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                image,
+            };
+            await firestore()
+                .collection('user')
+                .doc(auth.currentUser.uid)
+                .update(updateData);
+            await updateUserDetails();
+        } catch (error) {
+            setLoading(false);
+            if (error.message === '[auth/wrong-password] The password is invalid or the user does not have a password.') {
+                Alert.alert('Incorrect password');
+            }
+            console.log('Error occurred while updating:', error);
+        }
+    };
+*/

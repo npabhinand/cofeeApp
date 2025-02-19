@@ -7,8 +7,13 @@ import { colors } from '../constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { backIcon, } from '../assets/icons';
 import { profileImage } from '../assets/images';
+import { useSelector } from 'react-redux';
+import { selectedUserData } from '../redux/slice/userDataSlice';
 
 const ProfileHeaderComponent = (props) => {
+    const userData = useSelector(selectedUserData);
+    const { image } = userData[0];
+
     const { title, buttonText, icon, imageSize } = props;
     const navigation = useNavigation();
     return (
@@ -23,7 +28,11 @@ const ProfileHeaderComponent = (props) => {
                 </Pressable>
             </View>
             <View style={{ alignItems: 'center' }}>
-                <Image source={profileImage} style={{ marginTop: -80, alignSelf: 'center', height: imageSize, width: imageSize }} />
+                {image === undefined ? <Image source={profileImage} style={{ marginTop: -80, alignSelf: 'center', height: imageSize, width: imageSize }} /> :
+                    <View style={{ alignItems: 'center', justifyContent: 'center', width: HEIGHT * 0.16, height: HEIGHT * 0.16, backgroundColor: colors.commonWhite, marginTop: -80, borderRadius: '50%' }}>
+                        <Image source={{ uri: image }} style={{ alignSelf: 'center', height: imageSize, width: imageSize, borderRadius: '50%' }} />
+                    </View>}
+
                 {buttonText === 'Change Picture' ?
                     <Pressable onPress={() => navigation.navigate('EditProfileScreen')}>
                         <Text style={{}}>{buttonText}</Text>

@@ -21,7 +21,7 @@ const StockListScreen = () => {
         const coffees: any = [];
         setUpdate(true);
         try {
-            const coffeeRef = await firestore().collection('coffeeItem').get();
+            const coffeeRef = await firestore().collection('products').where('deleted', '==', false).get();
             coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
             setCoffeeData(coffees);
             setUpdate(false);

@@ -16,7 +16,7 @@ import { addUserData } from '../redux/slice/userDataSlice';
 const LoginScreen = () => {
     const [formData, setFormData] = useState<{ email: string; password: string; }>({ email: '', password: '' });
     const [errors, setErrors] = useState({});
-    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -53,6 +53,7 @@ const LoginScreen = () => {
             console.log(user.uid);
             if (!userQuerySnapshot.empty) {
                 const userDoc = userQuerySnapshot.data();
+                console.log('userDoc', userDoc);
                 await AsyncStorage.setItem('userD', JSON.stringify(userDoc));
                 dispatch(addUserData(userDoc));
                 setLoading(false);

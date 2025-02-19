@@ -11,6 +11,7 @@ import { colors } from '../../constants/colors';
 import { ProductDetailScreenProps } from '../../constants/types/commonTypes';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import { addCartCount } from '../../redux/slice/cartCountSlice';
+import { coffee1 } from '../../assets/images';
 // import { addCart } from '../../redux/slice/cartSlice';
 
 
@@ -40,7 +41,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                 });
             // setCartItems(carts);
 
-            const existingProduct = carts.find(item => item.productId === section.item.id);
+            const existingProduct = carts.find(item => item.productId === section.item.product.id);
             if (existingProduct) {
                 await firestore()
                     .collection('cartItem')
@@ -55,16 +56,16 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                 console.log('Updated cart count', snapshot.data().count);
             } else {
                 await firestore().collection('cartItem').add({
-                    name: section.item.product,
-                    coffeeType: section.item.coffeeType,
-                    description: section.item.description,
-                    types: section.item.types,
-                    price: section.item.price,
+                    name: section.item.product.product,
+                    coffeeType: section.item.product.coffeeType,
+                    description: section.item.product.description,
+                    types: section.item.product.types,
+                    price: section.item.product.price,
                     userId: userId,
-                    image: section.item.image,
+                    image: section.item.product.image,
                     quantity: 1,
-                    profit: section.item.profit,
-                    productId: section.item.id,
+                    profit: section.item.product.profit,
+                    productId: section.item.product.id,
                 });
 
                 const cartItemRef = firestore().collection('cartItem').where('userId', '==', userId);
@@ -81,16 +82,16 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
     };
 
     // dispatch(addCart({
-    //     id: section.item.id,
-    //     name: section.item.name,
-    //     coffeeType: section.item.item.coffeeType,
-    //     description: section.item.item.description,
+    //     id: section.item.product.id,
+    //     name: section.item.product.name,
+    //     coffeeType: section.item.product.item.coffeeType,
+    //     description: section.item.product.item.description,
     //     type: {
-    //         size: section.item.item.type[isSelected].size,
-    //         price: section.item.item.type[isSelected].price,
+    //         size: section.item.product.item.type[isSelected].size,
+    //         price: section.item.product.item.type[isSelected].price,
     //     },
-    //     rating: section.item.item.rating,
-    //     img: section.item.item.img,
+    //     rating: section.item.product.item.rating,
+    //     img: section.item.product.item.img,
     //     quantity: 1,
     // }));
     // Alert.alert('Successfully Added To cart');
@@ -112,11 +113,11 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         </Pressable>
                     </View>
                     <View style={{ paddingHorizontal: WIDTH * 0.05, marginTop: HEIGHT * 0.02, paddingBottom: HEIGHT * 0.15 }}>
-                        <Image source={{ uri: section.item.image }} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.24, borderRadius: WIDTH * 0.04 }} />
-                        <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginTop: HEIGHT * 0.02, textTransform: 'capitalize' }}>{section.item.product}</Text>
+                        <Image source={coffee1} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.24, borderRadius: WIDTH * 0.04 }} />
+                        <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginTop: HEIGHT * 0.02, textTransform: 'capitalize' }}>{section.item.product.product}</Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: colors.grayColor, marginTop: HEIGHT * 0.01 }}>{section.item.coffeeType}</Text>
+                            <Text style={{ color: colors.grayColor, marginTop: HEIGHT * 0.01 }}>{section.item.product.coffeeType}</Text>
 
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.04 }}>
                                 <View style={{ backgroundColor: `${colors.grayColor}10`, height: WIDTH * 0.12, width: WIDTH * 0.12, borderRadius: WIDTH * 0.04, alignItems: 'center', justifyContent: 'center' }}>
@@ -147,22 +148,22 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         <Text style={{ marginVertical: HEIGHT * 0.018, fontWeight: '600', fontSize: HEIGHT * 0.02 }}>Description</Text>
                         {/*  */}
                         <View>
-                            {section.item.description.length > 120 ? (
+                            {section.item.product.description.length > 120 ? (
                                 showMore ? (
                                     <View style={{}}>
-                                        <Text style={{ color: colors.grayColor, fontSize: 14 }}>{section.item.description}</Text>
+                                        <Text style={{ color: colors.grayColor, fontSize: 14 }}>{section.item.product.description}</Text>
                                         <Text style={{ color: colors.brownColor, fontWeight: 'bold' }} onPress={() => setShowMore(!showMore)}>Read Less</Text>
                                     </View>
                                 ) : (
                                     <View>
                                         <Text style={{ color: colors.grayColor, fontSize: 14 }}>
-                                            {`${section.item.description.slice(0, 120)}... `}
+                                            {`${section.item.product.description.slice(0, 120)}... `}
                                         </Text>
                                         <Text style={{ color: colors.brownColor, fontWeight: 'bold' }} onPress={() => setShowMore(!showMore)}>Read More</Text>
                                     </View>
                                 )
                             ) : (
-                                <Text style={{ color: colors.grayColor, fontSize: 14 }}>{section.item.description}</Text>
+                                <Text style={{ color: colors.grayColor, fontSize: 14 }}>{section.item.product.description}</Text>
                             )}
                         </View>
                         {/*  */}
@@ -170,10 +171,10 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         {/* <Text style={{ marginTop: HEIGHT * 0.035, fontWeight: '600', fontSize: HEIGHT * 0.02, marginBottom: HEIGHT * 0.015 }}>Size</Text> */}
 
                         <View style={{ marginTop: HEIGHT * 0.01, flexDirection: 'row', flexWrap: 'wrap', gap: HEIGHT * 0.01 }}>
-                            {Object.keys(section.item.types).map((key) => (
+                            {section.item.product.types !== undefined && Object.keys(section.item.product.types).map((key) => (
                                 <View key={key} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: `${colors.grayColor}90`, padding: 10, borderRadius: 10 }}>
                                     <Text style={{ color: colors.commonWhite, textTransform: 'capitalize' }}>{key}: </Text>
-                                    <Text style={{ color: colors.commonWhite }}>{section.item.types[key]}</Text>
+                                    <Text style={{ color: colors.commonWhite }}>{section.item.product.types[key]}</Text>
                                     {/* </Pressable> */}
                                 </View>
                             ))}
@@ -184,7 +185,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                 <View style={{ backgroundColor: colors.commonWhite, flexDirection: 'row', justifyContent: 'space-between', position: 'absolute', bottom: HEIGHT * 0.01, paddingHorizontal: WIDTH * 0.05, height: HEIGHT * 0.13, width: WIDTH * 1, borderTopLeftRadius: HEIGHT * 0.03, borderTopRightRadius: HEIGHT * 0.03, paddingTop: HEIGHT * 0.02 }}>
                     <View>
                         <Text style={{ marginBottom: HEIGHT * 0.01, color: colors.grayColor }}>Price</Text>
-                        <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.02, fontWeight: 'bold' }}>$ {section.item.price}</Text>
+                        <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.02, fontWeight: 'bold' }}>$ {section.item.product.price}</Text>
                     </View>
                     <Pressable style={{ width: WIDTH * 0.6, height: HEIGHT * 0.07, backgroundColor: colors.brownColor, borderRadius: WIDTH * 0.03, justifyContent: 'center', alignItems: 'center' }} onPress={handleAddItem}><Text style={{ color: colors.commonWhite, fontWeight: 'bold' }} >Buy Now</Text></Pressable>
 

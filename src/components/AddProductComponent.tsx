@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, TextInput, Image, Pressable, ScrollView, Alert } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, Image, Pressable, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import firebase from '@react-native-firebase/firestore';
 import { launchImageLibrary } from 'react-native-image-picker';
 
@@ -20,6 +20,7 @@ const AddProductComponent: React.FC<productProp> = (props) => {
 
     const [image, setImage] = useState<string>(item?.image || '');
     const [errors, setErrors] = useState<any>({});
+    const [loading, setLoading] = useState<boolean>(false);
     // const [attributes, setAttributes] = useState(item?.types ? Object.entries(item.types).map(([name, value]) => ({ name, value })) : []);
     // const [attributeName, setAttributeName] = useState('');
     // const [attributeValue, setAttributeValue] = useState('');
@@ -49,22 +50,26 @@ const AddProductComponent: React.FC<productProp> = (props) => {
         // }, {});
 
         try {
+            setLoading(true);
             if (item?.id) {
-                await firebase().collection('coffeeItem').doc(item.id).update({
+                await firebase().collection('products').doc(item.id).update({
                     ...formData,
                     image,
                     // types: attributesObject,
                 });
                 Alert.alert('Coffee Item updated Successfully');
             } else {
-                await firebase().collection('coffeeItem').add({
+                setLoading(true);
+                await firebase().collection('products').add({
                     ...formData,
+                    deleted: false,
                     image,
                     // types: attributesObject,
                 });
                 Alert.alert('Product Added Successfully');
             }
         } catch (error) {
+            setLoading(false);
             console.error('Error:', error);
             Alert.alert('Failed to save Coffee Item');
         }
@@ -186,8 +191,10 @@ const AddProductComponent: React.FC<productProp> = (props) => {
                     borderRadius: 10,
                 }}
                 onPress={handleSubmit}
-            >
+            >{loading ? <ActivityIndicator size={'large'} color={colors.commonWhite} /> :
                 <Text style={{ fontWeight: '600', color: colors.whiteColor, fontSize: 18 }}>Add Product</Text>
+                }
+
             </Pressable>
         </SafeAreaView>
     );

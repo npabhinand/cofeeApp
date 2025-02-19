@@ -134,14 +134,14 @@ const OrderScreen = () => {
         setLoading(true);
         if (cartItems.length > 0) {
             for (const item of cartItems) {
-                const itemRef = firestore().collection('coffeeItem').doc(item.productId);
+                const itemRef = firestore().collection('products').doc(item.productId);
                 const doc = await itemRef.get();
                 if (doc.exists) {
                     const currentStock = doc.data().stock || 0;
                     const updateStock = currentStock - item.quantity;
 
                     if (updateStock >= 0) {
-                        firestore().collection('coffeeItem').doc(item.productId).update({
+                        firestore().collection('products').doc(item.productId).update({
                             stock: updateStock,
                         });
                     }

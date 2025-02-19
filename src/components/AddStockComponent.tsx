@@ -7,14 +7,17 @@ import { backIcon, plusIcon } from '../assets/icons';
 import { colors } from '../constants/colors';
 
 const AddStockComponent = (props) => {
-    const { item, setLoading, loading, edit, setIsVisible, isVisible } = props;
-
+    const { item, setLoading, edit, setIsVisible, isVisible } = props;
+    // console.log(item.types, 'stock types');
     const [formData, setFormData] = useState<{ product: string; stock: number; }>({ product: item.product || '', stock: item.stock || 0 });
     const [errors, setErrors] = useState({});
+    const [update, setUpdate] = useState<boolean>();
     const [isEdit, setIsEdit] = useState<boolean>(edit);
     const [attributes, setAttributes] = useState(item?.types ? Object.entries(item.types).map(([name, value]) => ({ name, value })) : []);
     const [attributeName, setAttributeName] = useState<string>('');
     const [attributeValue, setAttributeValue] = useState<string>('');
+
+
     const handleSubmit = async () => {
         setLoading(true);
         let newErrors = {};
@@ -24,6 +27,7 @@ const AddStockComponent = (props) => {
             }
         });
         if (Object.keys(newErrors).length > 0) {
+
             setErrors(newErrors);
             setLoading(false);
             return;
@@ -35,32 +39,44 @@ const AddStockComponent = (props) => {
             }
             return acc;
         }, {});
-        if (item.id) {
-            //     try {
-            //         await firestore().collection('stock').doc(item.id).update({
-            //             stock: parseInt(formData.stock, 10),
-            //         });
-            //         Alert.alert('Stock is Updated');
-            //         setIsVisible(!isVisible);
-            //         setLoading(false);
-            //     } catch (error) {
-            //         console.log('error while updating stock', error);
-            //         Alert.alert('Stock is not updated');
-            //         setLoading(false);
-            //     }
-            // }
-            // else {
+        if (item.itemId) {
             try {
-                await firestore().collection('stock').add({
+                setUpdate(true);
+                console.log('pressed5??????')
+                await firestore().collection('items').doc(item.itemId).update({
                     stock: parseInt(formData.stock, 10),
-                    productId: item.id,
+                    product: item,
                     types: attributesObject,
                 });
+                Alert.alert('Stock is Updated');
+                setIsVisible(!isVisible);
                 setLoading(false);
+                setUpdate(false);
+            } catch (error) {
+                console.log('error while updating stock', error);
+                Alert.alert('Stock is not updated');
+                setLoading(false);
+                setUpdate(false);
+            }
+        }
+        else {
+            try {
+                console.log('pressed5??????')
+                setUpdate(true);
+                await firestore().collection('items').add({
+                    stock: parseInt(formData.stock, 10),
+                    product: item,
+                    types: attributesObject,
+                });
+                Alert.alert('Stock is added');
+                setIsVisible(!isVisible);
+                setLoading(false);
+                setUpdate(false);
             } catch (error) {
                 console.log('Error occured while adding data', error);
                 Alert.alert('Stock is not added');
                 setLoading(false);
+                setUpdate(false);
             }
         }
 
@@ -91,7 +107,7 @@ const AddStockComponent = (props) => {
 
     return (
         <View style={{ flex: 1, paddingHorizontal: WIDTH * 0.05 }}>
-            <View style={{ flexDirection: 'row', marginVertical: HEIGHT * 0.01, marginTop: HEIGHT * 0.1 }}>
+            <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.06 }}>
                 <Pressable onPress={() => setIsVisible(!isVisible)}>
                     <Image source={backIcon} />
                 </Pressable>
@@ -105,7 +121,9 @@ const AddStockComponent = (props) => {
 
                     <Text style={{ color: colors.redColor, textAlign: 'right' }}>{errors[key]}</Text>
                     {/* </View> */}
-                    <TextInput placeholder={`Enter ${key}`} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.056, borderWidth: 1, borderRadius: 5, padding: 5, borderColor: errors[key] ? colors.redColor : colors.commonBlack, backgroundColor: key === 'product' ? `${colors.grayColor}20` : isEdit ? colors.commonWhite : `${colors.grayColor}20` }} autoFocus={true} onChangeText={(text) => onChangeText(text, key)} value={(formData[key]).toString()} editable={key === 'product' ? false : isEdit} keyboardType="numeric" />
+                    <TextInput placeholder={`Enter ${key}`} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.056, borderWidth: 1, borderRadius: 5, padding: 5, borderColor: errors[key] ? colors.redColor : colors.commonBlack, backgroundColor: key === 'product' ? `${colors.grayColor}20` : isEdit ? colors.commonWhite : `${colors.grayColor}20` }} autoFocus={true} onChangeText={(text) => onChangeText(text, key)} value={(formData[key]).toString()}
+                        // editable={key === 'product' ? false : isEdit}
+                        keyboardType="numeric" />
                 </View>
             ))}
 
@@ -128,27 +146,27 @@ const AddStockComponent = (props) => {
                     placeholder="Attribute Name"
                     style={{
                         paddingLeft: WIDTH * 0.03, borderRadius: 10, width: WIDTH * 0.35, height: HEIGHT * 0.056, borderWidth: 0.5,
-                        backgroundColor: isEdit ? colors.commonWhite : `${colors.grayColor}20`,
+                        // backgroundColor: isEdit ? colors.commonWhite : `${colors.grayColor}20`,
                     }}
-                    value={attributeName} editable={isEdit}
+                    value={attributeName}
                     onChangeText={(text) => setAttributeName(text)}
                 />
                 <TextInput
                     placeholder="Attribute Value"
                     style={{
                         paddingLeft: WIDTH * 0.03, borderRadius: 10, width: WIDTH * 0.35, height: HEIGHT * 0.056, borderWidth: 0.5,
-                        backgroundColor: isEdit ? colors.commonWhite : `${colors.grayColor}20`,
+                        // backgroundColor: isEdit ? colors.commonWhite : `${colors.grayColor}20`,
                     }}
                     value={attributeValue}
                     onChangeText={(text) => setAttributeValue(text)}
                 />
-                <Pressable style={{ width: WIDTH * 0.1, backgroundColor: colors.commonBlack, height: WIDTH * 0.1, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={addAttribute} disabled={!isEdit}>
+                <Pressable style={{ width: WIDTH * 0.1, backgroundColor: colors.commonBlack, height: WIDTH * 0.1, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={addAttribute}>
                     <Image source={plusIcon} />
                 </Pressable>
             </View>
             {/*  */}
-            <Pressable style={{ position: 'absolute', bottom: HEIGHT * 0.05, width: WIDTH * 0.9, alignItems: 'center', height: HEIGHT * 0.056, alignSelf: 'center', backgroundColor: colors.brownColor, justifyContent: 'center', borderRadius: 10 }} onPress={isEdit ? handleSubmit : () => setIsEdit(!isEdit)} >
-                {loading ? <ActivityIndicator color={colors.commonWhite} /> : <Text style={{ color: colors.commonWhite, fontWeight: '600' }} >{isEdit ? 'Update Stock' : 'Edit Stock'}</Text>}
+            <Pressable style={{ position: 'absolute', bottom: HEIGHT * 0.05, width: WIDTH * 0.9, alignItems: 'center', height: HEIGHT * 0.056, alignSelf: 'center', backgroundColor: colors.brownColor, justifyContent: 'center', borderRadius: 10 }} onPress={handleSubmit}>
+                {update ? <ActivityIndicator color={colors.commonWhite} /> : <Text style={{ color: colors.commonWhite, fontWeight: '600' }} >{isEdit ? 'Update Stock' : 'Edit Stock'}</Text>}
             </Pressable>
         </View>
     );

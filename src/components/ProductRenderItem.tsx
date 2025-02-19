@@ -19,7 +19,9 @@ const ProductRenderItem: React.FC<productItems> = (props) => {
     const navigation = useNavigation();
 
     const onDeleteItem = () => {
-        firestore().collection('coffeeItem').doc(item.id).delete().then(() => { console.log('product deleted!'); });
+        firestore().collection('products').doc(item.id).update({
+            deleted: true,
+        });
         setUpdate(!update);
     };
     const handleDeleteAlert = () =>

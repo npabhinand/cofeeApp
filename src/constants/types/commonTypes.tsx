@@ -5,6 +5,7 @@ interface userDataItem {
     userType: string,
     phone: number,
     name: string,
+    image: string,
 }
 
 interface addressItems {
@@ -54,15 +55,18 @@ interface productProp {
 }
 interface coffeeProps {
     item: {
-        id: number;
-        product: string;
-        coffeeType: string;
-        description: string;
-        types: any;
-        price: number;
-        rating: number;
-        image: string;
-        profit: string;
+        product:
+        {
+            id: number;
+            product: string;
+            coffeeType: string;
+            description: string;
+            types: any;
+            price: number;
+            rating: number;
+            image: string;
+            profit: string;
+        }
     }
     userId: string;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;

@@ -11,7 +11,7 @@ import AdminHomeScreen from '../screens/Admin/AdminHomeScreen';
 import ProductListScreen from '../screens/Admin/ProductListScreen';
 import UserListScreen from '../screens/Admin/UserListScreen';
 import OrderListScreen from '../screens/Admin/OrderListScreen';
-import CommentListScreen from '../screens/Admin/StockListScreen';
+import StockListScreen from '../screens/Admin/StockListScreen';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/user/HomeScreen';
 import ProfitListScreen from '../screens/Admin/ProfitListScreen';
@@ -19,7 +19,7 @@ import UserOrderListScreen from '../screens/user/UserOrderListScreen';
 import Orders from '../screens/Admin/Orders';
 import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
-import WishListScreen from '../screens/user/WishListScreen';
+import FavoriteScreen from '../screens/user/FavoriteScreen';
 import StockProductScreen from '../screens/Admin/StockProductScreen';
 
 
@@ -38,14 +38,14 @@ const AppNavigator = () => {
             <Stack.Screen name="ProductListScreen" component={ProductListScreen} />
             <Stack.Screen name="UserListScreen" component={UserListScreen} />
             <Stack.Screen name="OrderListScreen" component={OrderListScreen} />
-            <Stack.Screen name="CommentListScreen" component={CommentListScreen} />
+            <Stack.Screen name="StockListScreen" component={StockListScreen} />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="ProfitListScreen" component={ProfitListScreen} />
             <Stack.Screen name="UserOrderListScreen" component={UserOrderListScreen} />
             <Stack.Screen name="Orders" component={Orders} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
-            <Stack.Screen name="WishListScreen" component={WishListScreen} />
+            <Stack.Screen name="FavoriteScreen" component={FavoriteScreen} />
             <Stack.Screen name="StockProductScreen" component={StockProductScreen} />
         </Stack.Navigator>
     );

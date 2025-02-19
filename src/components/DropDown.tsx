@@ -16,7 +16,7 @@ const DropDown: React.FC<dropDownProps> = (props) => {
     const navigation = useNavigation();
     // const isVisible = useSelector(selectVisibleModal);
 
-    const handleDeleteAlert = () =>
+    const handleLogoutAlert = () =>
         Alert.alert('Are You want to Logout', '', [
             {
                 text: 'Cancel',
@@ -44,7 +44,7 @@ const DropDown: React.FC<dropDownProps> = (props) => {
     };
     const profileArray = [
         { id: 1, name: 'Profile', icon: profile, handleClick: () => navigation.navigate('ProfileScreen') },
-        { id: 2, name: 'Sign Out', icon: logout, handleClick: handleDeleteAlert },
+        { id: 2, name: 'Sign Out', icon: logout, handleClick: handleLogoutAlert },
         { id: 3, name: 'Cancel', icon: back, handleClick: onPressClose },
     ];
 

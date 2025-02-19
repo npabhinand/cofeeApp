@@ -9,8 +9,6 @@ import { colors } from '../../constants/colors';
 import AddProductComponent from '../../components/AddProductComponent';
 import HeaderComponent from '../../components/HeaderComponent';
 
-// import { useSelector } from 'react-redux';
-// import { selectedCounts } from '../../redux/slice/CountSlice';
 
 
 
@@ -30,7 +28,7 @@ const ProductListScreen = () => {
 
         try {
             setLoading(true);
-            const productRef = await firebase().collection('coffeeItem').get();
+            const productRef = await firebase().collection('products').where('deleted', '==', false).get();
             productRef.forEach((doc) => {
                 productArray.push({ id: doc.id, ...doc.data() });
             });

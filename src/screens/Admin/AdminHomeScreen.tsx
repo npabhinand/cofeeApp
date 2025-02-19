@@ -26,7 +26,7 @@ const AdminHomeScreen = () => {
         try {
             setLoading(true);
 
-            const productSnapshot = await getCountFromServer(firestore().collection('coffeeItem'));
+            const productSnapshot = await getCountFromServer(firestore().collection('products'));
             const productCount = productSnapshot.data().count;
 
             const orderSnapshot = await getCountFromServer(firestore().collection('orders'));
@@ -36,7 +36,7 @@ const AdminHomeScreen = () => {
             const userCount = userSnapshot.data().count;
 
             const coffees = [];
-            const coffeeRef = await firestore().collection('coffeeItem').where('stock', '>', 0).get();
+            const coffeeRef = await firestore().collection('products').where('stock', '>', 0).get();
             coffeeRef.forEach(doc => coffees.push({ ...doc.data(), id: doc.id }));
             const stockCount = coffees.reduce((count, item) => count += item.stock, 0);
 
@@ -76,7 +76,7 @@ const AdminHomeScreen = () => {
         { id: 1, title: 'Product', count: counts.productCount, navigate: 'ProductListScreen' },
         { id: 2, title: 'User', count: counts.userCount, navigate: 'UserListScreen' },
         { id: 3, title: 'Orders', count: counts.orderCount, navigate: 'OrderListScreen' },
-        { id: 4, title: 'Stock', count: counts.stockCount, navigate: 'CommentListScreen' },
+        { id: 4, title: 'Stock', count: counts.stockCount, navigate: 'StockListScreen' },
         { id: 5, title: 'Profit', count: `₹${counts.totalProfit}`, navigate: 'ProfitListScreen' },
     ];
 

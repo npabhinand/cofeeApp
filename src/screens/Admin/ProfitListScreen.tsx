@@ -23,7 +23,7 @@ const ProfitListScreen = () => {
 
         try {
             setLoading(true);
-            const coffeeRef = await firestore().collection('coffeeItem').get();
+            const coffeeRef = await firestore().collection('products').get();
             coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
             setCoffeeData(coffees);
             setLoading(false);
