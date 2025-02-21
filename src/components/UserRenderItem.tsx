@@ -11,11 +11,14 @@ import { userProps } from '../constants/types/commonTypes';
 const UserRenderItem: React.FC<userProps> = (props) => {
     const { item } = props;
     return (
-        <View style={{ flexDirection: 'row', height: HEIGHT * 0.12, width: WIDTH * 0.9, alignItems: 'center', shadowColor: colors.commonBlack, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.20, shadowRadius: 1.41, elevation: 2, backgroundColor: colors.commonWhite, marginTop: HEIGHT * 0.02, alignSelf: 'center', borderRadius: 10, paddingHorizontal: WIDTH * 0.05 }}>
-            <Image source={profileIcon} style={{ width: WIDTH * 0.12, height: WIDTH * 0.12 }} />
-            <View style={{ marginLeft: WIDTH * 0.1 }}>
-                <Text style={{ color: colors.brownColor, fontWeight: 'bold', fontSize: 18 }}>{item?.name}</Text>
-                <Text>{item.phone}</Text>
+        <View style={{
+            flexDirection: 'row', alignItems: 'center', width: WIDTH * 0.9, height: 120, marginTop: HEIGHT * 0.01, alignSelf: 'center', borderRadius: 10, padding: 10, shadowColor: colors.commonBlack, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.20,
+            shadowRadius: 1.41, elevation: 2, backgroundColor: colors.commonWhite,
+        }}>
+            <Image source={profileIcon} style={{ width: WIDTH * 0.25, height: 100, borderRadius: 10 }} />
+            <View style={{ gap: 5, paddingLeft: WIDTH * 0.05 }}>
+                <Text style={{ fontWeight: '600', fontSize: 20, color: colors.brownColor, textTransform: 'capitalize' }}>{item?.name}</Text>
+                <Text style={{ color: colors.grayColor }}>{item.phone}</Text>
                 <Text>{item.email}</Text>
             </View>
         </View>
@@ -23,3 +26,4 @@ const UserRenderItem: React.FC<userProps> = (props) => {
 };
 
 export default UserRenderItem;
+

@@ -2,8 +2,8 @@
 import { View, Text, SafeAreaView, ActivityIndicator, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import { HEIGHT, WIDTH } from '../../constants/dimension';
 
+import { HEIGHT, WIDTH } from '../../constants/dimension';
 import ProfitRenderItem from '../../components/ProfitRenderItem';
 import { colors } from '../../constants/colors';
 import HeaderComponent from '../../components/HeaderComponent';
@@ -20,16 +20,14 @@ const ProfitListScreen = () => {
 
     const fetchData = async () => {
         const coffees: any = [];
-
         try {
             setLoading(true);
-            const coffeeRef = await firestore().collection('products').get();
+            const coffeeRef = await firestore().collection('items').get();
             coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
             setCoffeeData(coffees);
             setLoading(false);
         } catch (error) {
             console.log('error while fetching data', error);
-
         }
         setLoading(false);
     };

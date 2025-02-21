@@ -11,7 +11,7 @@ import { profitProps } from '../constants/types/commonTypes';
 const ProfitRenderItem: React.FC<profitProps> = (props) => {
     const { item, setLoading, loading } = props;
     const [isVisible, setIsVisible] = useState(false);
-    const [formData, setFormData] = useState<{ product: string; profit: number; }>({ product: item.product || '', profit: item.profit || 0 });
+    const [formData, setFormData] = useState<{ product: string; profit: number; }>({ product: item.product.product || '', profit: item.profit || 0 });
     const [errors, setErrors] = useState({});
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
@@ -31,7 +31,7 @@ const ProfitRenderItem: React.FC<profitProps> = (props) => {
 
         if (item.id) {
             try {
-                await firestore().collection('products').doc(item.id).update({
+                await firestore().collection('items').doc(item.id).update({
                     profit: parseInt(formData.profit, 10),
                 });
                 Alert.alert('Profit Percentage is Updated');
@@ -56,10 +56,10 @@ const ProfitRenderItem: React.FC<profitProps> = (props) => {
     return (
         <>
             <View style={{ height: 90, width: WIDTH * 0.9, backgroundColor: colors.commonWhite, alignSelf: 'center', borderRadius: 20, marginTop: HEIGHT * 0.02, alignItems: 'center', paddingLeft: 10, flexDirection: 'row', gap: 10 }}>
-                <Image source={{ uri: item.image }} style={{ width: WIDTH * 0.13, height: WIDTH * 0.13, borderRadius: '50%' }} />
+                <Image source={{ uri: item.product.image }} style={{ width: WIDTH * 0.13, height: WIDTH * 0.13, borderRadius: '50%' }} />
                 <View style={{ width: WIDTH * 0.5 }}>
                     <Text style={{ fontWeight: '600' }}>Product</Text>
-                    <Text style={{ color: colors.grayColor }}>{item.product}</Text>
+                    <Text style={{ color: colors.grayColor }}>{item.product.product}</Text>
                 </View>
                 <View>
                     <Text>Profit</Text>

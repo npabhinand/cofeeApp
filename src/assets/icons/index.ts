@@ -36,6 +36,10 @@ import orderIcon from './orderIcon/orderIcon.png';
 import emailIcon from './icons/email.png';
 import shareIcon from './icons/shareIcon.png';
 import heartFilledIcon from './icons/heartFilledIcon.png';
-import nameIcon from './icons/name.png'
+import nameIcon from './icons/name.png';
+import table4 from './tables/table4.png';
+import table5 from './tables/table5.png'
+import table6 from './tables/table6.png';
+import table8 from './tables/table8.png';
 // import commentIcon from './commentIcon/commentIcon.png';
-export { searchIcon, homeIcon, heartIcon, filterIcon, starIcon, plusIcon, cartIcon, notificationIcon, dotIcon, backIcon, deliveryIcon, beansIcon, milkCanIcon, rateIcon, editIcon, documentIcon, discountIcon, rightArrowIcon, walletIcon, bottomArrowIcon, gpsIcon, locationIcon, phoneIcon, driverIcon, minusIcon, deleteIcon, profileIcon, peoplesIcon, notVisibleIcon, visibleIcon, profile, logout, back, profitIcon, orderIcon, emailIcon, shareIcon, heartFilledIcon, nameIcon };
+export { searchIcon, homeIcon, heartIcon, filterIcon, starIcon, plusIcon, cartIcon, notificationIcon, dotIcon, backIcon, deliveryIcon, beansIcon, milkCanIcon, rateIcon, editIcon, documentIcon, discountIcon, rightArrowIcon, walletIcon, bottomArrowIcon, gpsIcon, locationIcon, phoneIcon, driverIcon, minusIcon, deleteIcon, profileIcon, peoplesIcon, notVisibleIcon, visibleIcon, profile, logout, back, profitIcon, orderIcon, emailIcon, shareIcon, heartFilledIcon, nameIcon, table4, table6, table5, table8 };

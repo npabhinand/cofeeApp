@@ -9,4 +9,5 @@ import map from './map/map.png';
 import route from './rute/rute.png';
 import deliveryBoy from './deliveryBoy/deliveryBoy.png';
 import profileImage from './profile/profile.png';
-export { background1, coffee1, coffee2, coffee3, coffee4, coffee5, banner, map, route, deliveryBoy, profileImage };
+import shopImage from './image/shop1.jpg'
+export { background1, coffee1, coffee2, coffee3, coffee4, coffee5, banner, map, route, deliveryBoy, profileImage, shopImage };

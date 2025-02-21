@@ -20,11 +20,10 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [showMore, setShowMore] = useState(false);
-    // const [cartItems, setCartItems] = useState<[]>([]);
+
     const navigation = useNavigation();
-    // const [isSelected, setIsSelected] = useState<number>(1);
     const userData = useSelector(selectedUserData);
-    const userId = userData[0].email;
+    const userId = userData[0].id;
 
     const handleAddItem = async () => {
         try {
@@ -32,7 +31,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
             const carts: any = [];
             await firestore()
                 .collection('cartItem')
-                .where('userId', '==', userData[0].email)
+                .where('userId', '==', userId)
                 .get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(doc => {
@@ -59,12 +58,10 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                     name: section.item.product.product,
                     coffeeType: section.item.product.coffeeType,
                     description: section.item.product.description,
-                    types: section.item.product.types,
                     price: section.item.product.price,
                     userId: userId,
                     image: section.item.product.image,
                     quantity: 1,
-                    profit: section.item.product.profit,
                     productId: section.item.product.id,
                 });
 
@@ -78,6 +75,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
             navigation.navigate('OrderScreen');
         } catch (error) {
             console.log('Error occurred while handling cart items', error);
+            setLoading(false);
         }
     };
 
@@ -107,7 +105,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         <Pressable onPress={() => navigation.goBack()}>
                             <Image source={backIcon} />
                         </Pressable>
-                        <Text style={{ fontWeight: '600', fontSize: HEIGHT * 0.02 }}>Detail</Text>
+                        <Text style={{ fontWeight: '600', fontSize: 18 }}>Detail</Text>
                         <Pressable>
                             <Image source={heartIcon} />
                         </Pressable>

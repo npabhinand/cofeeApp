@@ -52,8 +52,7 @@ const LoginScreen = () => {
             const userQuerySnapshot = await firestore().collection('user').doc(user.uid).get();
             console.log(user.uid);
             if (!userQuerySnapshot.empty) {
-                const userDoc = userQuerySnapshot.data();
-                console.log('userDoc', userDoc);
+                const userDoc = { ...userQuerySnapshot.data(), id: user.uid };
                 await AsyncStorage.setItem('userD', JSON.stringify(userDoc));
                 dispatch(addUserData(userDoc));
                 setLoading(false);

@@ -17,8 +17,8 @@ const AddressRenderItem: React.FC<contactProps> = (props) => {
     const { item, setUpdate, update } = props;
     // const dispatch = useDispatch();
     const userData = useSelector(selectedUserData);
-    const { email } = userData[0];
-
+    const { id } = userData[0];
+    console.log(id);
     const onDeleteItem = () => {
         firestore()
             .collection('address')
@@ -57,7 +57,7 @@ const AddressRenderItem: React.FC<contactProps> = (props) => {
         try {
 
             await firestore().collection('address')
-                .where('userId', '==', email)
+                .where('userId', '==', id)
                 .where('selected', '==', true)
                 .get()
                 .then(function (querySnapshot) {
@@ -108,7 +108,7 @@ const AddressRenderItem: React.FC<contactProps> = (props) => {
             </View>
             <Text style={{ marginTop: HEIGHT * 0.03 }}>{item.address}</Text>
             <Modal visible={modalVisible} animationType="slide">
-                <AddAddressComponent setModalVisible={setModalVisible} id={item.id} address={item.address} name={item.name} phone={item.phone} selected={item.selected} setUpdate={setUpdate} update={update} />
+                <AddAddressComponent setModalVisible={setModalVisible} addressId={item.id} address={item.address} name={item.name} phone={item.phone} selected={item.selected} setUpdate={setUpdate} update={update} />
             </Modal>
         </Pressable>
     );

@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Text, Pressable, Image, View, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import firestore from '@react-native-firebase/firestore';
+import React, { useState } from 'react';
+import firestore, { getCountFromServer } from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 
@@ -9,67 +9,36 @@ import { HEIGHT, WIDTH } from '../constants/dimension';
 import { heartFilledIcon, heartIcon, plusIcon, starIcon } from '../assets/icons';
 import { colors } from '../constants/colors';
 import { coffeeProps } from '../constants/types/commonTypes';
+import { addCartCount } from '../redux/slice/cartCountSlice';
+import { addFavorite, deleteFavorite } from '../redux/slice/favoriteSlice';
 
 
 const CoffeeCard: React.FC<coffeeProps> = (props) => {
     const { item, userId, setLoading } = props;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [isSelected, setIsSelected] = useState<boolean>(false);
+    const [isSelected, setIsSelected] = useState<boolean>(item.selected);
 
-    useEffect(() => {
-        checkFavorite();
-    }, [userId, item.id]);
+    const addFavourites = () => {
 
-    const checkFavorite = async () => {
-        try {
-            const favoriteRef = await firestore()
-                .collection('favorite')
-                .where('userId', '==', userId)
-                .where('itemId', '==', item.id)
-                .get();
+        dispatch(addFavorite({
+            id: item.id,
+            product: item.product.product,
+            coffeeType: item.product.coffeeType,
+            description: item.product.description,
+            types: item.product.types,
+            price: item.product.price,
+            image: item.product.image,
+            selected: true,
+        }));
 
-            if (!favoriteRef.empty) {
-
-                setIsSelected(true);
-            } else {
-                setIsSelected(false);
-            }
-        } catch (error) {
-            console.log('Error while checking favorites:', error);
-        }
+        setIsSelected(true);
     };
 
-    const addFavourites = async () => {
-        try {
-
-            const favoriteRef = await firestore()
-                .collection('favorite')
-                .where('userId', '==', userId)
-                .where('itemId', '==', item.id)
-                .get();
-
-            if (favoriteRef.empty) {
-
-                await firestore().collection('favorite').add({
-                    userId: userId,
-                    itemId: item.id,
-                    product: item.product,
-                    isSelected: true,
-                });
-                Alert.alert('Successfully added to favorites');
-            } else {
-
-                Alert.alert('Already in favorites');
-            }
-
-
-            checkFavorite();
-        } catch (error) {
-            console.log(error, 'Error while adding to favorites');
-        }
+    const removeFavorite = async () => {
+        dispatch(deleteFavorite(item.id));
+        setIsSelected(false);
     };
-
 
 
     const handleAddCart = async () => {
@@ -135,7 +104,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
             });
         }}>
             {isSelected ?
-                <Pressable style={{ position: 'absolute', top: HEIGHT * 0.02, left: WIDTH * 0.05, zIndex: 1, backgroundColor: colors.lightGray, width: WIDTH * 0.07, height: WIDTH * 0.07, borderRadius: '50%', alignItems: 'center', justifyContent: 'center' }} onPress={addFavourites}>
+                <Pressable style={{ position: 'absolute', top: HEIGHT * 0.02, left: WIDTH * 0.05, zIndex: 1, backgroundColor: colors.lightGray, width: WIDTH * 0.07, height: WIDTH * 0.07, borderRadius: '50%', alignItems: 'center', justifyContent: 'center' }} onPress={removeFavorite}>
                     <Image source={heartFilledIcon} style={{ width: WIDTH * 0.05, height: WIDTH * 0.05 }} />
                 </Pressable>
                 :

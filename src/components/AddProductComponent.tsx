@@ -27,6 +27,7 @@ const AddProductComponent: React.FC<productProp> = (props) => {
 
     const handleTextChange = (text: string, key: string) => {
         setFormData((prev) => ({ ...prev, [key]: text }));
+        setErrors((prev) => ({ ...prev, [key]: '' }));
     };
 
     const handleSubmit = async () => {

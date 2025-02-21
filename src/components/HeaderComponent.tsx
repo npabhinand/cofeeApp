@@ -11,11 +11,12 @@ const HeaderComponent: React.FC<headerProps> = (props) => {
     const { header } = props;
     const navigation = useNavigation();
     return (
-        <View style={{ flexDirection: 'row', marginVertical: HEIGHT * 0.01, paddingHorizontal: WIDTH * 0.05 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: HEIGHT * 0.01, paddingHorizontal: WIDTH * 0.05, justifyContent: 'space-between' }}>
             <Pressable onPress={() => navigation.goBack()}>
                 <Image source={backIcon} />
             </Pressable>
-            <Text style={{ fontWeight: '600', fontSize: 20, marginLeft: WIDTH * 0.3 }}>{header}</Text>
+            <Text style={{ fontWeight: '600', fontSize: 20 }}>{header}</Text>
+            <View />
         </View>
     );
 };

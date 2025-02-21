@@ -18,58 +18,66 @@ const AdminHomeScreen = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [counts, setCounts] = useState<{}>([]);
 
-    useEffect(() => {
-        fetchCounts();
-    }, []);
+    // useEffect(() => {
+    //     fetchCounts();
+    // }, []);
 
-    const fetchCounts = async () => {
-        try {
-            setLoading(true);
+    // const fetchProductCounts = async () => {
+    //     try {
+    //         const productSnapshot = await getCountFromServer(firestore().collection('products'));
+    //         const productCount = productSnapshot.data().count;
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // }
+    // const fetchOrderCounts = async () => {
+    //     try {
+    //         const orderSnapshot = await getCountFromServer(firestore().collection('orders'));
+    //         const orderCount = orderSnapshot.data().count;
 
-            const productSnapshot = await getCountFromServer(firestore().collection('products'));
-            const productCount = productSnapshot.data().count;
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // }
+    // const fetchUserCounts = async () => {
+    //     try {
+    //         const userSnapshot = await getCountFromServer(firestore().collection('user').where('userType', '==', 'user'));
+    //         const userCount = userSnapshot.data().count;
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // }
+    // const fetchStockCounts = async () => {
+    //     try {
+    //         const coffees = [];
+    //         const coffeeRef = await firestore().collection('items').where('stock', '>', 0).get();
+    //         coffeeRef.forEach(doc => coffees.push({ ...doc.data(), id: doc.id }));
+    //         const stockCount = coffees.reduce((count, item) => count += item.stock, 0);
 
-            const orderSnapshot = await getCountFromServer(firestore().collection('orders'));
-            const orderCount = orderSnapshot.data().count;
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // }
+    // const fetchTotalProfits = async () => {
+    //     try {
+    //         const orders: [] = [];
+    //         const orderRef = await firestore().collection('orders').get();
+    //         orderRef.forEach(doc => orders.push({ ...doc.data(), id: doc.id }));
 
-            const userSnapshot = await getCountFromServer(firestore().collection('user').where('userType', '==', 'user'));
-            const userCount = userSnapshot.data().count;
+    //         const orderWithProfit = orders.map(order => {
+    //             let orderProfit = 0;
+    //             order.products.forEach(product => {
+    //                 orderProfit += parseInt(product.price, 10) * product.profit / 100;
+    //             });
+    //             console.log(orderProfit, '>>>>>');
+    //             return { ...order, profit: orderProfit.toFixed(2) };
 
-            const coffees = [];
-            const coffeeRef = await firestore().collection('products').where('stock', '>', 0).get();
-            coffeeRef.forEach(doc => coffees.push({ ...doc.data(), id: doc.id }));
-            const stockCount = coffees.reduce((count, item) => count += item.stock, 0);
-
-
-            const orders: [] = [];
-            const orderRef = await firestore().collection('orders').get();
-            orderRef.forEach(doc => orders.push({ ...doc.data(), id: doc.id }));
-
-            const orderWithProfit = orders.map(order => {
-                let orderProfit = 0;
-                order.products.forEach(product => {
-                    orderProfit += parseInt(product.price, 10) * product.profit / 100;
-                });
-                console.log(orderProfit, '>>>>>');
-                return { ...order, profit: orderProfit.toFixed(2) };
-
-            });
-            const totalProfit = orderWithProfit.reduce((profits, curr) => profits += parseFloat(curr.profit), 0);
-
-            setCounts({
-                productCount,
-                userCount,
-                orderCount,
-                totalProfit,
-                stockCount,
-            });
-
-            setLoading(false);
-        } catch (error) {
-            console.log('Failed while fetching counts:', error);
-            setLoading(false);
-        }
-    };
+    //         });
+    //         const totalProfit = orderWithProfit.reduce((profits, curr) => profits += parseFloat(curr.profit), 0);
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // };
 
     // const counters = useSelector(selectedCounts);
     const cardArray = [
@@ -78,6 +86,8 @@ const AdminHomeScreen = () => {
         { id: 3, title: 'Orders', count: counts.orderCount, navigate: 'OrderListScreen' },
         { id: 4, title: 'Stock', count: counts.stockCount, navigate: 'StockListScreen' },
         { id: 5, title: 'Profit', count: `₹${counts.totalProfit}`, navigate: 'ProfitListScreen' },
+        { id: 6, title: 'Shops', count: 0, navigate: 'ShopListScreen' },
+        { id: 7, title: 'Table Settings', count: 0, navigate: 'TableSettingScreen' },
     ];
 
 

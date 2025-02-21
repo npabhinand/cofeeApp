@@ -21,6 +21,9 @@ import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import FavoriteScreen from '../screens/user/FavoriteScreen';
 import StockProductScreen from '../screens/Admin/StockProductScreen';
+import ShopListScreen from '../screens/Admin/ShopListScreen';
+import BookTableScreen from '../screens/user/BookTableScreen';
+import TableSettingScreen from '../screens/Admin/TableSettingScreen';
 
 
 const AppNavigator = () => {
@@ -47,6 +50,9 @@ const AppNavigator = () => {
             <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
             <Stack.Screen name="FavoriteScreen" component={FavoriteScreen} />
             <Stack.Screen name="StockProductScreen" component={StockProductScreen} />
+            <Stack.Screen name="ShopListScreen" component={ShopListScreen} />
+            <Stack.Screen name="BookTableScreen" component={BookTableScreen} />
+            <Stack.Screen name="TableSettingScreen" component={TableSettingScreen} />
         </Stack.Navigator>
     );
 };

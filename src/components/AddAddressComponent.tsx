@@ -14,11 +14,12 @@ import { selectedUserData } from '../redux/slice/userDataSlice';
 
 const AddAddressComponent: React.FC<addressProps> = (props) => {
 
-    const { id, name, address, phone, setUpdate, update, setModalVisible } = props;
+    const { addressId, name, address, phone, setUpdate, update, setModalVisible } = props;
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState<addressProps>({ name: name || '', phone: phone || null, address: address || '' });
     const userData = useSelector(selectedUserData);
-    const { email } = userData[0];
+    const { id } = userData[0];
+
     const AddOrUpdateAddress = async () => {
         let newErrors = {};
         Object.keys(formData).forEach((key) => {
@@ -30,9 +31,8 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
             setErrors(newErrors);
             // Alert.alert('Failed to update address');
             return;
-        };
-
-        if (id) {
+        }
+        if (addressId) {
             try {
                 await firestore().collection('address').doc(id).update({
                     name: formData.name,
@@ -52,7 +52,7 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
                     phone: formData.phone,
                     address: formData.address,
                     selected: false,
-                    userId: email,
+                    userId: id,
                 });
                 Alert.alert('Address Added Successfully');
             } catch (error) {
@@ -74,11 +74,11 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.whiteColor, paddingHorizontal: WIDTH * 0.05 }}>
-            <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.1 }}>
+            <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.05 }}>
                 <Pressable onPress={() => setModalVisible(false)}>
                     <Image source={backIcon} />
                 </Pressable>
-                <Text style={{ fontWeight: '600', fontSize: HEIGHT * 0.02, marginLeft: WIDTH * 0.2 }}>Add New Address</Text>
+                <Text style={{ fontWeight: '600', fontSize: 18, marginLeft: WIDTH * 0.25 }}>Add New Address</Text>
             </View>
             <View style={{ marginTop: HEIGHT * 0.04, gap: HEIGHT * 0.01 }}>
                 {Object.keys(formData).map((key) => (

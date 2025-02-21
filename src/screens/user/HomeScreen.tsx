@@ -4,32 +4,36 @@ import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { HEIGHT, WIDTH } from '../../constants/dimension';
-import { bottomArrowIcon, filterIcon, logout, orderIcon, profile, profileIcon, searchIcon } from '../../assets/icons';
+import { bottomArrowIcon, documentIcon, filterIcon, logout, orderIcon, profile, profileIcon, searchIcon } from '../../assets/icons';
 import PromoComponent from '../../components/PromoComponent';
 import { filterArray } from '../../constants/data/dataArray';
 import FilterButton from '../../components/FilterButton';
 import CoffeeCard from '../../components/CoffeeCard';
 import { colors } from '../../constants/colors';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
+import { selectedFavorites } from '../../redux/slice/favoriteSlice';
 
 
 const HomeScreen = () => {
+    const navigation = useNavigation();
+    const isFocused = useIsFocused();
+    const userData = useSelector(selectedUserData);
+    const favoriteData = useSelector(selectedFavorites);
+
+    const { id } = userData[0];
+
     const [isSelected, setIsSelected] = useState<number>();
     const [coffeeArray, setCoffeeArray] = useState<[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(false);
-    const userData = useSelector(selectedUserData);
-    const { email } = userData[0];
-    const navigation = useNavigation();
-
 
     useEffect(() => {
         fetchCoffee();
-    }, []);
+    }, [isFocused]);
 
     const fetchCoffee = async () => {
         const coffees: any = [];
@@ -37,12 +41,18 @@ const HomeScreen = () => {
             setLoading(true);
             const coffeeRef = await firestore().collection('items').where('stock', '>', 0).get();
             coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
-            setCoffeeArray(coffees);
+            const updatedCoffees = coffees.map((item) => ({
+                ...item,
+                selected: favoriteData.some((favorite) => item.id === favorite.id),
+            }));
+
+            setCoffeeArray(updatedCoffees);
             setLoading(false);
-        } catch {
-            console.log('error while fetching coffee items');
+        } catch (error) {
+            console.log('error while fetching coffee items:', error);
         }
     };
+
     const handleLogoutAlert = () =>
         Alert.alert('Are You want to Logout', '', [
             {
@@ -51,13 +61,12 @@ const HomeScreen = () => {
                 style: 'cancel',
             },
             {
-                text: 'Sign Out',
-                // onPress: () => dispatch(deleteContact(item.id))
-                onPress: () => handleSignOut(),
+                text: 'Logout',
+                onPress: () => handleLogout(),
 
             },
         ]);
-    const handleSignOut = async () => {
+    const handleLogout = async () => {
         try {
             await AsyncStorage.removeItem('userD');
             navigation.reset({
@@ -69,11 +78,12 @@ const HomeScreen = () => {
         }
 
     };
-    // handleDeleteAlert
+
     const profileArray = [
         { id: 1, name: 'Profile', icon: profile, handleClick: () => { navigation.navigate('ProfileScreen'); setIsVisible(!isVisible); } },
         { id: 2, name: 'Sign Out', icon: logout, handleClick: () => { handleLogoutAlert(); setIsVisible(!isVisible); } },
         { id: 3, name: 'Orders', icon: orderIcon, handleClick: () => { navigation.navigate('UserOrderListScreen'); setIsVisible(!isVisible); } },
+        { id: 4, name: 'Book', icon: documentIcon, handleClick: () => { navigation.navigate('BookTableScreen'); setIsVisible(!isVisible); } },
     ];
     return (
         <View style={{ flex: 1 }}>
@@ -152,7 +162,7 @@ const HomeScreen = () => {
                         scrollEnabled={false}
                         contentContainerStyle={{ marginBottom: HEIGHT * 0.13, paddingHorizontal: WIDTH * 0.05, justifyContent: 'space-between' }}
                         renderItem={({ item }) => (
-                            <CoffeeCard item={item} userId={email} setLoading={setLoading} />
+                            <CoffeeCard item={item} userId={id} setLoading={setLoading} />
                         )} />
                 </ScrollView>
             }

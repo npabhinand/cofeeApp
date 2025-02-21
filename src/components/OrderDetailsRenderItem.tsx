@@ -2,18 +2,17 @@
 import { View, Text, Pressable, Modal, Image } from 'react-native';
 import React, { useState } from 'react';
 import moment from 'moment';
+
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
 import OrderDetailsComponent from './OrderDetailsComponent';
 import { rightArrowIcon } from '../assets/icons';
 import { addressProps, orderComponentProps } from '../constants/types/commonTypes';
-import { useSelector } from 'react-redux';
-import { selectedUserData } from '../redux/slice/userDataSlice';
+
 
 const OrderDetailsRenderItem: React.FC<orderComponentProps> = (props) => {
     const { item, setLoading, showItem } = props;
-    const userData = useSelector(selectedUserData);
-    const { userType } = userData[0];
+
     const [isVisible, setIsVisible] = useState(false);
 
     const date = moment(item.orderTime).format('ddd, MM Do YY, h:mm:ss a');
@@ -25,14 +24,14 @@ const OrderDetailsRenderItem: React.FC<orderComponentProps> = (props) => {
     const orderArray = [
         { name: 'Order Id', value: item.id, icon: <Pressable onPress={handleModal}><Image source={rightArrowIcon} tintColor={colors.brownColor} /></Pressable> },
         { name: 'Order Time', value: date },
-        { name: 'Order Price', value: `₹${item.TotalPrice}` },
+        { name: 'Order Price', value: `₹${item.totalPrice}` },
         { name: 'Profit', value: `₹${item.profit}` },
     ];
 
     const orderArrayWithoutProfit = [
         { name: 'Order Id', value: item.id, icon: <Pressable onPress={handleModal}><Image source={rightArrowIcon} tintColor={colors.brownColor} /></Pressable> },
         { name: 'Order Time', value: date },
-        { name: 'Order Price', value: `₹${item.TotalPrice}` },
+        { name: 'Order Price', value: `₹${item.totalPrice}` },
         { name: 'Status', value: item.status },
     ];
 
@@ -62,7 +61,7 @@ const OrderDetailsRenderItem: React.FC<orderComponentProps> = (props) => {
 
                     <Modal visible={isVisible} animationType="slide" transparent={true}>
                         <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
-                            <OrderDetailsComponent item={item} handleModal={handleModal} marginTop={HEIGHT * 0.3} userType={userType} setLoading={setLoading} />
+                            <OrderDetailsComponent item={item} handleModal={handleModal} marginTop={HEIGHT * 0.3} setLoading={setLoading} />
                         </View>
                     </Modal>
                 </Pressable>

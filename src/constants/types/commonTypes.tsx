@@ -1,6 +1,7 @@
 
 
 interface userDataItem {
+    id: string;
     email: string;
     userType: string,
     phone: number,
@@ -17,10 +18,10 @@ interface addressItems {
     selected: boolean;
 }
 interface addressProps {
-    setModalVisible?: React.Dispatch<React.SetStateAction<boolean>>;
-    setUpdate?: React.Dispatch<React.SetStateAction<boolean>>;
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
     update?: boolean;
-    id?: string;
+    addressId?: string;
     name?: string;
     phone?: number;
     address?: string;
@@ -54,7 +55,10 @@ interface productProp {
     };
 }
 interface coffeeProps {
+
     item: {
+        id: number;
+        selected: boolean;
         product:
         {
             id: number;
@@ -159,6 +163,17 @@ interface CartItem {
     image?: string;
     quantity: number;
 }
+interface FavoriteItem {
+    id: number;
+    product: string;
+    coffeeType: string;
+    description: string;
+    types: any,
+    price: number;
+    image: string;
+    selected: boolean;
+}
+
 interface products {
     product: {
         name: string;
@@ -226,7 +241,7 @@ interface orderComponentProps {
     item: {
         id: string;
         orderTime: number;
-        TotalPrice: number;
+        totalPrice: number;
         products: [CartItem];
         profit: number;
         status: string;
@@ -237,7 +252,7 @@ interface orderComponentProps {
             phone: string;
             userId: string;
 
-        }[]
+        }
     }
     onNavigation?: () => void;
     marginTop?: number;
@@ -260,4 +275,42 @@ interface buttonProp {
     text1: string;
     text2: string;
 }
-export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products, ordersScreenProps, buttonProp };
+
+interface shopItem {
+    id: string;
+    image: string;
+    name: string;
+    place: string;
+    address: string;
+    time: string;
+}
+interface shopProps {
+    // setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+    // isVisible: boolean;
+    item: shopItem
+    modalShow: string;
+}
+interface addShopProps {
+    item?: shopItem;
+    setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+    isVisible: boolean;
+}
+
+interface carts {
+    itemId: string;
+    coffeeType: string;
+    description: string;
+    image?: string;
+    name?: string;
+    price: number;
+    quantity: number;
+    types: {};
+}
+
+interface bookButtonProps {
+    icon: number;
+    onPress: () => void;
+}
+export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products, ordersScreenProps, buttonProp, FavoriteItem, shopProps, addShopProps, carts, bookButtonProps };

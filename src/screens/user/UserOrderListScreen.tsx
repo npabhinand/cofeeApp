@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const UserOrderListScreen = () => {
     const userData = useSelector(selectedUserData);
-    const { email } = userData[0];
+    const { id } = userData[0];
     const navigation = useNavigation();
     const [currentOrderList, setCurrentOrderList] = useState<[]>([]);
     const [pastOrderList, setPastOrderList] = useState<[]>([]);
@@ -34,7 +34,7 @@ const UserOrderListScreen = () => {
                 setLoading(true);
             }, 150);
             await firestore().collection('orders')
-                .where('userId', '==', email)
+                .where('userId', '==', id)
                 .where('status', '==', 'processing').get()
                 .then(querySnapShot => {
                     querySnapShot.forEach(doc => {
@@ -52,7 +52,7 @@ const UserOrderListScreen = () => {
         const orders: any = [];
         try {
             await firestore().collection('orders')
-                .where('userId', '==', email)
+                .where('userId', '==', id)
                 .where('status', 'in', ['delivered', 'cancelled']).get()
                 .then(querySnapShot => {
                     querySnapShot.forEach(doc => {

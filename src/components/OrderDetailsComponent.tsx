@@ -12,19 +12,20 @@ import HandleOrderButtons from './HandleOrderButtons';
 
 
 const OrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
-    const { handleModal, marginTop, item, userType, setLoading } = props;
-    const { name, userId, address, phone } = item.address[0];
+    const { handleModal, marginTop, item, setLoading } = props;
+    const { name, userId, address, phone } = item.address;
 
     const date = moment(item.orderTime).format('ddd,MM Do YY, h:mm:ss a');
 
     const orderDetails = [
         { label: 'Order Id', value: item.id },
-        { label: 'Order Price', value: `$${item.TotalPrice} ` },
+        { label: 'Order Price', value: `$${item.totalPrice} ` },
         { label: 'Order Time', value: date },
         { label: 'Status', value: item.status },
     ];
     const addressDetails = [
         { label: 'Name', value: name },
+        { label: 'orderType', value: item.orderType },
         { label: 'UserId', value: userId },
         { label: 'Address', value: address },
         { label: 'Phone', value: phone },
@@ -116,8 +117,8 @@ const OrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
                 {orderDetails.map((detail, index) => (
                     <OrderDetails key={index} detail={detail} />
                 ))}
-                {userType === 'admin' && item.status === 'processing' ?
-                    <HandleOrderButtons onPress1={handleCancelAlert} onPress2={handleAcceptAlert} text1={'Cancel Order'} text2={'Accept Order'} /> : null}
+
+                <HandleOrderButtons onPress1={handleCancelAlert} onPress2={handleAcceptAlert} text1={'Cancel Order'} text2={'Accept Order'} />
             </View>
         </ScrollView>
 
