@@ -60,7 +60,12 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 });
             // setCartItems(carts);
 
-            const existingProduct = carts.find(items => items.itemId === item.itemId);
+            // const existingProduct = carts.find(cartItem => cartItem.itemId === item.itemId && cartItem.orderType === item.orderType);
+            const existingProduct = carts.find(cartItem =>
+                cartItem.itemId === item.itemId &&
+                cartItem.orderType.trim() === orderType
+            );
+            console.log(existingProduct, 'prodict')
             if (existingProduct) {
                 await firestore()
                     .collection('cartItem')

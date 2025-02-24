@@ -15,6 +15,8 @@ import OrderComponent from '../../components/OrderComponent';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import { addTotalPrice, selectedPrice } from '../../redux/slice/priceTotalSlice';
 import SelectedAddressComponent from '../../components/SelectedAddressComponent';
+import { addOrderType } from '../../redux/slice/orderTypeSlice';
+import PaymentDetails from '../../components/PaymentDetails';
 
 
 const OrderScreen = () => {
@@ -40,9 +42,16 @@ const OrderScreen = () => {
 
     useEffect(() => {
         onFetchData();
-        onFetchCartItem();
+        if (isSelected === 'Delivery') {
+            onFetchDeliveryCartItem();
+        } else if (isSelected === 'Dining') {
+            onFetchDiningCartItem();
+        } else {
+            onFetchPickUPCartItem();
+        }
+
         onFetchShopData();
-    }, [isFocused]);
+    }, [isFocused, isSelected]);
 
     const onFetchData = async () => {
         setLoading(true);
@@ -86,12 +95,57 @@ const OrderScreen = () => {
     };
 
 
-    const onFetchCartItem = async () => {
+    const onFetchDeliveryCartItem = async () => {
         try {
             const carts: any = [];
             let total: number = 0;
             await firestore()
                 .collection('cartItem').where('userId', '==', id)
+                .where('orderType', '==', 'Delivery')
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        carts.push({ ...doc.data(), id: doc.id });
+                        total += parseInt(doc.data().price * doc.data().quantity, 10);
+                    });
+                });
+            setPrices(total);
+            setCartItems(carts);
+            dispatch(addTotalPrice(total));
+
+        } catch (error) {
+            console.log('Error occurred while fetching cart data', error);
+        }
+    };
+    const onFetchPickUPCartItem = async () => {
+        try {
+            const carts: any = [];
+            let total: number = 0;
+            await firestore()
+                .collection('cartItem').where('userId', '==', id)
+                .where('orderType', '==', 'Pick Up')
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        carts.push({ ...doc.data(), id: doc.id });
+                        total += parseInt(doc.data().price * doc.data().quantity, 10);
+                    });
+                });
+            setPrices(total);
+            setCartItems(carts);
+            dispatch(addTotalPrice(total));
+
+        } catch (error) {
+            console.log('Error occurred while fetching cart data', error);
+        }
+    };
+    const onFetchDiningCartItem = async () => {
+        try {
+            const carts: any = [];
+            let total: number = 0;
+            await firestore()
+                .collection('cartItem').where('userId', '==', id)
+                .where('orderType', '==', 'Dining')
                 .get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(doc => {
@@ -161,7 +215,6 @@ const OrderScreen = () => {
                         return;
                     }
                 }
-
             }
             try {
                 await firestore().collection('orders').add({
@@ -205,7 +258,10 @@ const OrderScreen = () => {
         ]);
     };
 
-
+    const changeOrderTask = (value: string) => {
+        dispatch(addOrderType(value));
+        setIsSelected(value);
+    };
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>
             {loading ? <>
@@ -229,7 +285,7 @@ const OrderScreen = () => {
                         {orderType.map((type, index) => (
                             <Pressable key={index} style={[{ width: WIDTH * 0.29, height: HEIGHT * 0.04, justifyContent: 'center', alignItems: 'center', borderRadius: 10 },
                             isSelected === type.name && { backgroundColor: colors.brownColor }]}
-                                onPress={() => setIsSelected(type.name)}
+                                onPress={() => changeOrderTask(type.name)}
                             >
                                 <Text style={[{ fontSize: HEIGHT * 0.02 }, isSelected === type.name && { color: colors.commonWhite, fontWeight: '500' }]}>{type.name}</Text>
                             </Pressable>
@@ -282,7 +338,7 @@ const OrderScreen = () => {
                                     // maxWidth={WIDTH * 0.1}
                                     labelField="place"
                                     valueField="value"
-                                    placeholder={!isFocus || selectedPlace === '' ? selectedPlace : 'Select pick up'}
+                                    placeholder={!isFocus || selectedPlace === null ? selectedPlace : 'Select pick up'}
                                     value={selectedPlace}
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
@@ -341,36 +397,15 @@ const OrderScreen = () => {
                                 </View>
                             )}
                             onRowDidOpen={(rowKey) => onRowDidOpen(rowKey)}
-                            // leftOpenValue={75}
                             rightOpenValue={-300}
                         />
 
-
-
-                        <View >
-                            <View style={{ flexDirection: 'row', alignItems: 'center', height: HEIGHT * 0.07, width: WIDTH * 0.88, borderWidth: 1, borderRadius: WIDTH * 0.04, gap: WIDTH * 0.05, paddingHorizontal: WIDTH * 0.07, borderColor: '#F9F2ED', backgroundColor: colors.commonWhite }}>
-                                <Image source={discountIcon} />
-                                <Text>1 Discount is Applies</Text>
-                                <Image source={rightArrowIcon} style={{ position: 'absolute', right: WIDTH * 0.05 }} />
+                        {cartItems.length === 0 ?
+                            <View style={{ flex: 1 }}>
+                                <Text style={{ textAlign: 'center', color: colors.brownColor, fontSize: 16, fontWeight: '600', marginTop: HEIGHT * 0.05 }}>No Items in The Cart</Text>
                             </View>
-
-                            <Text style={{ marginVertical: HEIGHT * 0.02, fontWeight: '600', fontSize: HEIGHT * 0.02 }}>Payment Summary</Text>
-
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <View style={{ gap: HEIGHT * 0.01 }}>
-                                    <Text>Price</Text>
-                                    <Text>Delivery Fee</Text>
-                                </View>
-                                <View style={{ gap: HEIGHT * 0.01 }}>
-                                    <Text style={{ fontWeight: '600', textAlign: 'right' }}>${totalPrice}</Text>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ textDecorationLine: 'line-through' }}>$2.0 </Text>
-                                        <Text style={{ fontWeight: '600' }}>$1.0</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-
+                            : <PaymentDetails totalPrice={totalPrice} />
+                        }
                     </View>
                 </ScrollView>
 

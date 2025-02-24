@@ -41,7 +41,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                 });
             // setCartItems(carts);
 
-            const existingProduct = carts.find(item => item.itemId === section.item.itemId);
+            const existingProduct = carts.find(item => item.itemId === section.item.itemId && item.orderType.trim() === orderType);
             if (existingProduct) {
                 await firestore()
                     .collection('cartItem')

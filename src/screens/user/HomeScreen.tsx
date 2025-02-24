@@ -100,11 +100,13 @@ const HomeScreen = () => {
                             <Text style={{ color: colors.grayColor, marginTop: HEIGHT * 0.08 }}>Location</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <Text style={{ color: colors.commonWhite }}>Bilzen, Tanjungbalai </Text>
+
                                 <Image source={bottomArrowIcon} style={{ tintColor: colors.commonWhite, marginRight: WIDTH * 0.3 }} />
                                 <Pressable onPress={() => setIsVisible(!isVisible)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Image source={profileIcon} style={{ width: WIDTH * 0.1, height: WIDTH * 0.1, tintColor: colors.commonWhite }} />
                                     <Image source={bottomArrowIcon} style={{ marginTop: HEIGHT * 0.01, tintColor: colors.commonWhite }} />
                                 </Pressable>
+
                             </View>
 
                             <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.03, justifyContent: 'space-between' }}>
@@ -117,7 +119,6 @@ const HomeScreen = () => {
                                 </View>
                                 <Pressable style={{ backgroundColor: colors.brownColor, alignItems: 'center', justifyContent: 'center', width: HEIGHT * 0.06, borderRadius: HEIGHT * 0.015 }}>
                                     <Image source={filterIcon} style={{ tintColor: colors.commonWhite }} />
-
                                 </Pressable>
 
                             </View>
@@ -128,6 +129,7 @@ const HomeScreen = () => {
                     <Modal visible={isVisible} animationType="fade" transparent={true} onRequestClose={() => setIsVisible(!isVisible)}>
                         <Pressable style={{ width: WIDTH * 1.0, height: HEIGHT * 1.0 }} onPress={() => setIsVisible(!isVisible)}>
                             <View style={{ width: WIDTH * 0.3, height: 100, alignSelf: 'flex-end', marginTop: HEIGHT * 0.14, marginRight: WIDTH * 0.02, backgroundColor: colors.commonWhite, borderRadius: 10 }}>
+
                                 {profileArray.map((item, index) => (
                                     <Pressable key={index} style={{ flexDirection: 'row', marginTop: HEIGHT * 0.01, alignItems: 'center', borderBottomWidth: 0.3, borderColor: colors.brownColor, marginHorizontal: WIDTH * 0.02 }} onPress={item.handleClick}>
                                         <Image source={item.icon} style={{ width: WIDTH * 0.06, height: WIDTH * 0.06, marginRight: WIDTH * 0.01, tintColor: colors.brownColor }} />
