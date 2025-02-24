@@ -5,6 +5,7 @@ import contactSlice from './slice/contactSlice';
 import cartCountSlice from './slice/cartCountSlice';
 import userSlice from './slice/userDataSlice';
 import priceTotalSlice from './slice/priceTotalSlice';
+import orderTypeSlice from './slice/orderTypeSlice';
 
 const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
         cartCount: cartCountSlice,
         user: userSlice,
         totalPrice: priceTotalSlice,
+        orderType: orderTypeSlice,
         // counts: countSlice,
     },
 });

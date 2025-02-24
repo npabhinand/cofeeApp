@@ -72,6 +72,7 @@ interface coffeeProps {
             profit: string;
         }
     }
+    orderType: string;
     userId: string;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -172,6 +173,7 @@ interface FavoriteItem {
     price: number;
     image: string;
     selected: boolean;
+    orderType: string;
 }
 
 interface products {
@@ -313,4 +315,8 @@ interface bookButtonProps {
     icon: number;
     onPress: () => void;
 }
-export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products, ordersScreenProps, buttonProp, FavoriteItem, shopProps, addShopProps, carts, bookButtonProps };
+
+interface OrderTypeState {
+    orderType: string;
+}
+export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products, ordersScreenProps, buttonProp, FavoriteItem, shopProps, addShopProps, carts, bookButtonProps, OrderTypeState };

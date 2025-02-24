@@ -7,7 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Dropdown } from 'react-native-element-dropdown';
 
-import { backIcon, bottomArrowIcon, deleteIcon, discountIcon, plusIcon, rightArrowIcon, walletIcon } from '../../assets/icons';
+import { backIcon, bottomArrowIcon, deleteIcon, discountIcon, plusIcon, rightArrowIcon, table4, table5, table6, table8, walletIcon } from '../../assets/icons';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { orderType } from '../../constants/data/dataArray';
 import { colors } from '../../constants/colors';
@@ -27,12 +27,16 @@ const OrderScreen = () => {
 
     const [isSelected, setIsSelected] = useState<string>('Delivery');
     const [selectedContact, setSelectedContact] = useState<[]>([]);
+    const [selectedShop, setSelectedShop] = useState(null);
     const [cartItems, setCartItems] = useState<{}[]>([]);
     const [shopData, setShopData] = useState();
     const [prices, setPrices] = useState(totalPrice);
     const [loading, setLoading] = useState<boolean>(false);
     const [selectedPlace, setSelectedPlace] = useState(null);
+    const [selected, setSelected] = useState<[]>([]);
     const [isFocus, setIsFocus] = useState(false);
+    const [focus, setFocus] = useState(false);
+    const [tables, setTables] = useState([] || null);
 
     useEffect(() => {
         onFetchData();
@@ -126,7 +130,15 @@ const OrderScreen = () => {
             });
 
     };
-
+    const handleTablePress = (tableId: string) => {
+        setSelected(prevState => {
+            if (prevState.includes(tableId)) {
+                return prevState.filter((table) => table !== tableId);
+            } else {
+                return [...prevState, tableId];
+            }
+        });
+    };
 
     const HandleOrder = async () => {
         setLoading(true);
@@ -199,139 +211,184 @@ const OrderScreen = () => {
             {loading ? <>
                 <ActivityIndicator size={'large'} style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }} />
             </> : <>
-                {cartItems.length === 0 ?
+                {/* {cartItems.length === 0 ?
                     <View style={{ flex: 1, justifyContent: 'center' }}>
                         <Text style={{ textAlign: 'center', color: colors.brownColor, fontSize: 16, fontWeight: '600' }}>No Items in The Cart</Text>
                     </View>
-                    : <View>
-                        <ScrollView style={{ marginBottom: HEIGHT * 0.27, paddingHorizontal: WIDTH * 0.05 }} showsVerticalScrollIndicator={false}>
-                            <View style={{ flexDirection: 'row', marginVertical: HEIGHT * 0.01 }}>
-                                <Pressable onPress={() => navigation.goBack()}>
-                                    <Image source={backIcon} />
-                                </Pressable>
-                                <Text style={{ fontWeight: '600', fontSize: HEIGHT * 0.02, marginLeft: WIDTH * 0.3 }}>Order</Text>
-                            </View>
+                    : <View> */}
+                <ScrollView style={{ marginBottom: HEIGHT * 0.27, paddingHorizontal: WIDTH * 0.05 }} showsVerticalScrollIndicator={false}>
+                    <View style={{ flexDirection: 'row', marginVertical: HEIGHT * 0.01 }}>
+                        <Pressable onPress={() => navigation.goBack()}>
+                            <Image source={backIcon} />
+                        </Pressable>
+                        <Text style={{ fontWeight: '600', fontSize: HEIGHT * 0.02, marginLeft: WIDTH * 0.3 }}>Order</Text>
+                    </View>
 
-                            {/* orderType details */}
-                            <View style={{ width: WIDTH * 0.9, backgroundColor: `${colors.grayColor}10`, height: HEIGHT * 0.05, alignSelf: 'center', marginTop: HEIGHT * 0.04, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                {orderType.map((type, index) => (
-                                    <Pressable key={index} style={[{ width: WIDTH * 0.45, height: HEIGHT * 0.04, justifyContent: 'center', alignItems: 'center', borderRadius: 10 },
-                                    isSelected === type.name && { backgroundColor: colors.brownColor }]}
-                                        onPress={() => setIsSelected(type.name)}
-                                    >
-                                        <Text style={[{ fontSize: HEIGHT * 0.02 }, isSelected === type.name && { color: colors.commonWhite, fontWeight: '500' }]}>{type.name}</Text>
-                                    </Pressable>
-                                ))}
-                            </View>
-                            {/*  */}
+                    {/* orderType details */}
+                    <View style={{ width: WIDTH * 0.9, backgroundColor: `${colors.grayColor}10`, height: HEIGHT * 0.05, alignSelf: 'center', marginTop: HEIGHT * 0.04, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        {orderType.map((type, index) => (
+                            <Pressable key={index} style={[{ width: WIDTH * 0.29, height: HEIGHT * 0.04, justifyContent: 'center', alignItems: 'center', borderRadius: 10 },
+                            isSelected === type.name && { backgroundColor: colors.brownColor }]}
+                                onPress={() => setIsSelected(type.name)}
+                            >
+                                <Text style={[{ fontSize: HEIGHT * 0.02 }, isSelected === type.name && { color: colors.commonWhite, fontWeight: '500' }]}>{type.name}</Text>
+                            </Pressable>
+                        ))}
+                    </View>
+                    {/*  */}
+                    {/* item.capacity === '4' ? table4 : item.capacity === '5' ? table5 : item.capacity === '6' ?  */}
+                    <View style={{ marginTop: HEIGHT * 0.04, paddingBottom: HEIGHT * 0.03 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>{isSelected === 'Delivery' ? 'Delivery Address' : isSelected === 'Dining' ? 'select shop' : 'Pick Up Address'}</Text>
 
-                            <View style={{ marginTop: HEIGHT * 0.04, paddingBottom: HEIGHT * 0.03 }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02 }}>{isSelected === 'Delivery' ? 'Delivery Address' : 'Pick Up Address'}</Text>
-
-                                {/* delivery address part */}
-                                {isSelected === 'Delivery' ? (
-                                    <FlatList
-                                        data={selectedContact}
-                                        keyExtractor={(item) => item.id}
-                                        scrollEnabled={false}
-                                        renderItem={(item) => <SelectedAddressComponent item={item.item} isSelected={isSelected} />}
-                                        ListEmptyComponent={<EmptyAddressComponent />}
+                        {/* delivery address part */}
+                        {isSelected === 'Delivery' ? (
+                            <FlatList
+                                data={selectedContact}
+                                keyExtractor={(item, index) => item.id}
+                                scrollEnabled={false}
+                                renderItem={(item) => <SelectedAddressComponent item={item.item} isSelected={isSelected} />}
+                                ListEmptyComponent={<EmptyAddressComponent />}
+                            />
+                        ) : isSelected === 'Dining' ? (
+                            <Dropdown
+                                data={shopData}
+                                search
+                                maxHeight={HEIGHT * 0.4}
+                                searchPlaceholder="Search Here"
+                                labelField="name"
+                                valueField="value"
+                                placeholder={!focus || !selectedShop ? selectedShop : 'Select Shop'}
+                                value={selectedShop}
+                                onFocus={() => setFocus(true)}
+                                onBlur={() => setFocus(false)}
+                                onChange={(item) => {
+                                    setSelectedShop(item.name);
+                                    const selectedShopData = shopData.find((shop) => shop.name === item.name);
+                                    if (selectedShopData) {
+                                        setTables(selectedShopData.tables);
+                                    } else {
+                                        setTables([]);
+                                    }
+                                    setFocus(false);
+                                }}
+                                style={{ width: 'auto', maxWidth: WIDTH * 0.5, marginTop: HEIGHT * 0.02, justifyContent: 'center' }}
+                            />
+                        ) : (
+                            <>
+                                <Dropdown
+                                    data={shopData}
+                                    search
+                                    maxHeight={HEIGHT * 0.35}
+                                    // maxWidth={WIDTH * 0.1}
+                                    labelField="place"
+                                    valueField="value"
+                                    placeholder={!isFocus || selectedPlace === '' ? selectedPlace : 'Select pick up'}
+                                    value={selectedPlace}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={(item) => {
+                                        setSelectedPlace(item.place);
+                                        setIsFocus(false);
+                                    }}
+                                    style={{ width: WIDTH * 0.35, maxWidth: WIDTH * 0.5, marginTop: HEIGHT * 0.02, justifyContent: 'center' }}
+                                // renderLeftIcon={() => <Image source={bottomArrowIcon} />}
+                                />
+                                {selectedPlace && (
+                                    <SelectedAddressComponent
+                                        item={shopData.find((shop) => shop.place === selectedPlace)}
                                     />
-                                ) : (
-                                    <>
-                                        <Dropdown
-                                            data={shopData}
-                                            search
-                                            maxHeight={HEIGHT * 0.35}
-                                            // maxWidth={WIDTH * 0.1}
-                                            labelField="place"
-                                            valueField="value"
-                                            placeholder={!isFocus || selectedPlace === '' ? selectedPlace : 'Select pick up'}
-                                            value={selectedPlace}
-                                            onFocus={() => setIsFocus(true)}
-                                            onBlur={() => setIsFocus(false)}
-                                            onChange={(item) => {
-                                                setSelectedPlace(item.place);
-                                                setIsFocus(false);
-                                            }}
-                                            style={{ width: WIDTH * 0.35, maxWidth: WIDTH * 0.5, marginTop: HEIGHT * 0.02, justifyContent: 'center' }}
-                                        // renderLeftIcon={() => <Image source={bottomArrowIcon} />}
-                                        />
-                                        {selectedPlace && (
-                                            <SelectedAddressComponent
-                                                item={shopData.find((shop) => shop.place === selectedPlace)}
-                                            />
-                                        )}
-                                    </>
                                 )}
+                            </>
+                        )}
 
 
-                                {/*  */}
-
-                                <View style={{ borderBottomColor: `${colors.grayColor}50`, borderBottomWidth: 0.5, marginVertical: HEIGHT * 0.02 }} />
-
-                                <SwipeListView
-                                    data={cartItems}
+                        {/*  */}
+                        {isSelected === 'Dining' && tables.length > 0 ? (
+                            <View>
+                                <Text style={{ fontSize: 18, marginTop: HEIGHT * 0.01 }} >Select Tables</Text>
+                                <FlatList
+                                    data={tables}
+                                    numColumns={2}
                                     scrollEnabled={false}
-                                    keyExtractor={(item) => item.id}
+                                    keyExtractor={(item) => item.tableId}
                                     renderItem={({ item }) => (
-                                        <OrderComponent item={item} />)}
-                                    renderHiddenItem={(item) => (
-                                        <View style={{ height: HEIGHT * 0.12, marginTop: -HEIGHT * 0.02 }} >
-                                            <Pressable style={{ right: WIDTH * 0.1, position: 'absolute', top: HEIGHT * 0.05 }}>
-                                                <Image source={deleteIcon} />
+                                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                            <Text style={{ position: 'absolute' }}>{item.tableId}</Text>
+                                            <Pressable onPress={() => handleTablePress(item.tableId)}>
+                                                <Image
+                                                    source={item.capacity === '4' ? table4 : item.capacity === '5' ? table5 : item.capacity === '6' ? table6 : table8}
+                                                    style={{ width: WIDTH * 0.3, height: WIDTH * 0.3, tintColor: selected.includes(item.tableId) ? colors.redColor : colors.greenColor }}
+                                                />
                                             </Pressable>
                                         </View>
                                     )}
-                                    onRowDidOpen={(rowKey) => onRowDidOpen(rowKey)}
-                                    // leftOpenValue={75}
-                                    rightOpenValue={-300}
                                 />
+                            </View>
+                        ) : undefined}
+                        <View style={{ borderBottomColor: `${colors.grayColor}50`, borderBottomWidth: 0.5, marginVertical: HEIGHT * 0.02 }} />
+
+                        <SwipeListView
+                            data={cartItems}
+                            scrollEnabled={false}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <OrderComponent item={item} />)}
+                            renderHiddenItem={(item) => (
+                                <View style={{ height: HEIGHT * 0.12, marginTop: -HEIGHT * 0.02 }} >
+                                    <Pressable style={{ right: WIDTH * 0.1, position: 'absolute', top: HEIGHT * 0.05 }}>
+                                        <Image source={deleteIcon} />
+                                    </Pressable>
+                                </View>
+                            )}
+                            onRowDidOpen={(rowKey) => onRowDidOpen(rowKey)}
+                            // leftOpenValue={75}
+                            rightOpenValue={-300}
+                        />
 
 
 
-                                <View >
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', height: HEIGHT * 0.07, width: WIDTH * 0.88, borderWidth: 1, borderRadius: WIDTH * 0.04, gap: WIDTH * 0.05, paddingHorizontal: WIDTH * 0.07, borderColor: '#F9F2ED', backgroundColor: colors.commonWhite }}>
-                                        <Image source={discountIcon} />
-                                        <Text>1 Discount is Applies</Text>
-                                        <Image source={rightArrowIcon} style={{ position: 'absolute', right: WIDTH * 0.05 }} />
-                                    </View>
+                        <View >
+                            <View style={{ flexDirection: 'row', alignItems: 'center', height: HEIGHT * 0.07, width: WIDTH * 0.88, borderWidth: 1, borderRadius: WIDTH * 0.04, gap: WIDTH * 0.05, paddingHorizontal: WIDTH * 0.07, borderColor: '#F9F2ED', backgroundColor: colors.commonWhite }}>
+                                <Image source={discountIcon} />
+                                <Text>1 Discount is Applies</Text>
+                                <Image source={rightArrowIcon} style={{ position: 'absolute', right: WIDTH * 0.05 }} />
+                            </View>
 
-                                    <Text style={{ marginVertical: HEIGHT * 0.02, fontWeight: '600', fontSize: HEIGHT * 0.02 }}>Payment Summary</Text>
+                            <Text style={{ marginVertical: HEIGHT * 0.02, fontWeight: '600', fontSize: HEIGHT * 0.02 }}>Payment Summary</Text>
 
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View style={{ gap: HEIGHT * 0.01 }}>
-                                            <Text>Price</Text>
-                                            <Text>Delivery Fee</Text>
-                                        </View>
-                                        <View style={{ gap: HEIGHT * 0.01 }}>
-                                            <Text style={{ fontWeight: '600', textAlign: 'right' }}>${totalPrice}</Text>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ textDecorationLine: 'line-through' }}>$2.0 </Text>
-                                                <Text style={{ fontWeight: '600' }}>$1.0</Text>
-                                            </View>
-                                        </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ gap: HEIGHT * 0.01 }}>
+                                    <Text>Price</Text>
+                                    <Text>Delivery Fee</Text>
+                                </View>
+                                <View style={{ gap: HEIGHT * 0.01 }}>
+                                    <Text style={{ fontWeight: '600', textAlign: 'right' }}>${totalPrice}</Text>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={{ textDecorationLine: 'line-through' }}>$2.0 </Text>
+                                        <Text style={{ fontWeight: '600' }}>$1.0</Text>
                                     </View>
                                 </View>
-
                             </View>
-                        </ScrollView>
-
-                        <View style={{ position: 'absolute', bottom: HEIGHT * 0.05, height: HEIGHT * 0.2, backgroundColor: '#ffffff', width: WIDTH * 1.0, paddingHorizontal: WIDTH * 0.05 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: HEIGHT * 0.02, marginBottom: HEIGHT * 0.02 }}>
-                                <Image source={walletIcon} />
-                                <View style={{ marginLeft: WIDTH * 0.05, marginRight: WIDTH * 0.5 }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginBottom: HEIGHT * 0.01 }}>Cash/Wallet</Text>
-                                    <Text style={{ color: colors.brownColor }}>${totalPrice + 1}</Text>
-                                </View>
-                                <Image source={bottomArrowIcon} />
-                            </View>
-                            <Pressable style={{ width: WIDTH * 0.9, height: HEIGHT * 0.07, alignItems: 'center', justifyContent: 'center', backgroundColor: '#C67C4D', alignSelf: 'center', borderRadius: WIDTH * 0.05 }}
-                                onPress={() => HandleOrder()}>
-                                <Text style={{ fontSize: HEIGHT * 0.02, fontWeight: 'bold', color: '#fff' }}>Order</Text>
-                            </Pressable>
                         </View>
-                    </View>}
+
+                    </View>
+                </ScrollView>
+
+                <View style={{ position: 'absolute', bottom: HEIGHT * 0.1, height: HEIGHT * 0.2, backgroundColor: '#ffffff', width: WIDTH * 1.0, paddingHorizontal: WIDTH * 0.05 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: HEIGHT * 0.02, marginBottom: HEIGHT * 0.02 }}>
+                        <Image source={walletIcon} />
+                        <View style={{ marginLeft: WIDTH * 0.05, marginRight: WIDTH * 0.5 }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginBottom: HEIGHT * 0.01 }}>Cash/Wallet</Text>
+                            <Text style={{ color: colors.brownColor }}>${totalPrice + 1}</Text>
+                        </View>
+                        <Image source={bottomArrowIcon} />
+                    </View>
+                    <Pressable style={{ width: WIDTH * 0.9, height: HEIGHT * 0.07, alignItems: 'center', justifyContent: 'center', backgroundColor: '#C67C4D', alignSelf: 'center', borderRadius: WIDTH * 0.05 }}
+                        onPress={() => HandleOrder()}>
+                        <Text style={{ fontSize: HEIGHT * 0.02, fontWeight: 'bold', color: '#fff' }}>Order</Text>
+                    </Pressable>
+                </View>
+                {/* </View>} */}
             </>}
         </SafeAreaView >
     );

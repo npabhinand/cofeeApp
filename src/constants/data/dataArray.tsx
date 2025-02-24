@@ -67,6 +67,7 @@ const coffeeArray = [
 const orderType = [
     { id: 1, name: 'Delivery' },
     { id: 2, name: 'Pick Up' },
+    { id: 3, name: 'Dining' },
 ];
 
 const editAdressArray = [

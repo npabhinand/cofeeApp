@@ -16,6 +16,7 @@ import CoffeeCard from '../../components/CoffeeCard';
 import { colors } from '../../constants/colors';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import { selectedFavorites } from '../../redux/slice/favoriteSlice';
+import { selectedOrderType } from '../../redux/slice/orderTypeSlice';
 
 
 const HomeScreen = () => {
@@ -23,7 +24,7 @@ const HomeScreen = () => {
     const isFocused = useIsFocused();
     const userData = useSelector(selectedUserData);
     const favoriteData = useSelector(selectedFavorites);
-
+    const orderType = useSelector(selectedOrderType);
     const { id } = userData[0];
 
     const [isSelected, setIsSelected] = useState<number>();
@@ -162,7 +163,7 @@ const HomeScreen = () => {
                         scrollEnabled={false}
                         contentContainerStyle={{ marginBottom: HEIGHT * 0.13, paddingHorizontal: WIDTH * 0.05, justifyContent: 'space-between' }}
                         renderItem={({ item }) => (
-                            <CoffeeCard item={item} userId={id} setLoading={setLoading} />
+                            <CoffeeCard item={item} userId={id} setLoading={setLoading} orderType={orderType} />
                         )} />
                 </ScrollView>
             }

@@ -12,19 +12,20 @@ import { ProductDetailScreenProps } from '../../constants/types/commonTypes';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import { addCartCount } from '../../redux/slice/cartCountSlice';
 import { coffee1 } from '../../assets/images';
+import { selectedOrderType } from '../../redux/slice/orderTypeSlice';
 // import { addCart } from '../../redux/slice/cartSlice';
 
 
 const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
     const { section } = route.params;
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
-    const [showMore, setShowMore] = useState(false);
-
     const navigation = useNavigation();
     const userData = useSelector(selectedUserData);
+    const orderType = useSelector(selectedOrderType);
     const userId = userData[0].id;
 
+    const [loading, setLoading] = useState(false);
+    const [showMore, setShowMore] = useState(false);
     const handleAddItem = async () => {
         try {
             setLoading(true);
@@ -40,7 +41,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                 });
             // setCartItems(carts);
 
-            const existingProduct = carts.find(item => item.productId === section.item.product.id);
+            const existingProduct = carts.find(item => item.itemId === section.item.itemId);
             if (existingProduct) {
                 await firestore()
                     .collection('cartItem')
@@ -63,6 +64,8 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                     image: section.item.product.image,
                     quantity: 1,
                     productId: section.item.product.id,
+                    ItemId: section.item.id,
+                    orderType: orderType,
                 });
 
                 const cartItemRef = firestore().collection('cartItem').where('userId', '==', userId);
@@ -79,21 +82,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
         }
     };
 
-    // dispatch(addCart({
-    //     id: section.item.product.id,
-    //     name: section.item.product.name,
-    //     coffeeType: section.item.product.item.coffeeType,
-    //     description: section.item.product.item.description,
-    //     type: {
-    //         size: section.item.product.item.type[isSelected].size,
-    //         price: section.item.product.item.type[isSelected].price,
-    //     },
-    //     rating: section.item.product.item.rating,
-    //     img: section.item.product.item.img,
-    //     quantity: 1,
-    // }));
-    // Alert.alert('Successfully Added To cart');
-    // navigation.navigate('HomeTabs');
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.whiteColor }}>
@@ -111,7 +100,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         </Pressable>
                     </View>
                     <View style={{ paddingHorizontal: WIDTH * 0.05, marginTop: HEIGHT * 0.02, paddingBottom: HEIGHT * 0.15 }}>
-                        <Image source={coffee1} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.24, borderRadius: WIDTH * 0.04 }} />
+                        <Image source={{ uri: section.item.product.image }} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.24, borderRadius: WIDTH * 0.04 }} />
                         <Text style={{ fontWeight: 'bold', fontSize: HEIGHT * 0.02, marginTop: HEIGHT * 0.02, textTransform: 'capitalize' }}>{section.item.product.product}</Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -169,10 +158,10 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
                         {/* <Text style={{ marginTop: HEIGHT * 0.035, fontWeight: '600', fontSize: HEIGHT * 0.02, marginBottom: HEIGHT * 0.015 }}>Size</Text> */}
 
                         <View style={{ marginTop: HEIGHT * 0.01, flexDirection: 'row', flexWrap: 'wrap', gap: HEIGHT * 0.01 }}>
-                            {section.item.product.types !== undefined && Object.keys(section.item.product.types).map((key) => (
+                            {section.item.types !== undefined && Object.keys(section.item.types).map((key) => (
                                 <View key={key} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: `${colors.grayColor}90`, padding: 10, borderRadius: 10 }}>
                                     <Text style={{ color: colors.commonWhite, textTransform: 'capitalize' }}>{key}: </Text>
-                                    <Text style={{ color: colors.commonWhite }}>{section.item.product.types[key]}</Text>
+                                    <Text style={{ color: colors.commonWhite }}>{section.item.types[key]}</Text>
                                     {/* </Pressable> */}
                                 </View>
                             ))}

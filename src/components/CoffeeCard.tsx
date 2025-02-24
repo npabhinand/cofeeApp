@@ -13,12 +13,15 @@ import { addCartCount } from '../redux/slice/cartCountSlice';
 import { addFavorite, deleteFavorite } from '../redux/slice/favoriteSlice';
 
 
+
 const CoffeeCard: React.FC<coffeeProps> = (props) => {
-    const { item, userId, setLoading } = props;
+    const { item, userId, setLoading, orderType } = props;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [isSelected, setIsSelected] = useState<boolean>(item.selected);
 
+
+    const [isSelected, setIsSelected] = useState<boolean>(item.selected);
+    console.log(userId);
     const addFavourites = () => {
 
         dispatch(addFavorite({
@@ -30,6 +33,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
             price: item.product.price,
             image: item.product.image,
             selected: true,
+            orderType: orderType,
         }));
 
         setIsSelected(true);
@@ -56,7 +60,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                 });
             // setCartItems(carts);
 
-            const existingProduct = carts.find(items => items.productId === item.id);
+            const existingProduct = carts.find(items => items.itemId === item.itemId);
             if (existingProduct) {
                 await firestore()
                     .collection('cartItem')
@@ -75,14 +79,14 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
                     name: item.product.product,
                     coffeeType: item.product.coffeeType,
                     description: item.product.description,
-                    types: item.product.types,
+                    types: item.types,
                     price: item.product.price,
                     userId: userId,
                     image: item.product.image,
                     quantity: 1,
                     ItemId: item.id,
+                    orderType: orderType,
                 });
-
                 const cartItemRef = firestore().collection('cartItem').where('userId', '==', userId);
                 const snapshot = await getCountFromServer(cartItemRef);
                 dispatch(addCartCount(snapshot.data().count));
@@ -92,6 +96,7 @@ const CoffeeCard: React.FC<coffeeProps> = (props) => {
             Alert.alert('Product successfully added to cart');
         } catch (error) {
             console.log('Error occurred while handling cart items', error);
+            console.log(item.product.types);
         }
         setLoading(false);
     };

@@ -19,7 +19,7 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
     const [formData, setFormData] = useState<addressProps>({ name: name || '', phone: phone || null, address: address || '' });
     const userData = useSelector(selectedUserData);
     const { id } = userData[0];
-
+    console.log('booking');
     const AddOrUpdateAddress = async () => {
         let newErrors = {};
         Object.keys(formData).forEach((key) => {
@@ -34,7 +34,7 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
         }
         if (addressId) {
             try {
-                await firestore().collection('address').doc(id).update({
+                await firestore().collection('address').doc(addressId).update({
                     name: formData.name,
                     phone: formData.phone,
                     address: formData.address,
@@ -74,7 +74,7 @@ const AddAddressComponent: React.FC<addressProps> = (props) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.whiteColor, paddingHorizontal: WIDTH * 0.05 }}>
-            <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.05 }}>
+            <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.06 }}>
                 <Pressable onPress={() => setModalVisible(false)}>
                     <Image source={backIcon} />
                 </Pressable>
