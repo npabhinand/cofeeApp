@@ -6,7 +6,9 @@ import cartCountSlice from './slice/cartCountSlice';
 import userSlice from './slice/userDataSlice';
 import priceTotalSlice from './slice/priceTotalSlice';
 import orderTypeSlice from './slice/orderTypeSlice';
-
+import bookingTableSlice from './slice/bookingTableSlice';
+import cartSlice from './slice/cartSlice';
+import adminCountSlice from './slice/adminCountSlice'
 const store = configureStore({
     reducer: {
         favorite: favoriteSlice,
@@ -15,7 +17,9 @@ const store = configureStore({
         user: userSlice,
         totalPrice: priceTotalSlice,
         orderType: orderTypeSlice,
-        // counts: countSlice,
+        bookingTable:bookingTableSlice,
+        cart: cartSlice,
+        adminCount:adminCountSlice,
     },
 });
 

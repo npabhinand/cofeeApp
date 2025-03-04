@@ -42,7 +42,7 @@ const RenderItem: React.FC<shopProps> = props => {
                 <Text style={{ color: colors.grayColor }}>{item.time}</Text>
                 <Text style={{ fontSize: 16 }}>{item.place}</Text>
             </View>
-            {modalShow === 'modal' ? (
+            {modalShow === 'shop' ? (
                 <Modal visible={isVisible} animationType="slide">
                     <AddComponent
                         setIsVisible={setIsVisible}

@@ -22,7 +22,8 @@ const SelectedAddressComponent = (props) => {
             <Text style={{ color: colors.grayColor, marginTop: WIDTH * 0.02 }}>{item.address}</Text>
             <View style={{ flexDirection: 'row', gap: WIDTH * 0.03, marginTop: HEIGHT * 0.02 }}>
                 {isSelected === 'Delivery' ? (editAdressArray.map((items, key) => (
-                    <Pressable key={key} style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, borderWidth: 0.5, height: HEIGHT * 0.035, paddingHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.04, backgroundColor: colors.commonWhite }} onPress={items.onClick}><Image source={items.icon} /><Text>{items.name}</Text>
+                    <Pressable key={key} style={{ flexDirection: 'row', alignItems: 'center', gap: WIDTH * 0.02, borderWidth: 0.5, height: HEIGHT * 0.035, paddingHorizontal: WIDTH * 0.05, 
+                    borderRadius: WIDTH * 0.04, backgroundColor: colors.commonWhite }} onPress={items.onClick}><Image source={items.icon} /><Text>{items.name}</Text>
                     </Pressable>
                 ))) :
                     null}

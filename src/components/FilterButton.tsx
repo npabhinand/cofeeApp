@@ -9,8 +9,9 @@ import { buttonProps } from '../constants/types/commonTypes';
 const FilterButton: React.FC<buttonProps> = (props) => {
     const { buttonName, selected, onPress } = props;
     return (
-        <Pressable style={{ width: WIDTH * 0.2, height: HEIGHT * 0.04, backgroundColor: selected ? colors.brownColor : `${colors.grayColor}10`, marginRight: WIDTH * 0.05, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.02 }} onPress={onPress}>
-            <Text style={{ color: selected ? colors.commonWhite : colors.commonBlack, fontWeight: selected ? '600' : '400' }}>{buttonName}</Text>
+        <Pressable style={{ width: 'auto', height: HEIGHT * 0.04, backgroundColor: selected ? colors.brownColor : `${colors.grayColor}10`, 
+        paddingHorizontal:WIDTH*0.02,marginRight: WIDTH * 0.05, alignItems: 'center', justifyContent: 'center', borderRadius: WIDTH * 0.02 }} onPress={onPress}>
+            <Text style={{ color: selected ? colors.commonWhite : colors.commonBlack, fontWeight: selected ? '600' : '400', textTransform:'capitalize' }}>{buttonName}</Text>
         </Pressable>
     );
 };

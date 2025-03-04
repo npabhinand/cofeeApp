@@ -11,10 +11,9 @@ import { addressProps, orderComponentProps } from '../constants/types/commonType
 
 
 const OrderDetailsRenderItem: React.FC<orderComponentProps> = (props) => {
-    const { item, setLoading, showItem } = props;
+    const { item, setLoading,loading, showItem } = props;
 
     const [isVisible, setIsVisible] = useState(false);
-
     const date = moment(item.orderTime).format('ddd, MM Do YY, h:mm:ss a');
 
     const handleModal = () => {
@@ -61,7 +60,7 @@ const OrderDetailsRenderItem: React.FC<orderComponentProps> = (props) => {
 
                     <Modal visible={isVisible} animationType="slide" transparent={true}>
                         <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
-                            <OrderDetailsComponent item={item} handleModal={handleModal} marginTop={HEIGHT * 0.3} setLoading={setLoading} />
+                            <OrderDetailsComponent item={item} handleModal={handleModal} marginTop={HEIGHT * 0.3} setLoading={setLoading} loading={loading}/>
                         </View>
                     </Modal>
                 </Pressable>

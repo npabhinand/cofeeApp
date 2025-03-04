@@ -1,25 +1,27 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, Pressable, Image, FlatList } from 'react-native';
+import { View, Text, SafeAreaView, Pressable, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dropdown } from 'react-native-element-dropdown';
+import { useNavigation } from '@react-navigation/native';
 
 import HeaderComponent from '../../components/HeaderComponent';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
-import { Dropdown } from 'react-native-element-dropdown';
-import { table4, table5, table6, table8 } from '../../assets/icons';
 import { colors } from '../../constants/colors';
-import { useSelector } from 'react-redux';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
+import { addbookingTable } from '../../redux/slice/bookingTableSlice';
+
 
 
 const BookTableScreen = () => {
+    const dispatch=useDispatch();
+    const db=firestore();
     const userData = useSelector(selectedUserData);
     const { id, name } = userData[0];
-
+    const navigation=useNavigation();
     const [shopData, setShopData] = useState<{}[]>([]);
     const [tables, setTables] = useState([] || null);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [isVisible, setIsVisible] = useState<boolean>(false);
     const [selected, setSelected] = useState<[]>([]);
     const [selectedShop, setSelectedShop] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
@@ -31,7 +33,7 @@ const BookTableScreen = () => {
     const onFetchShopData = async () => {
         try {
             const shops: any = [];
-            await firestore()
+            await db
                 .collection('shops')
                 .get()
                 .then(querySnapshot => {
@@ -54,24 +56,46 @@ const BookTableScreen = () => {
             }
         });
     };
-
+    // console.log('id',id,'name',name,'selected---',selectedShop);
+    
+    const selectedShops = shopData.find((item) => item.name === selectedShop);
+    
     const onPressBook = async () => {
-        try {
-            await firestore().collection('booking').add({
-                userId: id,
-                name: name,
-                tablesBooked: selected,
-                bookTime: Date.now(),
-            });
-            if (selectedShop) {
-                await firestore().collection('shops').doc(selectedShop.shopId).update({
-                    book: true,
-                });
-            }
-        }
-        catch (err) {
-            console.log(err, ' error while booking');
-        }
+        // try {
+        //     await firestore().collection('booking').add({
+        //         userId: id,
+        //         name: name,
+        //         tablesBooked: selected,
+        //         bookTime: Date.now(),
+        //     });
+        //     console.log('seleceted shop', selectedShop);
+            
+        //     if (selectedShop) {
+        //         const shopDoc = firestore().collection('shops').doc(selectedShopId.shopId);
+        //         const shopData = (await shopDoc.get()).data();
+                
+        //         const updatedTables = shopData.tables.map((item) => {
+        //             if (selected.includes(item.tableId)) {
+        //                 return { ...item, booked: true };
+        //             }
+        //             return item;
+        //         });
+    
+        //         await shopDoc.update({
+        //             tables: updatedTables,
+        //         });
+        //     }
+        // }
+        // catch (err) {
+        //     console.log(err, ' error while booking');
+        // }
+        console.log('tables',selected)
+        dispatch(addbookingTable({
+            shopId:selectedShops.shopId,
+            name:selectedShop,
+            tables:selected,
+        }));
+        navigation.goBack();
     };
 
     return (
@@ -110,15 +134,11 @@ const BookTableScreen = () => {
                             numColumns={2}
                             keyExtractor={(item) => item.tableId}
                             renderItem={({ item }) => (
-                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ position: 'absolute' }}>{item.tableId}</Text>
-                                    <Pressable onPress={() => handleTablePress(item.tableId)}>
-                                        <Image
-                                            source={item.capacity === '4' ? table4 : item.capacity === '5' ? table5 : item.capacity === '6' ? table6 : table8}
-                                            style={{ width: WIDTH * 0.3, height: WIDTH * 0.3, tintColor: selected.includes(item.tableId) ? colors.redColor : colors.greenColor }}
-                                        />
+                                <Pressable onPress={() => handleTablePress(item.tableId)} disabled={item.booked?true:false} style={{flexDirection:'row', width:WIDTH*0.3,height:60, 
+                                backgroundColor:selected.includes(item.tableId)||item.booked ? `${colors.grayColor}50` : colors.greenColor, borderRadius:10, alignItems:'center',justifyContent:'center', margin:10}}>
+                                    <Text style={{color:colors.commonWhite}}>{item.tableId}</Text>
+                                        <Text style={{color:colors.commonWhite}}>- {item.capacity}</Text>
                                     </Pressable>
-                                </View>
                             )}
                         />
                     </>

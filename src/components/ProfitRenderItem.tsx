@@ -9,15 +9,16 @@ import { colors } from '../constants/colors';
 import { backIcon } from '../assets/icons';
 import { profitProps } from '../constants/types/commonTypes';
 const ProfitRenderItem: React.FC<profitProps> = (props) => {
-    const { item, setLoading, loading } = props;
+    const { item, setIsUpdate } = props;
     const [isVisible, setIsVisible] = useState(false);
+
     const [formData, setFormData] = useState<{ product: string; profit: number; }>({ product: item.product.product || '', profit: item.profit || 0 });
     const [errors, setErrors] = useState({});
     const [isEdit, setIsEdit] = useState<boolean>(false);
-
+    const [loading,setLoading]=useState<boolean>(false);
 
     const handleSubmit = async () => {
-        setLoading(true);
+
         let newErrors = {};
         Object.keys(formData).forEach((key) => {
             if (!formData[key].trim()) {
@@ -31,6 +32,7 @@ const ProfitRenderItem: React.FC<profitProps> = (props) => {
 
         if (item.id) {
             try {
+                setLoading(true);
                 await firestore().collection('items').doc(item.id).update({
                     profit: parseInt(formData.profit, 10),
                 });
@@ -43,6 +45,7 @@ const ProfitRenderItem: React.FC<profitProps> = (props) => {
                 setLoading(false);
             }
         }
+        setIsUpdate(true)
         setLoading(false);
     };
 

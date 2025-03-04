@@ -13,9 +13,9 @@ const AddStockComponent = (props) => {
     const [errors, setErrors] = useState({});
     const [update, setUpdate] = useState<boolean>();
     const [isEdit, setIsEdit] = useState<boolean>(edit);
-    const [attributes, setAttributes] = useState(item?.types ? Object.entries(item.types).map(([name, value]) => ({ name, value })) : []);
-    const [attributeName, setAttributeName] = useState<string>('');
-    const [attributeValue, setAttributeValue] = useState<string>('');
+    // const [attributes, setAttributes] = useState(item?.types ? Object.entries(item.types).map(([name, value]) => ({ name, value })) : []);
+    // const [attributeName, setAttributeName] = useState<string>('');
+    // const [attributeValue, setAttributeValue] = useState<string>('');
 
 
     const handleSubmit = async () => {
@@ -33,12 +33,12 @@ const AddStockComponent = (props) => {
             return;
 
         }
-        const attributesObject = attributes.reduce((acc, attr) => {
-            if (attr.name.trim()) {
-                acc[attr.name] = attr.value;
-            }
-            return acc;
-        }, {});
+        // const attributesObject = attributes.reduce((acc, attr) => {
+        //     if (attr.name.trim()) {
+        //         acc[attr.name] = attr.value;
+        //     }
+        //     return acc;
+        // }, {});
         if (item.itemId) {
             try {
                 setUpdate(true);
@@ -46,7 +46,7 @@ const AddStockComponent = (props) => {
                 await firestore().collection('items').doc(item.itemId).update({
                     stock: parseInt(formData.stock, 10),
                     product: item,
-                    types: attributesObject,
+                    // types: attributesObject,
                 });
                 Alert.alert('Stock is Updated');
                 setIsVisible(!isVisible);
@@ -66,7 +66,7 @@ const AddStockComponent = (props) => {
                 await firestore().collection('items').add({
                     stock: parseInt(formData.stock, 10),
                     product: item,
-                    types: attributesObject,
+                    // types: attributesObject,
                 });
                 Alert.alert('Stock is added');
                 setIsVisible(!isVisible);
@@ -91,11 +91,11 @@ const AddStockComponent = (props) => {
         }
     };
 
-    const deleteAttribute = (id: number) => {
-        const updatedAttribute = [...attributes];
-        updatedAttribute.splice(id, 1);
-        setAttributes(updatedAttribute);
-    };
+    // const deleteAttribute = (id: number) => {
+    //     const updatedAttribute = [...attributes];
+    //     updatedAttribute.splice(id, 1);
+    //     setAttributes(updatedAttribute);
+    // };
 
     const onChangeText = (value: any, key: string) => {
         if (key === 'stock') {
@@ -127,7 +127,7 @@ const AddStockComponent = (props) => {
                 </View>
             ))}
 
-            {/* attributes */}
+            {/* attributes
             <Text style={{ color: colors.brownColor, fontSize: HEIGHT * 0.03, marginVertical: HEIGHT * 0.01 }}>Attributes</Text>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
                 {attributes.map((attribute, index) => (
@@ -163,7 +163,7 @@ const AddStockComponent = (props) => {
                 <Pressable style={{ width: WIDTH * 0.1, backgroundColor: colors.commonBlack, height: WIDTH * 0.1, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={addAttribute}>
                     <Image source={plusIcon} />
                 </Pressable>
-            </View>
+            </View> */}
             {/*  */}
             <Pressable style={{ position: 'absolute', bottom: HEIGHT * 0.05, width: WIDTH * 0.9, alignItems: 'center', height: HEIGHT * 0.056, alignSelf: 'center', backgroundColor: colors.brownColor, justifyContent: 'center', borderRadius: 10 }} onPress={handleSubmit}>
                 {update ? <ActivityIndicator color={colors.commonWhite} /> : <Text style={{ color: colors.commonWhite, fontWeight: '600' }} >{isEdit ? 'Update Stock' : 'Edit Stock'}</Text>}

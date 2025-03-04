@@ -24,10 +24,38 @@ import StockProductScreen from '../screens/Admin/StockProductScreen';
 import ShopListScreen from '../screens/Admin/ShopListScreen';
 import BookTableScreen from '../screens/user/BookTableScreen';
 import TableSettingScreen from '../screens/Admin/TableSettingScreen';
+import PaymentScreen from '../screens/user/PaymentScreen';
+import { orders, paymentNavprops, productsNavProp } from '../constants/types/commonTypes';
 
 
+export type RootStackParamList = {
+    HomeScreen:undefined;
+    HomeTabs:undefined;
+    OnBoardScreen:undefined;
+    OrderScreen:undefined;
+    DeliveryScreen:undefined;
+    ProductDetailScreen:productsNavProp;
+    AddressScreen:undefined;
+    AdminHomeScreen:undefined;
+    ProductListScreen:undefined;
+    UserListScreen:undefined;
+    OrderListScreen:undefined;
+    StockListScreen:undefined;
+    LoginScreen:undefined;
+    ProfitListScreen:undefined;
+    UserOrderListScreen:undefined;
+    Orders:orders;
+    ProfileScreen:undefined;
+    EditProfileScreen:undefined;
+    FavoriteScreen:undefined;
+    StockProductScreen:undefined;
+    ShopListScreen:undefined;
+    BookTableScreen:undefined;
+    TableSettingScreen:undefined;
+    PaymentScreen: paymentNavprops;
+}
 const AppNavigator = () => {
-    const Stack = createNativeStackNavigator();
+    const Stack = createNativeStackNavigator<RootStackParamList>();
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="OnBoardScreen">
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -53,6 +81,7 @@ const AppNavigator = () => {
             <Stack.Screen name="ShopListScreen" component={ShopListScreen} />
             <Stack.Screen name="BookTableScreen" component={BookTableScreen} />
             <Stack.Screen name="TableSettingScreen" component={TableSettingScreen} />
+            <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
         </Stack.Navigator>
     );
 };

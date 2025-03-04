@@ -1,67 +1,88 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Image, Pressable } from 'react-native';
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 import { onBoardScreenData } from '../../constants/data/dataArray';
 import { colors } from '../../constants/colors';
 import { background1 } from '../../assets/images';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { addUserData } from '../../redux/slice/userDataSlice';
+import { addCartCount } from '../../redux/slice/cartCountSlice';
+import { addCart } from '../../redux/slice/cartSlice';
+import { RootStackParamList } from '../../routes/AppNavigator';
 // import { addCartCount } from '../../redux/slice/cartCountSlice';
 
 const OnBoardScreen = () => {
-    const navigation = useNavigation();
-    // const [cartCount, setCartCount] = useState<number>();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const [loginUser, setLoginUser] = useState(null);
     const dispatch = useDispatch();
-    // useEffect(() => {
-    //     const fetchCartCount = async () => {
-    //         try {
-    //             const cartItemRef = firestore().collection('cartItem').where('userId', '==', userId);
-    //             const snapshot = await getCountFromServer(cartItemRef);
-    //             // setCartCount(snapshot.data().count);
-    //             dispatch(addCartCount(snapshot.data().count));
-    //             console.log('dispatch', snapshot.data().count);
-    //         } catch (error) {
-    //             console.log('error while counting cart documents');
-    //         }
 
-    //     };
-    //     fetchCartCount();
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            handleUser();
+        }, 100);
 
-    // }, [dispatch]);
+        return () => clearTimeout(timeoutId);
+    }, []);
 
+    useEffect(() => {
+        if (loginUser) {
+            fetchCartItems();
+        }
+    }, [loginUser]);
 
-    const handleClick = async () => {
+    const handleUser = async () => {
         try {
             const fetchLoginDetails = await AsyncStorage.getItem('userD');
             if (fetchLoginDetails != null) {
                 const loginDetails = JSON.parse(fetchLoginDetails);
                 dispatch(addUserData(loginDetails));
-                if (loginDetails.userType === 'admin') {
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'AdminHomeScreen' }],
-                    });
-                } else if (loginDetails.userType === 'user') {
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'HomeTabs' }],
-                    });
-                }
+                setLoginUser(loginDetails);
             }
-            else {
+                else {
                 navigation.navigate('LoginScreen');
             }
+        } catch (error) {
+            console.log('error occurred while fetching user data from async storage');
         }
-        catch (error) {
-            console.log('error occured while fetching user data from async storage');
-        }
-
     };
 
+    const fetchCartItems = async () => {
+        try {
+            const cartItemRef = firestore().collection('cartItem').where('userId', '==', loginUser.id);
+            const snapshot = await cartItemRef.get();
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.itemId) {
+                    console.log('Adding item to cart:', data);
+                    dispatch(addCart(data));
+                } else {
+                    console.log('Missing itemId in document:', doc.id);
+                }
+            });
+
+            dispatch(addCartCount(snapshot.size));
+            // console.log('dispatch', snapshot.size);
+            if (loginUser.userType === 'admin') {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'AdminHomeScreen' }],
+                });
+            } else if (loginUser.userType === 'user') {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'HomeTabs' }],
+                });
+            }
+        } 
+        catch (error) {
+            console.log('error while counting cart documents');
+        }
+    };
     return (
         <View style={{ flex: 1, backgroundColor: colors.commonBlack }}>
             <Image source={background1} style={{ width: WIDTH * 1.00, position: 'absolute', height: HEIGHT * 0.6 }} />
@@ -75,7 +96,7 @@ const OnBoardScreen = () => {
                 {/* </Image> */}
             </View>
 
-            <Pressable onPress={handleClick} style={{ position: 'absolute', bottom: HEIGHT * 0.06, alignSelf: 'center', width: WIDTH * 0.9, backgroundColor: colors.brownColor, height: HEIGHT * 0.07, alignItems: 'center', justifyContent: 'center', borderRadius: 10, zIndex: 1 }}>
+            <Pressable style={{ position: 'absolute', bottom: HEIGHT * 0.06, alignSelf: 'center', width: WIDTH * 0.9, backgroundColor: colors.brownColor, height: HEIGHT * 0.07, alignItems: 'center', justifyContent: 'center', borderRadius: 10, zIndex: 1 }}>
                 <Text style={{ color: colors.commonWhite, fontWeight: 'bold' }}>Get Started</Text>
             </Pressable>
         </View>

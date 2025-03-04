@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import {  NavigationProp, useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { HEIGHT, WIDTH } from '../../constants/dimension';
-import { bottomArrowIcon, documentIcon, filterIcon, logout, orderIcon, profile, profileIcon, searchIcon } from '../../assets/icons';
+import { bottomArrowIcon, filterIcon, logout, orderIcon, profile, profileIcon, searchIcon } from '../../assets/icons';
 import PromoComponent from '../../components/PromoComponent';
 import { filterArray } from '../../constants/data/dataArray';
 import FilterButton from '../../components/FilterButton';
@@ -17,42 +17,62 @@ import { colors } from '../../constants/colors';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import { selectedFavorites } from '../../redux/slice/favoriteSlice';
 import { selectedOrderType } from '../../redux/slice/orderTypeSlice';
+import { selectedCarts } from '../../redux/slice/cartSlice';
+import { RootStackParamList } from '../../routes/AppNavigator';
 
 
 const HomeScreen = () => {
-    const navigation = useNavigation();
-    const isFocused = useIsFocused();
+    // const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList, 'ProfileScreen','UserOrderListScreen'>>();
     const userData = useSelector(selectedUserData);
     const favoriteData = useSelector(selectedFavorites);
+    const cartData=useSelector(selectedCarts)
     const orderType = useSelector(selectedOrderType);
     const { id } = userData[0];
+    const db=firestore();
 
-    const [isSelected, setIsSelected] = useState<number>();
+    const [isSelected, setIsSelected] = useState<string>('all coffee');
     const [coffeeArray, setCoffeeArray] = useState<[]>([]);
+    const [filteredArray, setFilteredArray] = useState<any[]>([]); 
     const [loading, setLoading] = useState<boolean>(false);
+    const [update,setUpdate]=useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(false);
-
+    
     useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, [])
+    
+    
+    useEffect(() => {   
         fetchCoffee();
-    }, [isFocused]);
+    }, [favoriteData,orderType,cartData]);
 
     const fetchCoffee = async () => {
         const coffees: any = [];
         try {
-            setLoading(true);
-            const coffeeRef = await firestore().collection('items').where('stock', '>', 0).get();
+            // setLoading(true);
+            setUpdate(true);
+            const coffeeRef = await db.collection('items').where('stock', '>', 0).get();
             coffeeRef.forEach((doc) => coffees.push({ ...doc.data(), id: doc.id }));
             const updatedCoffees = coffees.map((item) => ({
                 ...item,
                 selected: favoriteData.some((favorite) => item.id === favorite.id),
+                isAddedInCart:cartData.some((cart)=>item.id===cart.itemId && orderType===cart.orderType)       
             }));
 
             setCoffeeArray(updatedCoffees);
-            setLoading(false);
+            setFilteredArray(updatedCoffees);
+            // setLoading(false);
+            setUpdate(false);
         } catch (error) {
             console.log('error while fetching coffee items:', error);
         }
     };
+
+    
 
     const handleLogoutAlert = () =>
         Alert.alert('Are You want to Logout', '', [
@@ -82,10 +102,23 @@ const HomeScreen = () => {
 
     const profileArray = [
         { id: 1, name: 'Profile', icon: profile, handleClick: () => { navigation.navigate('ProfileScreen'); setIsVisible(!isVisible); } },
-        { id: 2, name: 'Sign Out', icon: logout, handleClick: () => { handleLogoutAlert(); setIsVisible(!isVisible); } },
-        { id: 3, name: 'Orders', icon: orderIcon, handleClick: () => { navigation.navigate('UserOrderListScreen'); setIsVisible(!isVisible); } },
-        { id: 4, name: 'Book', icon: documentIcon, handleClick: () => { navigation.navigate('BookTableScreen'); setIsVisible(!isVisible); } },
+        { id: 2, name: 'Orders', icon: orderIcon, handleClick: () => { navigation.navigate('UserOrderListScreen'); setIsVisible(!isVisible); } },
+        { id: 3, name: 'Logout', icon: logout, handleClick: () => { handleLogoutAlert(); setIsVisible(!isVisible); } },
+        // { id: 4, name: 'Book', icon: documentIcon, handleClick: () => { navigation.navigate('BookTableScreen'); setIsVisible(!isVisible); } },
     ];
+
+   
+    const filterCoffee = (filterName: string) => {
+        if (filterName !== 'all coffee') {
+            const newFilteredArray = coffeeArray.filter((item) => item.product.coffeeType === filterName);
+            setFilteredArray(newFilteredArray);
+        } else {
+            setFilteredArray(coffeeArray);
+        }
+        setIsSelected(filterName);
+    };
+
+    
     return (
         <View style={{ flex: 1 }}>
             {loading ? <>
@@ -153,19 +186,19 @@ const HomeScreen = () => {
                             <FilterButton
                                 key={filter.id}
                                 buttonName={filter.name}
-                                selected={isSelected === filter.id}
-                                onPress={() => setIsSelected(filter.id)}
+                                selected={isSelected === filter.name}
+                                onPress={() => filterCoffee(filter.name)}
                             />
                         ))}
                     </ScrollView>
                     <FlatList
-                        data={coffeeArray}
+                        data={filteredArray}
                         keyExtractor={(item) => item.id}
                         numColumns={2}
                         scrollEnabled={false}
                         contentContainerStyle={{ marginBottom: HEIGHT * 0.13, paddingHorizontal: WIDTH * 0.05, justifyContent: 'space-between' }}
                         renderItem={({ item }) => (
-                            <CoffeeCard item={item} userId={id} setLoading={setLoading} orderType={orderType} />
+                            <CoffeeCard item={item} userId={id} setLoading={setUpdate} orderType={orderType} />
                         )} />
                 </ScrollView>
             }

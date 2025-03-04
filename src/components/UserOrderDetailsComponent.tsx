@@ -12,22 +12,16 @@ import HandleOrderButtons from './HandleOrderButtons';
 
 const UserOrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
     const { handleModal, item, userType, marginTop, setLoading } = props;
-    // const { name, userId, address, phone } = item.address[0];
-
+    
     const date = moment(item.orderTime).format('ddd,MM Do YY, h:mm:ss a');
 
     const orderDetails = [
         { label: 'Order Id', value: item.id },
-        { label: 'Order Price', value: `$${item.TotalPrice} ` },
+        { label: 'Order Price', value: `$${item.totalPrice} ` },
         { label: 'Order Time', value: date },
-        // { label: 'Status', value: item.status },
+        {label:'orderType', value:item.orderType}
+       
     ];
-    // const addressDetails = [
-    //     { label: 'Name', value: name },
-    //     { label: 'UserId', value: userId },
-    //     { label: 'Address', value: address },
-    //     { label: 'Phone', value: phone },
-    // ];
 
     const handleCancelAlert = () => {
         Alert.alert('Are You sure want to cancel order', '', [
@@ -98,7 +92,7 @@ const UserOrderDetailsComponent: React.FC<orderComponentProps> = (props) => {
                     <Text style={{ fontWeight: 'bold', fontSize: 20, color: colors.grayColor }} onPress={handleModal}>X</Text>
 
                 </View>
-                <Text style={{ color: colors.brownColor, marginLeft: WIDTH * 0.2, fontSize: 18, fontWeight: '600' }}>{item.status}</Text>
+                <Text style={{ color: colors.brownColor, textAlign:'center', fontSize: 18, fontWeight: '600' }}>{item.status}</Text>
 
 
                 <FlatList

@@ -7,16 +7,20 @@ import { HEIGHT, WIDTH } from '../../constants/dimension';
 import ProfitRenderItem from '../../components/ProfitRenderItem';
 import { colors } from '../../constants/colors';
 import HeaderComponent from '../../components/HeaderComponent';
+import { useSelector } from 'react-redux';
+import { selectAdminCount } from '../../redux/slice/adminCountSlice';
 // import { colors } from '../../constants/colors';
 
 const ProfitListScreen = () => {
+    const adminCount = useSelector(selectAdminCount);
+
     const [coffeeData, setCoffeeData] = useState([]);
-
+    const [isUpdate,setIsUpdate]=useState<boolean>(false);
     const [loading, setLoading] = useState(false);
-
+    
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [isUpdate]);
 
     const fetchData = async () => {
         const coffees: any = [];
@@ -41,7 +45,7 @@ const ProfitListScreen = () => {
 
                     <View style={{ width: WIDTH * 0.8, height: HEIGHT * 0.2, alignSelf: 'center', backgroundColor: `${colors.brownColor}90`, borderRadius: 30, padding: HEIGHT * 0.05 }}>
                         <Text>profit</Text>
-                        <Text style={{ fontSize: HEIGHT * 0.04, fontWeight: '600' }}>$24.45</Text>
+                        <Text style={{ fontSize: HEIGHT * 0.04, fontWeight: '600' }}>₹{adminCount.totalProfit}</Text>
                     </View>
 
                     {/* <Pressable style={{
@@ -55,7 +59,7 @@ const ProfitListScreen = () => {
                     <FlatList
                         data={coffeeData}
                         renderItem={(item) => (
-                            <ProfitRenderItem item={item.item} setLoading={setLoading} loading={loading} />
+                            <ProfitRenderItem item={item.item}  setIsUpdate={setIsUpdate}/>
                         )}
                     />
                 </>

@@ -9,7 +9,7 @@ import { colors } from '../constants/colors';
 const PaymentDetails = (props) => {
     const { totalPrice } = props;
     return (
-        <View>
+        <View style={{marginBottom:HEIGHT*0.05}}>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', height: HEIGHT * 0.07, width: WIDTH * 0.88, borderWidth: 1, borderRadius: WIDTH * 0.04, gap: WIDTH * 0.05, paddingHorizontal: WIDTH * 0.07, borderColor: '#F9F2ED', backgroundColor: colors.commonWhite }}>
                 <Image source={discountIcon} />

@@ -2,11 +2,12 @@
 import { beansIcon, cartIcon, documentIcon, editIcon, peoplesIcon, profitIcon } from '../../assets/icons';
 
 const filterArray = [
-    { id: 1, name: 'All Coffee' },
-    { id: 2, name: 'Machiato' },
-    { id: 3, name: 'Latte' },
-    { id: 4, name: 'Americano' },
-    { id: 5, name: 'Espresso' },
+    { id: 1, name: 'all coffee' },
+    { id: 2, name: 'machiato' },
+    { id: 3, name: 'latte' },
+    { id: 4, name: 'americano' },
+    { id: 5, name: 'espresso' },
+    {id:6, name:'filter coffee'}
 ];
 
 const coffeeArray = [

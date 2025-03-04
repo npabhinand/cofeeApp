@@ -11,10 +11,10 @@ import { colors } from '../constants/colors';
 
 const AddTableComponent: React.FC<addShopProps> = (props) => {
     const { item, setIsVisible, isVisible, setUpdate } = props;
-    const [tables, setTables] = useState(item?.tables ? item?.tables.map(([tableId, capacity]) => ({ tableId, capacity })) : []);
+    const [tables, setTables] = useState(Array.isArray(item?.tables) ? item?.tables.map(({tableId, capacity}) => ({ tableId, capacity })) : []);
     const [tableId, setTableId] = useState<string>('');
     const [capacity, setCapacity] = useState<string>('');
-
+    console.log()
     const addTable = () => {
         if (tableId.trim() && capacity.trim()) {
             setTables([...tables, { tableId: tableId, capacity: capacity }]);

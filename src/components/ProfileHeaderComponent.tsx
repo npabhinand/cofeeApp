@@ -1,21 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, Pressable, Image } from 'react-native';
 import React from 'react';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { colors } from '../constants/colors';
-import { useNavigation } from '@react-navigation/native';
 import { backIcon, } from '../assets/icons';
 import { profileImage } from '../assets/images';
 import { useSelector } from 'react-redux';
 import { selectedUserData } from '../redux/slice/userDataSlice';
+import { RootStackParamList } from '../routes/AppNavigator';
 
 const ProfileHeaderComponent = (props) => {
+    const { title, buttonText, icon, imageSize } = props;
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const userData = useSelector(selectedUserData);
     const { image } = userData[0];
 
-    const { title, buttonText, icon, imageSize } = props;
-    const navigation = useNavigation();
+    
     return (
         <View style={{ height: HEIGHT * 0.35, backgroundColor: colors.commonWhite }}>
             <View style={{ flexDirection: 'row', paddingVertical: HEIGHT * 0.06, height: HEIGHT * 0.22, backgroundColor: colors.brownColor, justifyContent: 'space-between', paddingHorizontal: WIDTH * 0.05 }}>

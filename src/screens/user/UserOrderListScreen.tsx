@@ -4,18 +4,21 @@ import { SafeAreaView, Text, Alert, FlatList, ScrollView, ActivityIndicator, Vie
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+
 
 import HeaderComponent from '../../components/HeaderComponent';
 import MyOrderComponent from '../../components/MyOrderComponent';
 import { HEIGHT, WIDTH } from '../../constants/dimension';
 import { selectedUserData } from '../../redux/slice/userDataSlice';
 import { colors } from '../../constants/colors';
-import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../routes/AppNavigator';
+
 
 const UserOrderListScreen = () => {
     const userData = useSelector(selectedUserData);
     const { id } = userData[0];
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [currentOrderList, setCurrentOrderList] = useState<[]>([]);
     const [pastOrderList, setPastOrderList] = useState<[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -84,10 +87,10 @@ const UserOrderListScreen = () => {
 
                         <FlatList
                             data={currentOrderList}
-                            keyExtractor={(item) => item.id}
+                            keyExtractor={(item,index) => index.toString()}
                             scrollEnabled={false}
                             renderItem={(item) => (
-                                <MyOrderComponent item={item.item} setUpdate={setUpdate} onNavigation={onNavigation} />
+                                <MyOrderComponent item={item.item} setUpdate={setUpdate} onNavigation={onNavigation} update={update}/>
                             )} />
 
 
@@ -98,9 +101,9 @@ const UserOrderListScreen = () => {
                         <FlatList
                             data={pastOrderList}
                             scrollEnabled={false}
-                            keyExtractor={(item) => item.id}
+                            keyExtractor={(item,index) => index.toString()}
                             renderItem={(item) => (
-                                <MyOrderComponent item={item.item} setUpdate={setUpdate} />
+                                <MyOrderComponent item={item.item} setUpdate={setUpdate} update={update}/>
                             )} />
                     </ScrollView>
                 </View>

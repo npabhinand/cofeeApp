@@ -8,13 +8,14 @@ import { heartIcon, emailIcon, logout, phoneIcon, profileIcon, rightArrowIcon, n
 import { colors } from '../constants/colors';
 import { selectedUserData } from '../redux/slice/userDataSlice';
 import ProfileHeaderComponent from '../components/ProfileHeaderComponent';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RootStackParamList } from '../routes/AppNavigator';
 
 const ProfileScreen = () => {
     const userData = useSelector(selectedUserData);
     const { email, name, phone, userType } = userData[0];
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>()
     const DATA = [
         {
             title: 'User Details', data: [
@@ -36,7 +37,8 @@ const ProfileScreen = () => {
                 title: 'Settings',
                 data: [
                     { id: 8, title: 'Favourite', icon: heartIcon, onClick: () => navigation.navigate('FavoriteScreen') },
-                    { id: 9, title: 'Logout', icon: logout, onClick: () => handleLogoutAlert() },
+                    {id:10, title:'My Orders', icon:documentIcon, onClick:()=>navigation.navigate('UserOrderListScreen')},
+                    { id: 11, title: 'Logout', icon: logout, onClick: () => handleLogoutAlert() },
                 ],
             }];
 
@@ -72,7 +74,7 @@ const ProfileScreen = () => {
             <ProfileHeaderComponent title={'Profile'} buttonText={'Edit Profile'} icon={notificationIcon} imageSize={HEIGHT * 0.15} />
             <SectionList
                 sections={DATA}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <ProfileItem item={item} />
                 )}

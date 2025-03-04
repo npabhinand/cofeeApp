@@ -10,15 +10,13 @@ import AddProductComponent from '../../components/AddProductComponent';
 import HeaderComponent from '../../components/HeaderComponent';
 
 
-
-
 const ProductListScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [productList, setProductList] = useState([]);
     const [update, setUpdate] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
-    // const counter = useSelector(selectedCounts);
-    // console.log('counter', counter);
+    
+
     useEffect(() => {
         fetchProductData();
     }, [update]);
@@ -46,7 +44,6 @@ const ProductListScreen = () => {
 
                 <>
                     <HeaderComponent header={'Products'} />
-
                     <FlatList
                         data={productList}
                         // keyExtractor={(item) => item.id}

@@ -3,7 +3,7 @@ import { View, Text, TextInput, Image, Pressable, SafeAreaView, Alert, ActivityI
 import React, { useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 
@@ -12,13 +12,16 @@ import { notVisibleIcon, visibleIcon } from '../assets/icons';
 import { background1 } from '../assets/images';
 import { HEIGHT, WIDTH } from '../constants/dimension';
 import { addUserData } from '../redux/slice/userDataSlice';
+import { addCartCount } from '../redux/slice/cartCountSlice';
+import { addCart } from '../redux/slice/cartSlice';
+import { RootStackParamList } from '../routes/AppNavigator';
 
 const LoginScreen = () => {
     const [formData, setFormData] = useState<{ email: string; password: string; }>({ email: '', password: '' });
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
-    const navigation = useNavigation();
+     const navigation = useNavigation<NavigationProp<RootStackParamList>>()
     const dispatch = useDispatch();
 
     const handleLogin = async () => {
@@ -43,8 +46,6 @@ const LoginScreen = () => {
             setErrors(newErrors);
             return;
         }
-
-
         try {
             setLoading(true);
             const userCredential = await auth().signInWithEmailAndPassword(formData.email, formData.password);
@@ -62,7 +63,8 @@ const LoginScreen = () => {
                         routes: [{ name: 'AdminHomeScreen' }],
                     });
                 } else {
-                    console.log('true1', userDoc.userType);
+
+                    fetchCartItems(userDoc) 
                     navigation.reset({
                         index: 0,
                         routes: [{ name: 'HomeTabs' }],
@@ -84,6 +86,25 @@ const LoginScreen = () => {
 
     // };
 
+    const fetchCartItems = async (loginUser:[]) => {
+        try {
+            const cartItemRef = firestore().collection('cartItem').where('userId', '==', loginUser.id);
+            const snapshot = await cartItemRef.get();
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.itemId) {
+                    console.log('Adding item to cart:', data);
+                    dispatch(addCart(data));
+                } else {
+                    console.log('Missing itemId in document:', doc.id);
+                }
+            });
+            dispatch(addCartCount(snapshot.size));
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
 
     const onChangeText = (text: string, key: string) => {
         setFormData((prev) => ({ ...prev, [key]: text }));
@@ -94,9 +115,8 @@ const LoginScreen = () => {
     };
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.matteBlack }}>
-            {loading ? <>
-                <ActivityIndicator size="large" style={{ width: WIDTH * 1, flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: colors.commonWhite }} color={colors.brownColor} />
-            </> :
+           
+               
                 <View>
                     <Image source={background1} style={{ width: WIDTH * 1.0, height: HEIGHT * 0.4, position: 'absolute' }} />
                     {/* <View style={{ alignItems: 'center', marginTop: HEIGHT * 0.02 }}> */}
@@ -132,9 +152,10 @@ const LoginScreen = () => {
                             Forgot Password?
                         </Text>
 
-
-                        <Pressable style={{ height: HEIGHT * 0.06, width: WIDTH * 0.9, backgroundColor: colors.brownColor, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginTop: HEIGHT * 0.02 }} onPress={() => handleLogin()}>
-                            <Text style={{ fontWeight: 'bold', color: colors.commonWhite }}>Login</Text>
+                        
+                        <Pressable disabled={loading} style={{ height: HEIGHT * 0.06, width: WIDTH * 0.9, backgroundColor: colors.brownColor, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginTop: HEIGHT * 0.02 }} onPress={() => handleLogin()}>
+                            {loading? <ActivityIndicator color={colors.commonWhite} />:
+                            <Text style={{ fontWeight: 'bold', color: colors.commonWhite }}>Login</Text>}
                         </Pressable>
 
                         <View style={{ flexDirection: 'row', alignContent: 'center', marginTop: HEIGHT * 0.05, justifyContent: 'center' }}>
@@ -147,7 +168,6 @@ const LoginScreen = () => {
                     </View>
                     {/* </View> */}
                 </View>
-            }
         </SafeAreaView >
     );
 };

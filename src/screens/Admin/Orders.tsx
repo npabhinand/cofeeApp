@@ -87,33 +87,40 @@ const Orders: React.FC<ordersScreenProps> = ({ route }) => {
             setTimeout(() => {
                 setLoading(true);
             }, 200);
+    
             const orders: any = [];
-            // let totalPrice = 0;
-            await firestore().collection('orders')
-                .where('status', '==', 'delivered')
-                .get().then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        orders.push({ ...doc.data(), id: doc.id });
-                        // totalPrice += doc.data().TotalPrice;
-                    });
-                    const orderWithProfit = orders.map(order => {
-                        let orderProfit = 0;
-                        order.products.forEach(product => {
-                            orderProfit += parseInt(product.price, 10) * product.profit / 100;
-                        });
-                        console.log(orderProfit, '>>>>>');
-                        return { ...order, profit: orderProfit.toFixed(2) };
-
-                    });
-                    setSelectedData(orderWithProfit);
-                    setLoading(false);
-                });
-
+            let totalProfit = 0;
+    
+            const querySnapshot = await firestore().collection('orders').where('status', '==', 'delivered').get();
+    
+            for (const doc of querySnapshot.docs) {
+                const products = doc.data().products;
+                let orderProfit = 0;
+    
+                for (const product of products) {
+                    const snapShot = await firestore().collection('items').doc(product.itemId).get();
+                    const itemData = snapShot.data();
+                    
+                    if (itemData) {
+                        const profit = (product.price * product.quantity* itemData.profit) / 100;
+                        orderProfit += profit;
+                        // totalProfit += profit;
+                    }
+                }
+                orders.push({ ...doc.data(), id: doc.id, profit: orderProfit });
+            }
+    
+            setSelectedData(orders);
+            // setFullOrderList(orders);
+            console.log('Total Profit:', totalProfit);
+            
+            setLoading(false);
         } catch (err) {
             console.log('Error while fetching delivered orders data', err);
             setLoading(false);
         }
     };
+    
 
 
     const handleButtonClick = (buttonName: string) => {
@@ -124,7 +131,7 @@ const Orders: React.FC<ordersScreenProps> = ({ route }) => {
         <SafeAreaView style={{ flex: 1 }}>
             <HeaderComponent header={'Orders'} />
             <View style={{ padding: WIDTH * 0.05 }}>
-                {buttonNames && <View style={{ flexDirection: 'row', marginBottom: HEIGHT * 0.02, backgroundColor: colors.commonWhite, borderRadius: 10 }}>
+                {buttonNames && <View style={{ flexDirection: 'row', backgroundColor: colors.commonWhite, borderRadius: 10 }}>
                     {buttonNames.map((button) => (
                         <Pressable key={button.id} onPress={() => handleButtonClick(button.name)}
                             style={[{ width: WIDTH * 0.3, height: HEIGHT * 0.056, alignItems: 'center', justifyContent: 'center', borderRadius: 10 },
@@ -137,10 +144,12 @@ const Orders: React.FC<ordersScreenProps> = ({ route }) => {
                     <FlatList
                         data={selectedData}
                         bounces={false}
+                        showsVerticalScrollIndicator={false}
                         ListEmptyComponent={<EmptyComponent />}
+                        contentContainerStyle={{ paddingBottom: HEIGHT * 0.1, paddingTop: HEIGHT * 0.02, }}
                         keyExtractor={(item) => item.id}
                         renderItem={(item) => (
-                            <OrderDetailsRenderItem item={item.item} setLoading={setUpdate} showItem={showItem} />
+                            <OrderDetailsRenderItem item={item.item} loading={update} setLoading={setUpdate} showItem={showItem} />
                         )} />
                 }
             </View>

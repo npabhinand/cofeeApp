@@ -15,6 +15,7 @@ import HeaderComponent from '../../components/HeaderComponent';
 const AddressScreen = () => {
 
     // const addressList = useSelector(addedContacts);
+    const db=firestore()
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [addressList, setAddressList] = useState();
     const [update, setUpdate] = useState<boolean>(false);
@@ -27,7 +28,7 @@ const AddressScreen = () => {
 
     const fetchData = async () => {
         const addresses: any = [];
-        const addressRef = await firestore().collection('address').where('userId', '==', id).get();
+        const addressRef = await db.collection('address').where('userId', '==', id).get();
         addressRef.forEach((doc) => {
             addresses.push({ ...doc.data(), id: doc.id });
         });

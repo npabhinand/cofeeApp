@@ -24,7 +24,7 @@ const EditProfileScreen = () => {
 
     const auth = getAuth();
     const dispatch = useDispatch();
-    const reauthenticate = (password) => {
+    const reauthenticate = (password:string) => {
         const user = auth.currentUser;
         const credential = EmailAuthProvider.credential(user.email, password);
         return reauthenticateWithCredential(user, credential);

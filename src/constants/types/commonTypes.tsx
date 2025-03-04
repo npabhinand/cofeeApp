@@ -57,11 +57,12 @@ interface productProp {
 interface coffeeProps {
 
     item: {
-        id: number;
+        id: string;
         selected: boolean;
+        isAddedInCart:boolean;
         product:
         {
-            id: number;
+            id: string;
             product: string;
             coffeeType: string;
             description: string;
@@ -69,11 +70,11 @@ interface coffeeProps {
             price: number;
             rating: number;
             image: string;
-            profit: string;
+            profit?: string;
         }
     }
-    orderType: string;
-    userId: string;
+    orderType?: string;
+    userId?: string;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface ProductDetailScreenProps {
@@ -90,7 +91,7 @@ interface buttonProps {
 interface CartProps {
     // item: {
     item: {
-        id: string;
+        itemId: string;
         name: string;
         coffeeType: string;
         description: string;
@@ -153,19 +154,18 @@ interface countState {
     stockCount: number;
 }
 interface CartItem {
-    id: number;
-    name: string;
+    itemId: string;
     coffeeType: string;
     description: string;
-    type: any,
-    rating: number;
-    img: number;
-    price?: number;
-    image?: string;
-    quantity: number;
+    image: string;
+    name: string;
+    orderType:string;
+    price: number;
+    quantity:number;
+    types: {};
 }
 interface FavoriteItem {
-    id: number;
+    id: string;
     product: string;
     coffeeType: string;
     description: string;
@@ -175,6 +175,7 @@ interface FavoriteItem {
     selected: boolean;
     orderType: string;
 }
+
 
 interface products {
     product: {
@@ -197,8 +198,8 @@ interface ContactItem {
 
 interface profitProps {
     item: productsProps;
-    loading: boolean;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    // loading: boolean;
+    setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 
 }
 interface StockProps {
@@ -232,6 +233,7 @@ interface orderDetailProps {
 
         }[]
     }
+    update?:boolean;
     setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
     onNavigation?: () => void;
     marginTop?: number;
@@ -240,6 +242,8 @@ interface orderDetailProps {
 interface orderComponentProps {
     userType?: string;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    loading:boolean;
+
     item: {
         id: string;
         orderTime: number;
@@ -247,6 +251,9 @@ interface orderComponentProps {
         products: [CartItem];
         profit: number;
         status: string;
+        orderType:string;
+        table?:string[];
+        shop?:any;
 
         address: {
             address: string;
@@ -259,7 +266,8 @@ interface orderComponentProps {
     onNavigation?: () => void;
     marginTop?: number;
     handleModal?: () => void;
-    showItem?: string
+    showItem?: string;
+   
 }
 interface headerProps {
     header: string;
@@ -269,6 +277,9 @@ interface detailProps {
         label: string;
         value: string;
     }
+}
+interface addressProp {
+    address:any;
 }
 
 interface buttonProp {
@@ -285,6 +296,7 @@ interface shopItem {
     place: string;
     address: string;
     time: string;
+    tables:{tableId:string;capacity:string;}[]
 }
 interface shopProps {
     // setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -319,4 +331,70 @@ interface bookButtonProps {
 interface OrderTypeState {
     orderType: string;
 }
-export type { userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products, ordersScreenProps, buttonProp, FavoriteItem, shopProps, addShopProps, carts, bookButtonProps, OrderTypeState };
+
+interface BookingItem{
+    tables:string[];
+    shopId:string;
+    name:string;
+}
+
+interface countItem{
+    productCount:number;
+    userCount:number;
+    orderCount:number;
+    stockCount:number;
+    totalProfit:number;
+    shopCount:number;
+}
+
+interface paymentNavprops{
+    cartItems: any;
+    totalPrice: number;
+    orderType: string;
+    selectedShops?: any[];
+    selectedContact?: any;
+    selectedShop?: any;
+    setUpdate: (update: boolean) => void;
+}
+interface routeProps{
+    route:
+        paymentNavprops
+    
+}
+interface orders{
+    orderTypes:string;
+    buttonNames?:any;
+    showItem?:string;
+}
+interface OrderItem{
+    id:string;
+    orderTime:number;
+    orderType:string;
+    shop?:any;
+    status:string;
+    table?:[];
+    totalPrice:number;
+    userId:any;
+    products:any;
+    address?:any;
+
+}
+
+interface productsNavProp{
+    section:{
+    item:{
+        id: string;
+  selected: boolean;
+  isAddedInCart: boolean;
+  product: any;
+//   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    }}
+}
+interface FavouriteProps{
+    item:FavoriteItem
+}
+export type { BookingItem,userDataItem, addressProps, contactProps, productProp, coffeeProps, buttonProps, CartProps, productItems, userProps, 
+    ProductDetailScreenProps, dropDownProps, productsProps, addressItems, CartState, CartItem, ContactItem, PriceState, dropDownState, StockProps, 
+    profitProps, orderDetailProps, countState, headerProps, productItem, orderComponentProps, detailProps, products, ordersScreenProps, buttonProp, 
+    FavoriteItem, shopProps, addShopProps, carts, bookButtonProps, OrderTypeState,addressProp, countItem,
+    paymentNavprops, routeProps, OrderItem, orders, productsNavProp, FavouriteProps };

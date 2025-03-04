@@ -10,7 +10,7 @@ import HandleOrderButtons from './HandleOrderButtons';
 import UserOrderDetailsComponent from './UserOrderDetailsComponent';
 
 const MyOrderComponent: React.FC<orderDetailProps> = (props) => {
-    const { item, setUpdate, onNavigation } = props;
+    const { item, setUpdate, onNavigation, update } = props;
 
     const [isVisible, setIsVisible] = useState(false);
     const handleModal = () => {
@@ -25,7 +25,7 @@ const MyOrderComponent: React.FC<orderDetailProps> = (props) => {
                 style: 'cancel',
             },
             {
-                text: 'Cancel',
+                text: 'Yes',
                 // onPress: () => dispatch(deleteContact(item.id))
                 onPress: () => handleOrderStatus(),
 
@@ -34,7 +34,7 @@ const MyOrderComponent: React.FC<orderDetailProps> = (props) => {
     };
 
     const handleOrderStatus = async () => {
-        setUpdate(true);
+        setUpdate(!update);
         await firestore().collection('orders').doc(item.id).update({
             status: 'cancelled',
         });

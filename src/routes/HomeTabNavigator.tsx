@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -34,20 +33,7 @@ interface tabBarProps {
     focused?: boolean;
 }
 
-const CustomTabBarIcon: React.FC<tabBarProps> = (props) => {
-    const { tab, focused } = props;
-    const counter = useSelector(selectCartCount);
-    // console.log('count:', useSelector(selectCartCount));
 
-    return (
-        <View>
-            {tab.name === 'Cart' && <View style={{ backgroundColor: colors.brownColor, width: WIDTH * 0.04, height: WIDTH * 0.04, borderRadius: '50%', alignItems: 'center', justifyContent: 'center', position: 'absolute', left: WIDTH * 0.04, bottom: HEIGHT * 0.017 }}><Text style={{ fontSize: 9, color: colors.commonWhite }}>{counter}</Text></View>}
-            <Image source={tab.icon} style={{ tintColor: focused ? '#C67C4D' : '#A2A2A2' }} />
-            {focused && <Image source={dotIcon} style={{ marginTop: 7, alignSelf: 'center', position: 'absolute', top: HEIGHT * 0.025 }} />}
-
-        </View>
-    );
-};
 
 export const HomeTabNavigator = () => {
 
@@ -75,3 +61,16 @@ export const HomeTabNavigator = () => {
 
 };
 
+const CustomTabBarIcon: React.FC<tabBarProps> = (props) => {
+    const { tab, focused } = props;
+    const counter = useSelector(selectCartCount);
+
+    return (
+        <View>
+            {tab.name === 'Cart' && <View style={{ backgroundColor: colors.brownColor, width: WIDTH * 0.04, height: WIDTH * 0.04, borderRadius: '50%', alignItems: 'center', justifyContent: 'center', position: 'absolute', left: WIDTH * 0.04, bottom: HEIGHT * 0.017 }}><Text style={{ fontSize: 9, color: colors.commonWhite }}>{counter}</Text></View>}
+            <Image source={tab.icon} style={{ tintColor: focused ? '#C67C4D' : '#A2A2A2' }} />
+            {focused && <Image source={dotIcon} style={{ marginTop: 7, alignSelf: 'center', position: 'absolute', top: HEIGHT * 0.025 }} />}
+
+        </View>
+    );
+};

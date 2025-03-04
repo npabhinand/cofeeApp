@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, FlatList } from 'react-native';
+import { SafeAreaView, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 
@@ -34,7 +34,7 @@ const TableSettingScreen = () => {
                 data={shopData}
                 keyExtractor={item => item.id}
                 renderItem={item => (
-                    <RenderItem item={item.item} setUpdate={setUpdate} modalShow={''} />
+                    <RenderItem item={item.item} setUpdate={setUpdate} modalShow={'table'} />
                 )}
             />
         </SafeAreaView>
